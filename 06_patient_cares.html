@@ -11,31 +11,204 @@
 <div class="body-layout">
   <div id="sidebar-container"></div>
   <main class="main">
-    <div class="breadcrumb">
-      <a href="02_home.html">ホーム</a>
-      <span class="breadcrumb-sep">›</span>
-      <span class="breadcrumb-current">患者様対応一覧</span>
-    </div>
     <div class="page-header">
       <div><h1 class="page-title">患者様対応一覧</h1></div>
-      <div class="page-actions"><a href="#" class="btn btn-primary"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>患者様対応登録</a></div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          患者様対応登録
+        </a>
+      </div>
     </div>
-<div class="search-panel"><div class="search-grid"><div><label class="form-label">患者番号・患者名</label><input type="text" class="form-control" placeholder="番号または氏名"></div><div><label class="form-label">種別</label><select class="form-control"><option value="">すべて</option><option>電話</option><option>メール</option><option>来院</option><option>その他</option></select></div><div><label class="form-label">状態</label><select class="form-control"><option value="">すべて</option><option>未対応</option><option>対応中</option><option>完了</option></select></div><div><label class="form-label">担当者</label><input type="text" class="form-control" placeholder="担当者名"></div><div style="display:flex;align-items:flex-end;gap:8px;"><button class="btn btn-primary">検索</button><a href="#" class="btn btn-outline">クリア</a></div></div></div>
+
+    <!-- 検索パネル -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <div>
+          <label class="form-label">患者番号・患者名</label>
+          <input type="text" class="form-control" placeholder="番号または氏名">
+        </div>
+        <div>
+          <label class="form-label">キーワード</label>
+          <input type="text" class="form-control" placeholder="対応詳細を検索">
+        </div>
+        <div>
+          <label class="form-label">登録日</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="date" class="form-control">
+            <span class="text-sm text-muted">〜</span>
+            <input type="date" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:0.75rem;">
+        <label class="form-label">状況</label>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.25rem;">
+          <label style="display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; cursor:pointer;"><input type="checkbox" checked> 登録中</label>
+          <label style="display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; cursor:pointer;"><input type="checkbox" checked> 未対応</label>
+          <label style="display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; cursor:pointer;"><input type="checkbox" checked> 対応中</label>
+          <label style="display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; cursor:pointer;"><input type="checkbox"> 対応済</label>
+          <label style="display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; cursor:pointer;"><input type="checkbox"> 期限切れ</label>
+          <label style="display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; cursor:pointer;"><input type="checkbox"> 保留</label>
+          <label style="display:flex; align-items:center; gap:0.3rem; font-size:0.82rem; cursor:pointer;"><input type="checkbox"> 無効</label>
+        </div>
+      </div>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+        <button class="btn btn-primary">検索</button>
+        <a href="#" class="btn btn-outline">クリア</a>
+      </div>
+    </div>
+
+    <!-- クイックフィルタ -->
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+      <button class="btn btn-sm btn-outline" style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);">未対応</button>
+      <button class="btn btn-sm btn-outline">対応中</button>
+      <button class="btn btn-sm btn-outline" style="color:#dc2626;border-color:#dc2626;">◆期限過対応中</button>
+      <button class="btn btn-sm btn-outline" style="color:#dc2626;border-color:#dc2626;">★期限過未対応</button>
+      <button class="btn btn-sm btn-outline">本日対応予定</button>
+      <button class="btn btn-sm btn-outline">対応予定３日以内</button>
+    </div>
+
+    <!-- テーブル -->
     <div class="card">
-      <div class="table-wrap">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <span class="text-sm text-muted">全 8 件</span>
+        <button class="btn btn-sm btn-outline">表示設定</button>
+      </div>
+      <div class="table-responsive">
         <table class="table">
-          <thead><tr><th>管理番号</th><th>患者番号</th><th>患者名</th><th>種別</th><th>件名</th><th>状態</th><th>担当者</th><th>依頼日</th><th>期日</th><th></th></tr></thead>
-          <tbody><tr><td>PC-001</td><td><a href="05_patient_detail.html">114648</a></td><td>鳩間　こずえ</td><td><span class="badge badge-info">電話</span></td><td>次回予約確認</td><td><span class="badge badge-warning">対応中</span></td><td>秦勝</td><td>2026/05/01</td><td>2026/05/08</td><td><a href="#" class="btn btn-xs btn-outline">詳細</a></td></tr><tr><td>PC-002</td><td><a href="05_patient_detail.html">114779</a></td><td>板倉　美奈子</td><td><span class="badge badge-muted">メール</span></td><td>検査結果説明</td><td><span class="badge badge-success">完了</span></td><td>テストユーザ</td><td>2026/04/28</td><td>2026/05/02</td><td><a href="#" class="btn btn-xs btn-outline">詳細</a></td></tr></tbody>
+          <thead>
+            <tr>
+              <th style="width:40px;">#</th>
+              <th style="width:100px;">登録日</th>
+              <th style="width:70px;">状況</th>
+              <th style="width:80px;">患者番号</th>
+              <th style="width:120px;">患者名（漢字）</th>
+              <th style="width:80px;">種別</th>
+              <th>対応詳細</th>
+              <th style="width:80px;">対応部門</th>
+              <th style="width:100px;">対応予定日</th>
+              <th style="width:90px;">最終対応者</th>
+              <th style="width:60px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-sm text-muted">1</td>
+              <td class="text-sm">2026/05/02</td>
+              <td><span class="badge badge-success">対応済</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">117725</a></td>
+              <td class="text-sm font-medium">新路 加奈<br><span class="text-muted">シンミチ カナ</span></td>
+              <td><span class="badge badge-muted">忘れ物</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">5/2 融解移植同意書の持参忘れ。ご主人様のサインが未だできていないとのこと。→5/8の8:00に同意書提出依頼済み。内容に不備があればET出来ないことお伝え済み。大嶋<br>→5/2 16:58 ご主人様同意書持参いただいた。大嶋</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">2026/05/08</td>
+              <td class="text-sm">大嶋華子</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr style="background:#fffdf8;">
+              <td class="text-sm text-muted">2</td>
+              <td class="text-sm">2026/05/01</td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">106590</a></td>
+              <td class="text-sm font-medium">ソープ キャサリン<br><span class="text-muted">ソープ キャサリン</span></td>
+              <td><span class="badge badge-muted">お渡し</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">5/1 当院仕様の診断書の依頼あり。・懐妊したこと ・妊娠何週か ・出産予定日 上記の記載を希望。仕上がり次第電話かメールでお知らせする。<br>5/2 仕上がりTEL済み。大嶋</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">2026/05/22</td>
+              <td class="text-sm">大嶋華子</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">3</td>
+              <td class="text-sm">2026/04/24</td>
+              <td><span class="badge badge-success">対応済</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">119199</a></td>
+              <td class="text-sm font-medium">宅野 みく<br><span class="text-muted">タクノ ミク</span></td>
+              <td><span class="badge badge-muted">お渡し</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">当院診断書依頼 4/24領収済（植野受け）飛行機キャンセル用のため、可能であればつわりのため長時間の移動が辛い旨記入してほしいと（難しいとはお伝え済）<br>→5/1 診断書お渡し済 田村</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">—</td>
+              <td class="text-sm">田村麻由子</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr style="background:#fffdf8;">
+              <td class="text-sm text-muted">4</td>
+              <td class="text-sm">2026/05/01</td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">119774</a></td>
+              <td class="text-sm font-medium">後藤 真弓<br><span class="text-muted">ゴトウ マユミ</span></td>
+              <td><span class="badge badge-muted">お渡し</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">5/1 公正証書（仮）で作成して院内お持ち込み頂いた。内容問題なければ清書するため、5/2（土）までにご連絡をご希望。→5/1 内容問題ないことお伝え済み。次回受診時に公正証書（仮）お返しする旨ご案内し終話。大嶋</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">2026/05/12</td>
+              <td class="text-sm">大嶋華子</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">5</td>
+              <td class="text-sm">2026/05/01</td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">117602</a></td>
+              <td class="text-sm font-medium">関本 蕗<br><span class="text-muted">セキモト フキ</span></td>
+              <td><span class="badge badge-muted">お渡し</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">5/1 保険会社診断書依頼あり。・2025/10/14 採卵 K890-4 ・2026/01/17 移植 K884-3 仕上がり次第TELとお伝え。大嶋</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">2026/05/22</td>
+              <td class="text-sm">大嶋華子</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr style="background:#fffdf8;">
+              <td class="text-sm text-muted">6</td>
+              <td class="text-sm">2026/04/10</td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">114981</a></td>
+              <td class="text-sm font-medium">鈴木 亜由美<br><span class="text-muted">スズキ アユミ</span></td>
+              <td><span class="badge badge-muted">連絡</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">4/10（金）午前診療中 電話対応：髙橋さん・大嶋さん。紹介状が届かない、本日受診するので窓口で渡して欲しい。誤送しているのであれば個人情報なので取り返して欲しいと申し出あり。→調べると3/23に投函完了となっていたため、その旨お伝えするも届いていないと。</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">2026/05/09</td>
+              <td class="text-sm">田村麻由子</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">7</td>
+              <td class="text-sm">2026/04/28</td>
+              <td><span class="badge badge-warning">未対応</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">112371</a></td>
+              <td class="text-sm font-medium">瀧田 桃子<br><span class="text-muted">タキタ モモコ</span></td>
+              <td><span class="badge badge-muted">連絡</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">4/28 採卵後の経過確認のため連絡。次回来院日の確認が必要。</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">2026/05/09</td>
+              <td class="text-sm">—</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr style="background:#fffdf8;">
+              <td class="text-sm text-muted">8</td>
+              <td class="text-sm">2026/04/25</td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td class="text-sm"><a href="05_patient_detail.html" style="color:var(--color-primary);">110681</a></td>
+              <td class="text-sm font-medium">阪本 麻有<br><span class="text-muted">サカモト マユ</span></td>
+              <td><span class="badge badge-muted">お渡し</span></td>
+              <td class="text-sm" style="max-width:320px; line-height:1.6;">4/25 一般助成金証明書の発行依頼。仕上がり次第ご連絡予定。</td>
+              <td class="text-sm">受付部門</td>
+              <td class="text-sm">2026/05/15</td>
+              <td class="text-sm">内野唯香</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+          </tbody>
         </table>
       </div>
+      <!-- ページネーション -->
       <div class="pagination">
-        <div class="page-btn disabled">«</div>
-        <div class="page-btn disabled">‹</div>
-        <div class="page-btn active">1</div>
-        <div class="page-btn">›</div>
-        <div class="page-btn">»</div>
+        <a href="#" class="btn btn-sm btn-outline">前へ</a>
+        <span class="btn btn-sm btn-primary">1</span>
+        <a href="#" class="btn btn-sm btn-outline">2</a>
+        <a href="#" class="btn btn-sm btn-outline">次へ</a>
       </div>
     </div>
+
   </main>
 </div>
 <script src="components.js"></script>

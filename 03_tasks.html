@@ -35,9 +35,9 @@
           <label class="form-label">種別</label>
           <select class="form-control">
             <option value="">すべて</option>
-            <option>患者対応</option>
+            <option>受付対応</option>
+            <option>院内対応</option>
             <option>事務</option>
-            <option>その他</option>
           </select>
         </div>
         <div>
@@ -45,6 +45,7 @@
           <select class="form-control">
             <option value="">すべて</option>
             <option>未対応</option>
+            <option>依頼中</option>
             <option>対応中</option>
             <option>完了</option>
           </select>
@@ -58,145 +59,182 @@
             <option>低</option>
           </select>
         </div>
+      </div>
+      <div class="search-grid" style="grid-template-columns:1fr 1fr 1fr 1fr; margin-top:0.75rem;">
         <div>
           <label class="form-label">担当者</label>
           <input type="text" class="form-control" placeholder="担当者名">
         </div>
         <div>
-          <label class="form-label">依頼日（開始）</label>
-          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+          <label class="form-label">患者番号</label>
+          <input type="text" class="form-control" placeholder="患者番号">
         </div>
         <div>
-          <label class="form-label">期日（終了）</label>
-          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+          <label class="form-label">依頼日（開始）</label>
+          <input type="date" class="form-control">
         </div>
-        <div style="display:flex;align-items:flex-end;gap:8px;">
-          <button class="btn btn-primary">
-            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
-            検索
-          </button>
-          <a href="#" class="btn btn-outline">クリア</a>
+        <div>
+          <label class="form-label">期限（終了）</label>
+          <input type="date" class="form-control">
         </div>
       </div>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+        <button class="btn btn-primary">検索</button>
+        <a href="#" class="btn btn-outline">クリア</a>
+      </div>
+    </div>
+
+    <!-- クイックフィルタ -->
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+      <a href="#" class="btn btn-sm btn-outline" style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);">未対応</a>
+      <a href="#" class="btn btn-sm btn-outline">対応中</a>
+      <a href="#" class="btn btn-sm btn-outline" style="color:#dc2626;border-color:#dc2626;">◆期限過対応中</a>
+      <a href="#" class="btn btn-sm btn-outline" style="color:#dc2626;border-color:#dc2626;">★期限過未対応</a>
+      <a href="#" class="btn btn-sm btn-outline">本日対応予定</a>
+      <a href="#" class="btn btn-sm btn-outline">対応予定３日以内</a>
     </div>
 
     <!-- テーブル -->
     <div class="card">
-      <div class="card-header">
-        <span class="card-title">タスク一覧</span>
-        <span class="text-muted text-sm">全 <strong style="color:var(--color-primary-dark);">12</strong> 件</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <span class="text-sm text-muted">全 10 件</span>
+        <button class="btn btn-sm btn-outline">表示設定</button>
       </div>
-      <div class="table-wrap">
+      <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
-              <th>管理番号</th>
-              <th>種別</th>
+              <th style="width:80px;">No.</th>
+              <th style="width:90px;">種別</th>
               <th>件名</th>
-              <th>画面の情報</th>
-              <th>優先度</th>
-              <th>状態</th>
-              <th>担当者</th>
-              <th>依頼日</th>
-              <th>期日</th>
-              <th style="width:80px;"></th>
+              <th style="width:130px;">患者名</th>
+              <th style="width:60px;">優先</th>
+              <th style="width:80px;">状態</th>
+              <th style="width:160px;">担当者</th>
+              <th style="width:90px;">依頼日</th>
+              <th style="width:90px;">期限</th>
+              <th style="width:60px;"></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>1</td>
-              <td><span class="badge badge-info">患者対応</span></td>
-              <td><a href="#">吉野様 問診結果確認</a></td>
-              <td class="text-sm">吉野　瑞貴 (100001)</td>
+              <td class="text-sm text-muted">T00862</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【事後会計】九冨 里絵（119506）</a></td>
+              <td class="text-sm">九冨 里絵<br><span class="text-muted">119506</span></td>
               <td><span class="badge badge-danger">高</span></td>
-              <td><span class="badge badge-warning">未対応</span></td>
-              <td>三栖有津紗</td>
-              <td>2026/05/08</td>
-              <td>2026/05/09</td>
-              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td><span class="badge badge-info">患者対応</span></td>
-              <td><a href="#">若松様 次回来院日調整</a></td>
-              <td class="text-sm">若松　飛鳥 (100002)</td>
-              <td><span class="badge badge-warning">中</span></td>
-              <td><span class="badge badge-warning">未対応</span></td>
-              <td>鶴田有希</td>
-              <td>2026/05/07</td>
-              <td>2026/05/10</td>
-              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td><span class="badge badge-muted">事務</span></td>
-              <td><a href="#">保険証期限確認（5月分）</a></td>
-              <td class="text-sm">—</td>
-              <td><span class="badge badge-warning">中</span></td>
-              <td><span class="badge badge-info">対応中</span></td>
-              <td>花城穂乃果</td>
-              <td>2026/05/01</td>
-              <td>2026/05/15</td>
-              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td><span class="badge badge-info">患者対応</span></td>
-              <td><a href="#">加藤様 AIH後の経過確認連絡</a></td>
-              <td class="text-sm">加藤　佳奈 (100003)</td>
-              <td><span class="badge badge-danger">高</span></td>
-              <td><span class="badge badge-warning">未対応</span></td>
-              <td>三栖有津紗</td>
-              <td>2026/05/08</td>
-              <td>2026/05/09</td>
-              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td><span class="badge badge-muted">事務</span></td>
-              <td><a href="#">在庫発注点確認（HMG製剤）</a></td>
-              <td class="text-sm">—</td>
-              <td><span class="badge badge-danger">高</span></td>
-              <td><span class="badge badge-warning">未対応</span></td>
-              <td>鶴田有希</td>
-              <td>2026/05/08</td>
-              <td>2026/05/09</td>
-              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td><span class="badge badge-info">患者対応</span></td>
-              <td><a href="#">庄形様 助成金書類準備連絡</a></td>
-              <td class="text-sm">庄形　恵美 (100004)</td>
-              <td><span class="badge badge-muted">低</span></td>
               <td><span class="badge badge-success">完了</span></td>
-              <td>花城穂乃果</td>
-              <td>2026/04/28</td>
-              <td>2026/05/07</td>
+              <td class="text-sm">赤川真智子<br>内野唯香<br>恵島明日香</td>
+              <td class="text-sm">2026/05/02</td>
+              <td class="text-sm">2026/05/13</td>
               <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
             </tr>
             <tr>
-              <td>7</td>
-              <td><span class="badge badge-info">患者対応</span></td>
-              <td><a href="#">瀬戸口様 採卵スケジュール確認</a></td>
-              <td class="text-sm">瀬戸口　ユリア (100005)</td>
-              <td><span class="badge badge-danger">高</span></td>
-              <td><span class="badge badge-info">対応中</span></td>
-              <td>三栖有津紗</td>
-              <td>2026/05/06</td>
-              <td>2026/05/11</td>
-              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td><span class="badge badge-muted">事務</span></td>
-              <td><a href="#">5月分レセプト点検</a></td>
+              <td class="text-sm text-muted">T00861</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">R8年8月休診日にかかわる設定・共有・HP更新</a></td>
               <td class="text-sm">—</td>
               <td><span class="badge badge-warning">中</span></td>
-              <td><span class="badge badge-warning">未対応</span></td>
-              <td>鶴田有希</td>
-              <td>2026/05/01</td>
-              <td>2026/05/20</td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td class="text-sm">内野唯香</td>
+              <td class="text-sm">2026/05/02</td>
+              <td class="text-sm">2026/05/31</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr style="background:#fff8f0;">
+              <td class="text-sm text-muted">T00860</td>
+              <td><span class="badge badge-muted">院内対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【患者様対応詳細】新路 加奈（117725）</a></td>
+              <td class="text-sm">新路 加奈<br><span class="text-muted">117725</span></td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td class="text-sm">大嶋華子<br>高橋凛<br>田村麻由子</td>
+              <td class="text-sm">2026/05/02</td>
+              <td class="text-sm">2026/05/08</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">T00856</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【お問い合わせ】品川 杏理（118074）</a></td>
+              <td class="text-sm">品川 杏理<br><span class="text-muted">118074</span></td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-warning">依頼中</span></td>
+              <td class="text-sm">田村麻由子</td>
+              <td class="text-sm">2026/04/28</td>
+              <td class="text-sm">2026/05/08</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">T00852</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【紹介状】安井 枝里（113998）</a></td>
+              <td class="text-sm">安井 枝里<br><span class="text-muted">113998</span></td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-warning">依頼中</span></td>
+              <td class="text-sm">大嶋華子<br>高橋凛<br>田村麻由子</td>
+              <td class="text-sm">2026/04/28</td>
+              <td class="text-sm">2026/05/08</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">T00843</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【紹介状】ナカムラ 裕子（108665）</a></td>
+              <td class="text-sm">ナカムラ 裕子<br><span class="text-muted">108665</span></td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-warning">依頼中</span></td>
+              <td class="text-sm">田村麻由子</td>
+              <td class="text-sm">2026/04/26</td>
+              <td class="text-sm">2026/05/09</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">T00841</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【紹介状】白澤 あゆみ（118360）</a></td>
+              <td class="text-sm">白澤 あゆみ<br><span class="text-muted">118360</span></td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-warning">依頼中</span></td>
+              <td class="text-sm">田村麻由子</td>
+              <td class="text-sm">2026/04/26</td>
+              <td class="text-sm">2026/05/09</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">T00837</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【事後会計】楠瀬 健太（109961）</a></td>
+              <td class="text-sm">楠瀬 健太<br><span class="text-muted">109961</span></td>
+              <td><span class="badge badge-danger">高</span></td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td class="text-sm">赤川真智子<br>内野唯香<br>恵島明日香</td>
+              <td class="text-sm">2026/04/25</td>
+              <td class="text-sm">2026/05/02</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">T00833</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【紹介状】高橋 あいこ（109082）</a></td>
+              <td class="text-sm">高橋 あいこ<br><span class="text-muted">109082</span></td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-warning">依頼中</span></td>
+              <td class="text-sm">田村麻由子</td>
+              <td class="text-sm">2026/04/24</td>
+              <td class="text-sm">2026/05/08</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm text-muted">T00823</td>
+              <td><span class="badge badge-info">受付対応</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">【紹介状】仲田 遥香（116607）</a></td>
+              <td class="text-sm">仲田 遥香<br><span class="text-muted">116607</span></td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td class="text-sm">田村麻由子</td>
+              <td class="text-sm">2026/04/22</td>
+              <td class="text-sm">2026/05/02</td>
               <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
             </tr>
           </tbody>
@@ -204,12 +242,11 @@
       </div>
       <!-- ページネーション -->
       <div class="pagination">
-        <div class="page-btn disabled">«</div>
-        <div class="page-btn disabled">‹</div>
-        <div class="page-btn active">1</div>
-        <div class="page-btn">2</div>
-        <div class="page-btn">›</div>
-        <div class="page-btn">»</div>
+        <a href="#" class="btn btn-sm btn-outline">前へ</a>
+        <span class="btn btn-sm btn-primary">1</span>
+        <a href="#" class="btn btn-sm btn-outline">2</a>
+        <a href="#" class="btn btn-sm btn-outline">3</a>
+        <a href="#" class="btn btn-sm btn-outline">次へ</a>
       </div>
     </div>
 
