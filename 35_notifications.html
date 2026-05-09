@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — お知らせ一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="notifications">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">お知らせ一覧</span>
+    </div>
+    <div class="page-header">
+      <div><h1 class="page-title">お知らせ一覧</h1></div>
+      <div class="page-actions"><a href="#" class="btn btn-primary"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>お知らせ登録</a></div>
+    </div>
+<div class="search-panel"><div class="search-grid"><div><label class="form-label">タイトル</label><input type="text" class="form-control" placeholder="タイトルで検索"></div><div><label class="form-label">状態</label><select class="form-control"><option value="">すべて</option><option>公開中</option><option>非公開</option><option>期限切れ</option></select></div><div style="display:flex;align-items:flex-end;gap:8px;"><button class="btn btn-primary">検索</button><a href="#" class="btn btn-outline">クリア</a></div></div></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>タイトル</th><th>公開日</th><th>公開終了日</th><th>作成者</th><th>状態</th><th></th></tr></thead>
+          <tbody><tr><td>Test rich text 1</td><td>2026/04/02</td><td>2026/12/31</td><td>テストユーザ</td><td><span class="badge badge-success">公開中</span></td><td><a href="#" class="btn btn-xs btn-outline">編集</a></td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

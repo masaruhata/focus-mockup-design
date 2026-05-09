@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 在庫一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="inventory">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="page-header">
+      <div><h1 class="page-title">在庫一覧</h1></div>
+      <div class="page-actions">
+        <a href="34_medical_inventories.html" class="btn btn-outline">入出庫履歴</a>
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          品目登録
+        </a>
+      </div>
+    </div>
+
+    <!-- サマリーカード -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">総品目数</div>
+        <div style="font-size:28px;font-weight:800;color:var(--color-primary-dark);">24</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">在庫不足</div>
+        <div style="font-size:28px;font-weight:800;color:var(--color-danger);">3</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">要発注</div>
+        <div style="font-size:28px;font-weight:800;color:var(--color-warning);">5</div>
+      </div>
+      <div class="card" style="padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">今月入庫</div>
+        <div style="font-size:28px;font-weight:800;color:var(--color-success);">12</div>
+      </div>
+    </div>
+
+    <!-- 検索パネル -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:1fr 1fr 1fr auto;">
+        <div>
+          <label class="form-label">品目名</label>
+          <input type="text" class="form-control" placeholder="品目名で検索">
+        </div>
+        <div>
+          <label class="form-label">カテゴリ</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>薬剤</option>
+            <option>医療器具</option>
+            <option>消耗品</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">在庫状態</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>十分</option>
+            <option>要発注</option>
+            <option>在庫不足</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;">
+          <button class="btn btn-primary">検索</button>
+          <a href="#" class="btn btn-outline">クリア</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- テーブル -->
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>品目名</th>
+              <th>カテゴリ</th>
+              <th>現在庫数</th>
+              <th>最小在庫数</th>
+              <th>単位</th>
+              <th>在庫状態</th>
+              <th>最終入庫日</th>
+              <th>保管場所</th>
+              <th style="width:100px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>排卵誘発剤A</strong></td>
+              <td><span class="badge badge-info">薬剤</span></td>
+              <td><strong style="color:var(--color-success);">150</strong></td>
+              <td>50</td>
+              <td>本</td>
+              <td><span class="badge badge-success">十分</span></td>
+              <td>2026/05/07</td>
+              <td>薬品棚A-1</td>
+              <td>
+                <a href="#" class="btn btn-xs btn-outline">入庫</a>
+                <a href="#" class="btn btn-xs btn-ghost">出庫</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>採卵針</strong></td>
+              <td><span class="badge badge-muted">医療器具</span></td>
+              <td><strong style="color:var(--color-warning);">45</strong></td>
+              <td>50</td>
+              <td>本</td>
+              <td><span class="badge badge-warning">要発注</span></td>
+              <td>2026/04/20</td>
+              <td>器具棚B-3</td>
+              <td>
+                <a href="#" class="btn btn-xs btn-outline">入庫</a>
+                <a href="#" class="btn btn-xs btn-ghost">出庫</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>培養液</strong></td>
+              <td><span class="badge badge-info">薬剤</span></td>
+              <td><strong style="color:var(--color-danger);">8</strong></td>
+              <td>20</td>
+              <td>本</td>
+              <td><span class="badge badge-danger">在庫不足</span></td>
+              <td>2026/04/15</td>
+              <td>冷蔵庫C-1</td>
+              <td>
+                <a href="#" class="btn btn-xs btn-outline">入庫</a>
+                <a href="#" class="btn btn-xs btn-ghost">出庫</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>滅菌ガーゼ</strong></td>
+              <td><span class="badge badge-muted">消耗品</span></td>
+              <td><strong style="color:var(--color-success);">500</strong></td>
+              <td>100</td>
+              <td>枚</td>
+              <td><span class="badge badge-success">十分</span></td>
+              <td>2026/05/01</td>
+              <td>消耗品棚D-2</td>
+              <td>
+                <a href="#" class="btn btn-xs btn-outline">入庫</a>
+                <a href="#" class="btn btn-xs btn-ghost">出庫</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>注射針（18G）</strong></td>
+              <td><span class="badge badge-muted">消耗品</span></td>
+              <td><strong style="color:var(--color-warning);">30</strong></td>
+              <td>50</td>
+              <td>本</td>
+              <td><span class="badge badge-warning">要発注</span></td>
+              <td>2026/04/10</td>
+              <td>消耗品棚D-1</td>
+              <td>
+                <a href="#" class="btn btn-xs btn-outline">入庫</a>
+                <a href="#" class="btn btn-xs btn-ghost">出庫</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — ログイン</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+  body { background: var(--color-sidebar-bg); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .login-wrap { width: 100%; max-width: 400px; padding: 24px; }
+  .login-logo { text-align: center; margin-bottom: 32px; }
+  .login-logo-text { font-size: 36px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+  .login-logo-text span { color: var(--color-accent); }
+  .login-logo-sub { font-size: 13px; color: #888; margin-top: 4px; }
+  .login-card {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-lg);
+  }
+  .login-title { font-size: 18px; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 6px; }
+  .login-subtitle { font-size: 13px; color: var(--color-text-muted); margin-bottom: 24px; }
+  .login-btn {
+    width: 100%;
+    padding: 11px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.15s;
+    font-family: inherit;
+  }
+  .login-btn:hover { background: var(--color-primary-dark); }
+  .login-footer { text-align: center; margin-top: 20px; font-size: 12px; color: var(--color-text-muted); }
+  .login-footer a { color: var(--color-accent); }
+  .form-group { margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-logo">
+    <div class="login-logo-text">Focus<span>.</span></div>
+    <div class="login-logo-sub">恵比寿女性クリニック 職員ポータル</div>
+  </div>
+  <div class="login-card">
+    <div class="login-title">ログイン</div>
+    <div class="login-subtitle">メールアドレスとパスワードを入力してください</div>
+    <div class="form-group">
+      <label class="form-label">メールアドレス</label>
+      <input type="email" class="form-control" placeholder="example@ebisu-womens.jp" value="masaru.hata@ebisu-womens.jp">
+    </div>
+    <div class="form-group">
+      <label class="form-label">パスワード</label>
+      <input type="password" class="form-control" placeholder="パスワードを入力" value="••••••••">
+    </div>
+    <button class="login-btn">ログイン</button>
+    <div class="login-footer">
+      <a href="#">パスワードをお忘れの方はこちら</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

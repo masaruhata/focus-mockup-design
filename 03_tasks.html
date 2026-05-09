@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — タスク管理</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="tasks">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">タスク管理</h1>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          タスク登録
+        </a>
+      </div>
+    </div>
+
+    <!-- 検索パネル -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+        <div>
+          <label class="form-label">件名</label>
+          <input type="text" class="form-control" placeholder="件名で検索">
+        </div>
+        <div>
+          <label class="form-label">種別</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>患者対応</option>
+            <option>事務</option>
+            <option>その他</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">状態</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>未対応</option>
+            <option>対応中</option>
+            <option>完了</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">優先度</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>高</option>
+            <option>中</option>
+            <option>低</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">担当者</label>
+          <input type="text" class="form-control" placeholder="担当者名">
+        </div>
+        <div>
+          <label class="form-label">依頼日（開始）</label>
+          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+        </div>
+        <div>
+          <label class="form-label">期日（終了）</label>
+          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;">
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+            検索
+          </button>
+          <a href="#" class="btn btn-outline">クリア</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- テーブル -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">タスク一覧</span>
+        <span class="text-muted text-sm">全 <strong style="color:var(--color-primary-dark);">12</strong> 件</span>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>管理番号</th>
+              <th>種別</th>
+              <th>件名</th>
+              <th>画面の情報</th>
+              <th>優先度</th>
+              <th>状態</th>
+              <th>担当者</th>
+              <th>依頼日</th>
+              <th>期日</th>
+              <th style="width:80px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><span class="badge badge-info">患者対応</span></td>
+              <td><a href="#">吉野様 問診結果確認</a></td>
+              <td class="text-sm">吉野　瑞貴 (100001)</td>
+              <td><span class="badge badge-danger">高</span></td>
+              <td><span class="badge badge-warning">未対応</span></td>
+              <td>三栖有津紗</td>
+              <td>2026/05/08</td>
+              <td>2026/05/09</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><span class="badge badge-info">患者対応</span></td>
+              <td><a href="#">若松様 次回来院日調整</a></td>
+              <td class="text-sm">若松　飛鳥 (100002)</td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-warning">未対応</span></td>
+              <td>鶴田有希</td>
+              <td>2026/05/07</td>
+              <td>2026/05/10</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><span class="badge badge-muted">事務</span></td>
+              <td><a href="#">保険証期限確認（5月分）</a></td>
+              <td class="text-sm">—</td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td>花城穂乃果</td>
+              <td>2026/05/01</td>
+              <td>2026/05/15</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><span class="badge badge-info">患者対応</span></td>
+              <td><a href="#">加藤様 AIH後の経過確認連絡</a></td>
+              <td class="text-sm">加藤　佳奈 (100003)</td>
+              <td><span class="badge badge-danger">高</span></td>
+              <td><span class="badge badge-warning">未対応</span></td>
+              <td>三栖有津紗</td>
+              <td>2026/05/08</td>
+              <td>2026/05/09</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><span class="badge badge-muted">事務</span></td>
+              <td><a href="#">在庫発注点確認（HMG製剤）</a></td>
+              <td class="text-sm">—</td>
+              <td><span class="badge badge-danger">高</span></td>
+              <td><span class="badge badge-warning">未対応</span></td>
+              <td>鶴田有希</td>
+              <td>2026/05/08</td>
+              <td>2026/05/09</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><span class="badge badge-info">患者対応</span></td>
+              <td><a href="#">庄形様 助成金書類準備連絡</a></td>
+              <td class="text-sm">庄形　恵美 (100004)</td>
+              <td><span class="badge badge-muted">低</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td>花城穂乃果</td>
+              <td>2026/04/28</td>
+              <td>2026/05/07</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><span class="badge badge-info">患者対応</span></td>
+              <td><a href="#">瀬戸口様 採卵スケジュール確認</a></td>
+              <td class="text-sm">瀬戸口　ユリア (100005)</td>
+              <td><span class="badge badge-danger">高</span></td>
+              <td><span class="badge badge-info">対応中</span></td>
+              <td>三栖有津紗</td>
+              <td>2026/05/06</td>
+              <td>2026/05/11</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><span class="badge badge-muted">事務</span></td>
+              <td><a href="#">5月分レセプト点検</a></td>
+              <td class="text-sm">—</td>
+              <td><span class="badge badge-warning">中</span></td>
+              <td><span class="badge badge-warning">未対応</span></td>
+              <td>鶴田有希</td>
+              <td>2026/05/01</td>
+              <td>2026/05/20</td>
+              <td class="row-actions"><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- ページネーション -->
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+*.webp
+*.png
+*.json
+gen_screens.py

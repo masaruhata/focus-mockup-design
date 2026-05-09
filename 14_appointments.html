@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — DQ予約情報</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+.calendar-layout { display:grid; grid-template-columns:240px 1fr; gap:16px; }
+.mini-cal { background:var(--color-bg-card); border:1px solid var(--color-border-light); border-radius:var(--radius-md); padding:14px; box-shadow:var(--shadow-xs); }
+.mini-cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.mini-cal-title { font-size:14px; font-weight:700; color:var(--color-primary-dark); }
+.mini-cal-nav { width:24px; height:24px; border-radius:var(--radius-xs); border:1px solid var(--color-border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--color-text-sub); }
+.mini-cal-nav:hover { background:var(--color-beige-light); }
+.mini-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.mini-cal-dow { text-align:center; font-size:10px; font-weight:700; color:var(--color-text-muted); padding:3px 0; }
+.mini-cal-day { text-align:center; font-size:12px; padding:4px 2px; border-radius:var(--radius-xs); cursor:pointer; color:var(--color-text-sub); }
+.mini-cal-day:hover { background:var(--color-beige-light); }
+.mini-cal-day.today { background:var(--color-primary); color:white; font-weight:700; }
+.mini-cal-day.has-event { position:relative; }
+.mini-cal-day.has-event::after { content:''; position:absolute; bottom:2px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--color-accent); }
+.mini-cal-day.other-month { color:var(--color-border); }
+
+.filter-panel { background:var(--color-bg-card); border:1px solid var(--color-border-light); border-radius:var(--radius-md); padding:12px 14px; margin-top:12px; }
+.filter-title { font-size:11px; font-weight:700; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+.filter-item { display:flex; align-items:center; gap:6px; padding:4px 0; font-size:12px; color:var(--color-text-sub); cursor:pointer; }
+.filter-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+.cal-main { background:var(--color-bg-card); border:1px solid var(--color-border-light); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-xs); }
+.cal-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--color-border-light); background:var(--color-beige-light); }
+.cal-title { font-size:16px; font-weight:700; color:var(--color-primary-dark); }
+.cal-view-tabs { display:flex; gap:2px; background:var(--color-beige); border-radius:var(--radius-sm); padding:2px; }
+.cal-view-tab { padding:4px 12px; border-radius:4px; font-size:12px; font-weight:600; cursor:pointer; color:var(--color-text-muted); }
+.cal-view-tab.active { background:var(--color-bg-card); color:var(--color-primary-dark); box-shadow:var(--shadow-xs); }
+
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); }
+.cal-dow { text-align:center; padding:8px; font-size:11px; font-weight:700; color:var(--color-text-muted); background:var(--color-beige-light); border-bottom:1px solid var(--color-border-light); }
+.cal-cell { min-height:100px; border-right:1px solid var(--color-border-table); border-bottom:1px solid var(--color-border-table); padding:6px; }
+.cal-cell:nth-child(7n) { border-right:none; }
+.cal-cell-date { font-size:12px; font-weight:600; color:var(--color-text-sub); margin-bottom:4px; }
+.cal-cell-date.today { width:22px; height:22px; background:var(--color-primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; }
+.cal-cell.other-month .cal-cell-date { color:var(--color-border); }
+.cal-event { font-size:10px; font-weight:600; padding:2px 5px; border-radius:3px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; }
+.cal-event.type-a { background:#e3f2fd; color:#1565c0; }
+.cal-event.type-b { background:#e8f5e9; color:#2e7d32; }
+.cal-event.type-c { background:#fff3e0; color:#e65100; }
+.cal-event.type-d { background:#fce4ec; color:#c62828; }
+</style>
+</head>
+<body data-page="appointments">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="page-header">
+      <div><h1 class="page-title">DQ予約情報</h1></div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          予約登録
+        </a>
+      </div>
+    </div>
+
+    <div class="calendar-layout">
+      <!-- 左サイドパネル -->
+      <div>
+        <!-- ミニカレンダー -->
+        <div class="mini-cal">
+          <div class="mini-cal-header">
+            <button class="mini-cal-nav">‹</button>
+            <span class="mini-cal-title">2026年5月</span>
+            <button class="mini-cal-nav">›</button>
+          </div>
+          <div class="mini-cal-grid">
+            <div class="mini-cal-dow">日</div>
+            <div class="mini-cal-dow">月</div>
+            <div class="mini-cal-dow">火</div>
+            <div class="mini-cal-dow">水</div>
+            <div class="mini-cal-dow">木</div>
+            <div class="mini-cal-dow">金</div>
+            <div class="mini-cal-dow">土</div>
+            <!-- 4/26〜4/30 -->
+            <div class="mini-cal-day other-month">26</div>
+            <div class="mini-cal-day other-month">27</div>
+            <div class="mini-cal-day other-month">28</div>
+            <div class="mini-cal-day other-month">29</div>
+            <div class="mini-cal-day other-month">30</div>
+            <div class="mini-cal-day">1</div>
+            <div class="mini-cal-day">2</div>
+            <div class="mini-cal-day">3</div>
+            <div class="mini-cal-day">4</div>
+            <div class="mini-cal-day">5</div>
+            <div class="mini-cal-day">6</div>
+            <div class="mini-cal-day has-event">7</div>
+            <div class="mini-cal-day today">8</div>
+            <div class="mini-cal-day has-event">9</div>
+            <div class="mini-cal-day">10</div>
+            <div class="mini-cal-day">11</div>
+            <div class="mini-cal-day has-event">12</div>
+            <div class="mini-cal-day">13</div>
+            <div class="mini-cal-day">14</div>
+            <div class="mini-cal-day">15</div>
+            <div class="mini-cal-day">16</div>
+            <div class="mini-cal-day">17</div>
+            <div class="mini-cal-day">18</div>
+            <div class="mini-cal-day">19</div>
+            <div class="mini-cal-day">20</div>
+            <div class="mini-cal-day">21</div>
+            <div class="mini-cal-day">22</div>
+            <div class="mini-cal-day">23</div>
+            <div class="mini-cal-day">24</div>
+            <div class="mini-cal-day">25</div>
+            <div class="mini-cal-day">26</div>
+            <div class="mini-cal-day">27</div>
+            <div class="mini-cal-day">28</div>
+            <div class="mini-cal-day">29</div>
+            <div class="mini-cal-day">30</div>
+            <div class="mini-cal-day">31</div>
+            <div class="mini-cal-day other-month">1</div>
+            <div class="mini-cal-day other-month">2</div>
+            <div class="mini-cal-day other-month">3</div>
+            <div class="mini-cal-day other-month">4</div>
+            <div class="mini-cal-day other-month">5</div>
+            <div class="mini-cal-day other-month">6</div>
+          </div>
+        </div>
+
+        <!-- フィルター -->
+        <div class="filter-panel">
+          <div class="filter-title">予約種別</div>
+          <div class="filter-item"><div class="filter-dot" style="background:#1565c0;"></div>初診</div>
+          <div class="filter-item"><div class="filter-dot" style="background:#2e7d32;"></div>再診</div>
+          <div class="filter-item"><div class="filter-dot" style="background:#e65100;"></div>採卵</div>
+          <div class="filter-item"><div class="filter-dot" style="background:#c62828;"></div>移植</div>
+        </div>
+
+        <!-- 問診状態 -->
+        <div class="filter-panel" style="margin-top:8px;">
+          <div class="filter-title">問診状態</div>
+          <div class="filter-item"><div class="filter-dot" style="background:#2e7d32;"></div>回答済</div>
+          <div class="filter-item"><div class="filter-dot" style="background:#e65100;"></div>未回答</div>
+          <div class="filter-item"><div class="filter-dot" style="background:#8a8a8a;"></div>未送付</div>
+        </div>
+      </div>
+
+      <!-- メインカレンダー -->
+      <div class="cal-main">
+        <div class="cal-header">
+          <div class="flex-center gap-sm">
+            <button class="btn btn-outline btn-sm">‹ 前週</button>
+            <button class="btn btn-outline btn-sm">今日</button>
+            <button class="btn btn-outline btn-sm">次週 ›</button>
+          </div>
+          <span class="cal-title">2026年5月</span>
+          <div class="cal-view-tabs">
+            <div class="cal-view-tab">日</div>
+            <div class="cal-view-tab active">週</div>
+            <div class="cal-view-tab">月</div>
+          </div>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-dow">日</div>
+          <div class="cal-dow">月</div>
+          <div class="cal-dow">火</div>
+          <div class="cal-dow">水</div>
+          <div class="cal-dow">木</div>
+          <div class="cal-dow">金</div>
+          <div class="cal-dow">土</div>
+
+          <!-- Week 1 -->
+          <div class="cal-cell"><div class="cal-cell-date">3</div></div>
+          <div class="cal-cell"><div class="cal-cell-date">4</div></div>
+          <div class="cal-cell"><div class="cal-cell-date">5</div></div>
+          <div class="cal-cell"><div class="cal-cell-date">6</div></div>
+          <div class="cal-cell"><div class="cal-cell-date">7</div>
+            <div class="cal-event type-b">08:30 吉野 瑞貴（再診）</div>
+            <div class="cal-event type-b">08:30 若松 飛鳥（注射）</div>
+            <div class="cal-event type-b">09:00 加藤 佳奈（再診）</div>
+          </div>
+          <div class="cal-cell"><div class="cal-cell-date today">9</div>
+            <div class="cal-event type-b">08:30 庄形 恵美（婦初診）</div>
+            <div class="cal-event type-b">08:30 瀬戸口 ユリア（再診）</div>
+            <div class="cal-event type-c">08:45 長 玲奈（採卵）</div>
+            <div class="cal-event type-d">09:00 王 珮瑩（移植）</div>
+          </div>
+          <div class="cal-cell"><div class="cal-cell-date">8</div>
+            <div class="cal-event type-a">08:30 本間 愛子（初診）</div>
+            <div class="cal-event type-b">09:00 長崎 なつみ（再診）</div>
+          </div>
+
+          <!-- Week 2 -->
+          <div class="cal-cell"><div class="cal-cell-date">10</div></div>
+          <div class="cal-cell"><div class="cal-cell-date">11</div>
+            <div class="cal-event type-b">10:00 長林 幸子（再診）</div>
+          </div>
+          <div class="cal-cell"><div class="cal-cell-date">12</div>
+            <div class="cal-event type-b">13:00 吉野 瑞貴（再診）</div>
+          </div>
+          <div class="cal-cell"><div class="cal-cell-date">13</div></div>
+          <div class="cal-cell"><div class="cal-cell-date">14</div>
+            <div class="cal-event type-a">09:00 若松 飛鳥（初診）</div>
+            <div class="cal-event type-c">11:00 加藤 佳奈（採卵）</div>
+          </div>
+          <div class="cal-cell"><div class="cal-cell-date">15</div>
+            <div class="cal-event type-b">10:00 庄形 恵美（再診）</div>
+          </div>
+          <div class="cal-cell"><div class="cal-cell-date">16</div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

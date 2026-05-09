@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 問診一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="interview">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">問診一覧</span>
+    </div>
+    <div class="page-header">
+      <div><h1 class="page-title">問診一覧</h1></div>
+      <div class="page-actions"><a href="#" class="btn btn-primary"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>問診登録</a></div>
+    </div>
+<div class="search-panel"><div class="search-grid"><div><label class="form-label">患者番号・患者名</label><input type="text" class="form-control" placeholder="番号または氏名"></div><div><label class="form-label">回答状態</label><select class="form-control"><option value="">すべて</option><option>回答済</option><option>未回答</option></select></div><div style="display:flex;align-items:flex-end;gap:8px;"><button class="btn btn-primary">検索</button><a href="#" class="btn btn-outline">クリア</a></div></div></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>患者番号</th><th>患者名</th><th>問診日</th><th>問診種別</th><th>回答状態</th><th>担当者</th><th></th></tr></thead>
+          <tbody><tr><td><a href="05_patient_detail.html">114648</a></td><td>鳩間　こずえ</td><td>2026/05/01</td><td>初診問診</td><td><span class="badge badge-success">回答済</span></td><td>秦勝</td><td><a href="#" class="btn btn-xs btn-outline">詳細</a></td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

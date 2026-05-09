@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — メールテンプレート一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="mail_template">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">メールテンプレート一覧</span>
+    </div>
+    <div class="page-header">
+      <div><h1 class="page-title">メールテンプレート一覧</h1></div>
+      <div class="page-actions"><a href="#" class="btn btn-primary"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>メールテンプレート登録</a></div>
+    </div>
+<div class="search-panel"><div class="search-grid"><div><label class="form-label">テンプレート名</label><input type="text" class="form-control" placeholder="テンプレート名で検索"></div><div><label class="form-label">種別</label><select class="form-control"><option value="">すべて</option><option>予約</option><option>通知</option><option>案内</option><option>その他</option></select></div><div style="display:flex;align-items:flex-end;gap:8px;"><button class="btn btn-primary">検索</button><a href="#" class="btn btn-outline">クリア</a></div></div></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>テンプレート名</th><th>件名</th><th>種別</th><th>最終更新日</th><th>更新者</th><th></th></tr></thead>
+          <tbody><tr><td>予約確認メール</td><td>【恵比寿女性クリニック】ご予約確認</td><td>予約</td><td>2026/03/01</td><td>秦勝</td><td><a href="#" class="btn btn-xs btn-outline">編集</a></td></tr><tr><td>検査結果通知</td><td>【恵比寿女性クリニック】検査結果のご案内</td><td>通知</td><td>2026/02/15</td><td>テストユーザ</td><td><a href="#" class="btn btn-xs btn-outline">編集</a></td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

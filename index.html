@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus モックアップ — チャコールモダン テーマ</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+body { background:var(--color-beige); min-height:100vh; }
+.index-wrap { max-width:960px; margin:0 auto; padding:40px 24px; }
+.index-hero { text-align:center; margin-bottom:40px; }
+.index-logo { display:inline-flex; align-items:center; gap:10px; margin-bottom:16px; }
+.index-logo-mark { width:44px; height:44px; background:var(--color-primary); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.index-logo-mark svg { width:24px; height:24px; color:white; }
+.index-logo-text { font-size:24px; font-weight:800; color:var(--color-primary-dark); letter-spacing:-.02em; }
+.index-subtitle { font-size:14px; color:var(--color-text-muted); margin-bottom:8px; }
+.index-badge { display:inline-flex; align-items:center; gap:6px; background:var(--color-primary); color:white; font-size:12px; font-weight:700; padding:4px 12px; border-radius:100px; }
+.index-badge-dot { width:7px; height:7px; border-radius:50%; background:var(--color-accent); }
+
+.screen-group { margin-bottom:32px; }
+.screen-group-title { font-size:11px; font-weight:700; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:.12em; margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid var(--color-border-light); }
+.screen-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:10px; }
+.screen-card { background:var(--color-bg-card); border:1px solid var(--color-border-light); border-radius:var(--radius-md); padding:14px 16px; text-decoration:none; color:var(--color-text); transition:all .15s; display:flex; align-items:center; gap:10px; box-shadow:var(--shadow-xs); }
+.screen-card:hover { border-color:var(--color-primary); box-shadow:0 4px 12px rgba(74,74,74,.12); transform:translateY(-1px); text-decoration:none; color:var(--color-primary-dark); }
+.screen-card-icon { width:32px; height:32px; border-radius:var(--radius-sm); background:var(--color-beige-light); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.screen-card-icon svg { width:16px; height:16px; color:var(--color-primary); }
+.screen-card-num { font-size:10px; color:var(--color-text-muted); }
+.screen-card-name { font-size:13px; font-weight:600; }
+
+.css-note { background:var(--color-bg-card); border:1px solid var(--color-border-light); border-radius:var(--radius-md); padding:20px 24px; margin-top:32px; box-shadow:var(--shadow-xs); }
+.css-note-title { font-size:13px; font-weight:700; color:var(--color-primary-dark); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.css-note pre { background:var(--color-beige-light); border:1px solid var(--color-border-light); border-radius:var(--radius-sm); padding:12px 16px; font-size:12px; color:var(--color-text-sub); overflow-x:auto; margin:0; }
+</style>
+</head>
+<body>
+<div class="index-wrap">
+
+  <div class="index-hero">
+    <div class="index-logo">
+      <div class="index-logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="index-logo-text">Focus</span>
+    </div>
+    <div class="index-subtitle">恵比寿女性クリニック 患者管理システム</div>
+    <div style="margin-top:10px;">
+      <span class="index-badge"><span class="index-badge-dot"></span>チャコールモダン テーマ — モックアップ v2.0</span>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--color-text-muted);">全 <strong style="color:var(--color-primary-dark);">37</strong> 画面 | CSS変数による一括カラー変更対応</div>
+  </div>
+
+  <!-- 認証 -->
+  <div class="screen-group">
+    <div class="screen-group-title">認証</div>
+    <div class="screen-grid">
+      <a href="01_login.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">01</div><div class="screen-card-name">ログイン</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ホーム・タスク -->
+  <div class="screen-group">
+    <div class="screen-group-title">ホーム・タスク</div>
+    <div class="screen-grid">
+      <a href="02_home.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg></div>
+        <div><div class="screen-card-num">02</div><div class="screen-card-name">ダッシュボード</div></div>
+      </a>
+      <a href="03_tasks.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">03</div><div class="screen-card-name">タスク管理</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 患者管理 -->
+  <div class="screen-group">
+    <div class="screen-group-title">患者管理</div>
+    <div class="screen-grid">
+      <a href="04_patient_list.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg></div>
+        <div><div class="screen-card-num">04</div><div class="screen-card-name">患者情報一覧</div></div>
+      </a>
+      <a href="05_patient_detail.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">05</div><div class="screen-card-name">患者詳細情報</div></div>
+      </a>
+      <a href="06_patient_cares.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">06</div><div class="screen-card-name">患者様対応</div></div>
+      </a>
+      <a href="07_marriage_informations.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">07</div><div class="screen-card-name">婚姻情報</div></div>
+      </a>
+      <a href="08_insurance_cards.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">08</div><div class="screen-card-name">保険証一覧</div></div>
+      </a>
+      <a href="09_pregnant_patients.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">09</div><div class="screen-card-name">妊娠患者一覧</div></div>
+      </a>
+      <a href="18_list_accounts.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">18</div><div class="screen-card-name">患者アカウント</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 診療記録 -->
+  <div class="screen-group">
+    <div class="screen-group-title">診療記録</div>
+    <div class="screen-grid">
+      <a href="10_patient_memo.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">10</div><div class="screen-card-name">カルテ情報</div></div>
+      </a>
+      <a href="11_payments.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">11</div><div class="screen-card-name">診療費請求</div></div>
+      </a>
+      <a href="12_visit_info.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">12</div><div class="screen-card-name">来院情報</div></div>
+      </a>
+      <a href="13_medical_interviews.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">13</div><div class="screen-card-name">問診一覧</div></div>
+      </a>
+      <a href="15_inspections.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673 0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">15</div><div class="screen-card-name">検査情報</div></div>
+      </a>
+      <a href="22_receipts.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a1 1 0 001 1h8a1 1 0 001-1v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a1 1 0 00-1-1H6a1 1 0 00-1 1zm2 0h6v3H7V4zm-1 9v-2h8v2H6z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">22</div><div class="screen-card-name">レセプト情報</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 不妊治療 -->
+  <div class="screen-group">
+    <div class="screen-group-title">不妊治療</div>
+    <div class="screen-grid">
+      <a href="26_semen_analysis.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673 0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">26</div><div class="screen-card-name">精液検査</div></div>
+      </a>
+      <a href="27_artificial_insemination.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">27</div><div class="screen-card-name">人工授精</div></div>
+      </a>
+      <a href="28_opu_informations.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">28</div><div class="screen-card-name">OPU（採卵）</div></div>
+      </a>
+      <a href="29_transplantation.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z"/></svg></div>
+        <div><div class="screen-card-num">29</div><div class="screen-card-name">移植（ET）</div></div>
+      </a>
+      <a href="30_frozen_eggs.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.736 6.979C9.208 6.193 9.696 6 10 6c.304 0 .792.193 1.264.979a1 1 0 001.715-1.029C12.279 4.784 11.232 4 10 4s-2.279.784-2.979 1.95c-.285.475-.507 1-.67 1.55H6a1 1 0 000 2h.013a9.358 9.358 0 000 1H6a1 1 0 100 2h.351c.163.55.385 1.075.67 1.55C7.721 15.216 8.768 16 10 16s2.279-.784 2.979-1.95a1 1 0 10-1.715-1.029c-.472.786-.96.979-1.264.979-.304 0-.792-.193-1.264-.979a4.265 4.265 0 01-.264-.521H10a1 1 0 100-2H8.017a7.36 7.36 0 010-1H10a1 1 0 100-2H8.472a4.26 4.26 0 01.264-.521z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">30</div><div class="screen-card-name">凍結胚</div></div>
+      </a>
+      <a href="31_frozen_sperm.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.736 6.979C9.208 6.193 9.696 6 10 6c.304 0 .792.193 1.264.979a1 1 0 001.715-1.029C12.279 4.784 11.232 4 10 4s-2.279.784-2.979 1.95c-.285.475-.507 1-.67 1.55H6a1 1 0 000 2h.013a9.358 9.358 0 000 1H6a1 1 0 100 2h.351c.163.55.385 1.075.67 1.55C7.721 15.216 8.768 16 10 16s2.279-.784 2.979-1.95a1 1 0 10-1.715-1.029c-.472.786-.96.979-1.264.979-.304 0-.792-.193-1.264-.979a4.265 4.265 0 01-.264-.521H10a1 1 0 100-2H8.017a7.36 7.36 0 010-1H10a1 1 0 100-2H8.472a4.26 4.26 0 01.264-.521z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">31</div><div class="screen-card-name">凍結精子</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 書類管理 -->
+  <div class="screen-group">
+    <div class="screen-group-title">書類管理</div>
+    <div class="screen-grid">
+      <a href="19_patient_documents.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">19</div><div class="screen-card-name">患者文書</div></div>
+      </a>
+      <a href="20_resident_registries.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">20</div><div class="screen-card-name">住民票・戸籍</div></div>
+      </a>
+      <a href="21_consent_letters.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">21</div><div class="screen-card-name">電子同意書</div></div>
+      </a>
+      <a href="24_referral_informations.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/></svg></div>
+        <div><div class="screen-card-num">24</div><div class="screen-card-name">紹介状</div></div>
+      </a>
+      <a href="25_subsidies.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">25</div><div class="screen-card-name">助成金</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 予約・オンライン -->
+  <div class="screen-group">
+    <div class="screen-group-title">予約・オンライン診療</div>
+    <div class="screen-grid">
+      <a href="14_appointments.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">14</div><div class="screen-card-name">DQ予約情報</div></div>
+      </a>
+      <a href="23_online_consultation.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/><path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"/></svg></div>
+        <div><div class="screen-card-num">23</div><div class="screen-card-name">オンライン診療</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- メール -->
+  <div class="screen-group">
+    <div class="screen-group-title">メール管理</div>
+    <div class="screen-grid">
+      <a href="16_mail_inbox.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></div>
+        <div><div class="screen-card-num">16</div><div class="screen-card-name">メール受信箱</div></div>
+      </a>
+      <a href="32_mail_template.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">32</div><div class="screen-card-name">メールテンプレート</div></div>
+      </a>
+      <a href="33_email_campaigns.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/></svg></div>
+        <div><div class="screen-card-num">33</div><div class="screen-card-name">一斉配信</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 在庫管理 -->
+  <div class="screen-group">
+    <div class="screen-group-title">在庫管理</div>
+    <div class="screen-grid">
+      <a href="17_inventories.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"/><path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">17</div><div class="screen-card-name">在庫一覧</div></div>
+      </a>
+      <a href="34_medical_inventories.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">34</div><div class="screen-card-name">入出庫履歴</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- システム管理 -->
+  <div class="screen-group">
+    <div class="screen-group-title">システム管理</div>
+    <div class="screen-grid">
+      <a href="35_notifications.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg></div>
+        <div><div class="screen-card-num">35</div><div class="screen-card-name">お知らせ</div></div>
+      </a>
+      <a href="36_admin_accounts.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">36</div><div class="screen-card-name">アカウント管理</div></div>
+      </a>
+      <a href="37_settings.html" class="screen-card">
+        <div class="screen-card-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg></div>
+        <div><div class="screen-card-num">37</div><div class="screen-card-name">設定</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- CSSカスタマイズ説明 -->
+  <div class="css-note">
+    <div class="css-note-title">
+      <svg viewBox="0 0 20 20" fill="currentColor" style="width:16px;height:16px;color:var(--color-accent);"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      CSSカラー変数による一括変更方法（theme.css）
+    </div>
+    <pre>:root {
+  /* ===== プライマリカラー（チャコール系） ===== */
+  --color-primary:        #4a4a4a;   /* メインカラー → 任意の色に変更可 */
+  --color-primary-dark:   #2a2a2a;   /* 濃いプライマリ */
+  --color-primary-light:  #6a6a6a;   /* 薄いプライマリ */
+
+  /* ===== アクセントカラー（ゴールドベージュ） ===== */
+  --color-accent:         #c8a96e;   /* アクセント → 任意の色に変更可 */
+  --color-accent-bg:      #fdf6ec;   /* アクセント背景 */
+
+  /* ===== 背景・ベージュ系 ===== */
+  --color-bg:             #faf6f0;   /* ページ背景 */
+  --color-beige:          #f0e8d8;   /* ベージュ */
+  --color-beige-light:    #faf4ec;   /* 薄いベージュ */
+}</pre>
+  </div>
+
+</div>
+</body>
+</html>

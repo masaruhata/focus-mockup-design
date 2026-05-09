@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 入出庫履歴一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="inventory_log">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+    <div class="breadcrumb">
+      <a href="17_inventories.html">在庫一覧</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">入出庫履歴一覧</span>
+    </div>
+    <div class="page-header">
+      <div><h1 class="page-title">入出庫履歴一覧</h1></div>
+      <div class="page-actions"></div>
+    </div>
+<div class="search-panel"><div class="search-grid"><div><label class="form-label">品目名</label><input type="text" class="form-control" placeholder="品目名で検索"></div><div><label class="form-label">種別</label><select class="form-control"><option value="">すべて</option><option>入庫</option><option>出庫</option></select></div><div><label class="form-label">日付（開始）</label><input type="text" class="form-control" placeholder="YYYY/MM/DD"></div><div><label class="form-label">日付（終了）</label><input type="text" class="form-control" placeholder="YYYY/MM/DD"></div><div style="display:flex;align-items:flex-end;gap:8px;"><button class="btn btn-primary">検索</button><a href="#" class="btn btn-outline">クリア</a></div></div></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>日時</th><th>品目名</th><th>種別</th><th>数量</th><th>在庫残数</th><th>担当者</th><th>備考</th></tr></thead>
+          <tbody><tr><td>2026/05/07 09:00</td><td>排卵誘発剤A</td><td><span class="badge badge-success">入庫</span></td><td>+50</td><td>150</td><td>秦勝</td><td>定期発注</td></tr><tr><td>2026/05/06 14:30</td><td>採卵針</td><td><span class="badge badge-danger">出庫</span></td><td>-5</td><td>45</td><td>テストユーザ</td><td>処置使用</td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

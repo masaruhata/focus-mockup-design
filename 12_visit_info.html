@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 来院情報一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="visit">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">来院情報一覧</span>
+    </div>
+    <div class="page-header">
+      <div><h1 class="page-title">来院情報一覧</h1></div>
+      <div class="page-actions"></div>
+    </div>
+<div class="search-panel"><div class="search-grid"><div><label class="form-label">患者番号・患者名</label><input type="text" class="form-control" placeholder="番号または氏名"></div><div><label class="form-label">来院日（開始）</label><input type="text" class="form-control" placeholder="YYYY/MM/DD"></div><div><label class="form-label">来院日（終了）</label><input type="text" class="form-control" placeholder="YYYY/MM/DD"></div><div style="display:flex;align-items:flex-end;gap:8px;"><button class="btn btn-primary">検索</button><a href="#" class="btn btn-outline">クリア</a></div></div></div>
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>患者番号</th><th>患者名</th><th>来院日時</th><th>診療区分</th><th>担当医</th><th>状態</th><th></th></tr></thead>
+          <tbody><tr><td><a href="05_patient_detail.html">114648</a></td><td>鳩間　こずえ</td><td>2026/05/07 10:30</td><td>不妊治療</td><td>院長</td><td><span class="badge badge-success">来院済</span></td><td><a href="#" class="btn btn-xs btn-outline">詳細</a></td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 患者情報一覧</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+.sub-nav { display:flex; gap:2px; margin-bottom:14px; border-bottom:2px solid var(--color-border-light); }
+.sub-nav a { padding:8px 14px; font-size:13px; font-weight:600; color:var(--color-text-muted); border-bottom:2px solid transparent; margin-bottom:-2px; white-space:nowrap; transition:all .15s; }
+.sub-nav a:hover { color:var(--color-text); text-decoration:none; }
+.sub-nav a.active { color:var(--color-primary-dark); border-bottom-color:var(--color-primary); }
+.view-tabs { display:flex; gap:4px; }
+.view-tab { padding:5px 12px; border-radius:var(--radius-sm); font-size:12px; font-weight:600; cursor:pointer; border:1px solid var(--color-border); background:var(--color-bg-card); color:var(--color-text-sub); transition:all .15s; }
+.view-tab:hover { background:var(--color-beige-light); }
+.view-tab.active { background:var(--color-primary); color:white; border-color:var(--color-primary); }
+.table-toolbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px; }
+.result-count { font-size:13px; color:var(--color-text-muted); }
+.result-count strong { color:var(--color-primary-dark); font-size:15px; }
+.row-actions { display:flex; gap:4px; }
+</style>
+</head>
+<body data-page="patient_list">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">患者情報一覧</h1>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          患者情報登録
+        </a>
+      </div>
+    </div>
+
+    <!-- サブナビ -->
+    <div class="sub-nav">
+      <a href="04_patient_list.html" class="active">患者情報一覧</a>
+      <a href="#">患者情報インポート</a>
+      <a href="07_marriage_informations.html">婚姻情報一覧</a>
+      <a href="08_insurance_cards.html">保険証一覧</a>
+      <a href="18_list_accounts.html">患者アカウント情報一覧</a>
+      <a href="09_pregnant_patients.html">妊娠患者一覧</a>
+    </div>
+
+    <!-- 検索パネル -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+        <div>
+          <label class="form-label">患者番号・患者名</label>
+          <input type="text" class="form-control" placeholder="番号または氏名で検索">
+        </div>
+        <div>
+          <label class="form-label">メールアドレス・携帯番号・住所</label>
+          <input type="text" class="form-control" placeholder="メール・電話・住所">
+        </div>
+        <div>
+          <label class="form-label">初診日（開始）</label>
+          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+        </div>
+        <div>
+          <label class="form-label">初診日（終了）</label>
+          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+        </div>
+        <div>
+          <label class="form-label">住所確認日（開始）</label>
+          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+        </div>
+        <div>
+          <label class="form-label">住所確認日（終了）</label>
+          <input type="text" class="form-control" placeholder="YYYY/MM/DD">
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;grid-column:span 2;">
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+            検索
+          </button>
+          <a href="#" class="btn btn-outline">クリア</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ツールバー -->
+    <div class="table-toolbar">
+      <div class="flex-center gap-sm">
+        <div class="result-count">全 <strong>12</strong> 件</div>
+        <div class="view-tabs">
+          <div class="view-tab active">共通ビュー①</div>
+          <div class="view-tab">共通ビュー②</div>
+          <div class="view-tab">共通ビュー③</div>
+        </div>
+      </div>
+      <button class="btn btn-outline btn-sm">
+        <svg viewBox="0 0 20 20" fill="currentColor" style="width:13px;height:13px;"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-4 4A1 1 0 016 19v-7.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/></svg>
+        表示設定
+      </button>
+    </div>
+
+    <!-- テーブル -->
+    <div class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:36px;">#</th>
+              <th class="sortable">患者番号</th>
+              <th class="sortable">患者名（漢字）</th>
+              <th class="sortable">患者名（カナ）</th>
+              <th>性別</th>
+              <th class="sortable">生年月日</th>
+              <th>メールアドレス</th>
+              <th>携帯電話</th>
+              <th>郵便番号</th>
+              <th>住所確認日</th>
+              <th>診療区分</th>
+              <th>初診日</th>
+              <th style="width:80px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-muted text-xs">1</td>
+              <td><a href="05_patient_detail.html">100001</a></td>
+              <td><strong>吉野　瑞貴</strong></td>
+              <td class="text-sub">ヨシノ　ミズキ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1987/09/12</td>
+              <td class="text-sm">mini-0323@i.softbank.jp</td>
+              <td>08044770323</td>
+              <td>135-0063</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">2</td>
+              <td><a href="05_patient_detail.html">100002</a></td>
+              <td><strong>若松　飛鳥</strong></td>
+              <td class="text-sub">ワカマツ　アスカ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1988/02/03</td>
+              <td class="text-sm">asw.3off@icloud.com</td>
+              <td>09082807022</td>
+              <td>153-0062</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">3</td>
+              <td><a href="05_patient_detail.html">100003</a></td>
+              <td><strong>加藤　佳奈</strong></td>
+              <td class="text-sub">カトウ　カナ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1991/03/01</td>
+              <td class="text-sm">anakpine@gmail.com</td>
+              <td>08044150770</td>
+              <td>142-0063</td>
+              <td>2020/12/01</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">4</td>
+              <td><a href="05_patient_detail.html">100004</a></td>
+              <td><strong>庄形　恵美</strong></td>
+              <td class="text-sub">ショウガタ　メグミ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1985/05/29</td>
+              <td class="text-sm">m.kawashima0529@gmail.com</td>
+              <td>09052527155</td>
+              <td>150-0021</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">5</td>
+              <td><a href="05_patient_detail.html">100005</a></td>
+              <td><strong>瀬戸口　ユリア</strong></td>
+              <td class="text-sub">セトグチ　ユリア</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1977/09/04</td>
+              <td class="text-sm">hiwalani_julia@hotmail.com</td>
+              <td>08043654335</td>
+              <td>211-0053</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">6</td>
+              <td><a href="05_patient_detail.html">100006</a></td>
+              <td><strong>長　玲奈</strong></td>
+              <td class="text-sub">チョウ　レイナ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1995/11/29</td>
+              <td class="text-sm">re.gossip.xoxo@gmail.com</td>
+              <td>08078270932</td>
+              <td>152-0004</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">7</td>
+              <td><a href="05_patient_detail.html">100007</a></td>
+              <td><strong>王　珮瑩</strong></td>
+              <td class="text-sub">オウ　ペイエイ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1989/01/22</td>
+              <td class="text-sm">ken12999@hotmail.co.jp</td>
+              <td>07021968038</td>
+              <td>145-0013</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">8</td>
+              <td><a href="05_patient_detail.html">100008</a></td>
+              <td><strong>本間　愛子</strong></td>
+              <td class="text-sub">ホンマ　アイコ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1980/05/24</td>
+              <td class="text-sm">aiko-style.vb@docomo.ne.jp</td>
+              <td>09088755965</td>
+              <td>302-0033</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">9</td>
+              <td><a href="05_patient_detail.html">100009</a></td>
+              <td><strong>長崎　なつみ</strong></td>
+              <td class="text-sub">ナガサキ　ナツミ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1989/07/19</td>
+              <td class="text-sm">natsumi19ruby@gmail.com</td>
+              <td>09069360662</td>
+              <td>158-0086</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted text-xs">10</td>
+              <td><a href="05_patient_detail.html">100010</a></td>
+              <td><strong>長林　幸子</strong></td>
+              <td class="text-sub">ナガバヤシ　サチコ</td>
+              <td><span class="badge badge-info">女性</span></td>
+              <td>1983/03/18</td>
+              <td class="text-sm">sck345sw@i.softbank.jp</td>
+              <td>09058102070</td>
+              <td>201-0016</td>
+              <td>—</td>
+              <td><span class="badge badge-muted">不妊治療</span></td>
+              <td>2019/06/01</td>
+              <td class="row-actions">
+                <a href="05_patient_detail.html" class="btn btn-xs btn-outline">詳細</a>
+                <a href="#" class="btn btn-xs btn-ghost">編集</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- ページネーション -->
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

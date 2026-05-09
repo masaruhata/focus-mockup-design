@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 設定</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+.settings-layout { display:grid; grid-template-columns:220px 1fr; gap:16px; }
+.settings-nav { background:var(--color-bg-card); border:1px solid var(--color-border-light); border-radius:var(--radius-md); padding:8px 0; box-shadow:var(--shadow-xs); height:fit-content; }
+.settings-nav-section { font-size:10px; font-weight:700; color:var(--color-text-muted); text-transform:uppercase; letter-spacing:.1em; padding:12px 16px 4px; }
+.settings-nav-item { display:flex; align-items:center; gap:8px; padding:9px 16px; font-size:13px; color:var(--color-text-sub); cursor:pointer; border-left:3px solid transparent; transition:all .12s; }
+.settings-nav-item:hover { background:var(--color-beige-light); color:var(--color-text); }
+.settings-nav-item.active { background:var(--color-accent-bg); border-left-color:var(--color-primary); color:var(--color-primary-dark); font-weight:600; }
+.settings-nav-item svg { width:15px; height:15px; opacity:.7; flex-shrink:0; }
+
+.settings-content { display:flex; flex-direction:column; gap:16px; }
+.settings-section { background:var(--color-bg-card); border:1px solid var(--color-border-light); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-xs); }
+.settings-section-header { padding:14px 18px; border-bottom:1px solid var(--color-border-light); background:var(--color-beige-light); }
+.settings-section-title { font-size:14px; font-weight:700; color:var(--color-primary-dark); }
+.settings-section-desc { font-size:12px; color:var(--color-text-muted); margin-top:2px; }
+.settings-body { padding:18px; }
+.settings-row { display:grid; grid-template-columns:200px 1fr; gap:16px; align-items:start; padding:12px 0; border-bottom:1px solid var(--color-border-table); }
+.settings-row:last-child { border-bottom:none; }
+.settings-label { font-size:13px; font-weight:600; color:var(--color-text-sub); padding-top:8px; }
+.settings-label-desc { font-size:11px; color:var(--color-text-muted); margin-top:2px; font-weight:400; }
+.toggle { display:flex; align-items:center; gap:10px; }
+.toggle-switch { width:40px; height:22px; background:var(--color-primary); border-radius:100px; position:relative; cursor:pointer; flex-shrink:0; }
+.toggle-switch::after { content:''; position:absolute; top:3px; right:3px; width:16px; height:16px; background:white; border-radius:50%; transition:transform .15s; }
+.toggle-switch.off { background:var(--color-border); }
+.toggle-switch.off::after { transform:translateX(-18px); }
+.toggle-label { font-size:13px; color:var(--color-text-sub); }
+</style>
+</head>
+<body data-page="settings">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="page-header">
+      <div><h1 class="page-title">設定</h1></div>
+    </div>
+
+    <div class="settings-layout">
+      <!-- 設定ナビ -->
+      <div class="settings-nav">
+        <div class="settings-nav-section">一般</div>
+        <div class="settings-nav-item active">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+          基本設定
+        </div>
+        <div class="settings-nav-item">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+          プロフィール
+        </div>
+        <div class="settings-nav-section">通知</div>
+        <div class="settings-nav-item">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
+          通知設定
+        </div>
+        <div class="settings-nav-item">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+          メール設定
+        </div>
+        <div class="settings-nav-section">セキュリティ</div>
+        <div class="settings-nav-item">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          パスワード変更
+        </div>
+        <div class="settings-nav-item">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          アクセス管理
+        </div>
+        <div class="settings-nav-section">データ</div>
+        <div class="settings-nav-item">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          エクスポート
+        </div>
+        <div class="settings-nav-item">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>
+          バックアップ
+        </div>
+      </div>
+
+      <!-- 設定コンテンツ -->
+      <div class="settings-content">
+
+        <!-- クリニック基本情報 -->
+        <div class="settings-section">
+          <div class="settings-section-header">
+            <div class="settings-section-title">クリニック基本情報</div>
+            <div class="settings-section-desc">クリニックの基本情報を設定します</div>
+          </div>
+          <div class="settings-body">
+            <div class="settings-row">
+              <div class="settings-label">クリニック名</div>
+              <div><input type="text" class="form-control" value="恵比寿女性クリニック" style="max-width:360px;"></div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">電話番号</div>
+              <div><input type="text" class="form-control" value="03-0000-0000" style="max-width:240px;"></div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">住所</div>
+              <div><input type="text" class="form-control" value="東京都渋谷区恵比寿" style="max-width:360px;"></div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">メールアドレス</div>
+              <div><input type="text" class="form-control" value="info@ebisu-womens.jp" style="max-width:360px;"></div>
+            </div>
+          </div>
+          <div style="padding:12px 18px;border-top:1px solid var(--color-border-light);display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary btn-sm">保存</button>
+          </div>
+        </div>
+
+        <!-- 表示設定 -->
+        <div class="settings-section">
+          <div class="settings-section-header">
+            <div class="settings-section-title">表示設定</div>
+            <div class="settings-section-desc">システムの表示に関する設定です</div>
+          </div>
+          <div class="settings-body">
+            <div class="settings-row">
+              <div class="settings-label">
+                タイムゾーン
+                <div class="settings-label-desc">日時表示に使用するタイムゾーン</div>
+              </div>
+              <div>
+                <select class="form-control" style="max-width:240px;">
+                  <option selected>Asia/Tokyo (UTC+9)</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">
+                日付フォーマット
+              </div>
+              <div>
+                <select class="form-control" style="max-width:240px;">
+                  <option selected>YYYY/MM/DD</option>
+                  <option>YYYY-MM-DD</option>
+                  <option>MM/DD/YYYY</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">
+                1ページの表示件数
+              </div>
+              <div>
+                <select class="form-control" style="max-width:120px;">
+                  <option>10</option>
+                  <option selected>20</option>
+                  <option>50</option>
+                  <option>100</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div style="padding:12px 18px;border-top:1px solid var(--color-border-light);display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary btn-sm">保存</button>
+          </div>
+        </div>
+
+        <!-- 通知設定 -->
+        <div class="settings-section">
+          <div class="settings-section-header">
+            <div class="settings-section-title">通知設定</div>
+            <div class="settings-section-desc">各種通知のオン/オフを設定します</div>
+          </div>
+          <div class="settings-body">
+            <div class="settings-row">
+              <div class="settings-label">
+                新着メール通知
+                <div class="settings-label-desc">患者からのメール受信時に通知</div>
+              </div>
+              <div class="toggle">
+                <div class="toggle-switch"></div>
+                <span class="toggle-label">有効</span>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">
+                タスク期限通知
+                <div class="settings-label-desc">タスクの期限前日に通知</div>
+              </div>
+              <div class="toggle">
+                <div class="toggle-switch"></div>
+                <span class="toggle-label">有効</span>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">
+                在庫不足通知
+                <div class="settings-label-desc">在庫が最小数を下回った際に通知</div>
+              </div>
+              <div class="toggle">
+                <div class="toggle-switch off"></div>
+                <span class="toggle-label">無効</span>
+              </div>
+            </div>
+          </div>
+          <div style="padding:12px 18px;border-top:1px solid var(--color-border-light);display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary btn-sm">保存</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>
