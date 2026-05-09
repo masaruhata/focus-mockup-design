@@ -6,271 +6,1001 @@
 <title>Focus — メール受信箱</title>
 <link rel="stylesheet" href="theme.css">
 <style>
-.mail-layout { display:flex; height:calc(100vh - 56px); overflow:hidden; }
-.mail-sidebar { width:200px; min-width:200px; background:var(--sidebar-bg); border-right:1px solid var(--border-color); overflow-y:auto; padding:0.75rem 0; }
-.mail-sidebar-item { display:flex; justify-content:space-between; align-items:center; padding:0.45rem 1rem; font-size:0.82rem; color:var(--text-muted); cursor:pointer; border-left:3px solid transparent; }
-.mail-sidebar-item:hover { background:var(--sidebar-hover); color:var(--text-base); }
-.mail-sidebar-item.active { background:var(--sidebar-active-bg); color:var(--color-primary); border-left-color:var(--color-accent); font-weight:600; }
-.mail-sidebar-badge { background:var(--color-accent); color:#fff; font-size:0.68rem; padding:1px 6px; border-radius:10px; font-weight:700; }
-.mail-sidebar-section { padding:0.5rem 1rem 0.25rem; font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-top:0.5rem; }
-.mail-list { flex:1; overflow-y:auto; background:#fff; }
-.mail-toolbar { display:flex; align-items:center; gap:0.75rem; padding:0.6rem 1rem; border-bottom:1px solid var(--border-color); background:#fff; }
-.mail-toolbar select { font-size:0.78rem; padding:0.25rem 0.5rem; border:1px solid var(--border-color); border-radius:4px; color:var(--text-base); }
-.mail-toolbar .btn { font-size:0.78rem; }
-.mail-item { display:grid; grid-template-columns:32px 140px 1fr 120px; align-items:start; gap:0.75rem; padding:0.75rem 1rem; border-bottom:1px solid var(--border-color); cursor:pointer; transition:background 0.15s; }
-.mail-item:hover { background:#f8f6f2; }
-.mail-item.unread { background:#fffdf8; }
-.mail-item.unread .mail-subject { font-weight:700; color:var(--color-primary); }
-.mail-item-check { display:flex; align-items:center; padding-top:2px; }
-.mail-sender { font-size:0.82rem; font-weight:600; color:var(--text-base); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mail-date { font-size:0.75rem; color:var(--text-muted); text-align:right; white-space:nowrap; }
-.mail-subject { font-size:0.82rem; color:var(--text-base); margin-bottom:0.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mail-preview { font-size:0.75rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.mail-status-badge { display:inline-block; font-size:0.68rem; padding:1px 7px; border-radius:3px; font-weight:600; margin-right:4px; }
-.status-unprocessed { background:#fee2e2; color:#dc2626; }
-.status-processing { background:#fef3c7; color:#d97706; }
-.status-done { background:#d1fae5; color:#059669; }
-.mail-folder-label { font-size:0.7rem; padding:1px 6px; border-radius:3px; background:#e5e7eb; color:#6b7280; margin-right:4px; }
+/* ===== Split Inbox レイアウト ===== */
+.mail-shell {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px);
+  background: var(--color-bg);
+}
+.mail-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  height: 48px;
+  background: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+.mail-titlebar h2 { margin: 0; font-size: 15px; color: var(--color-text); }
+.mail-titlebar .spacer { flex: 1; }
+.mode-btn {
+  height: 30px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.mode-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.mail-body { flex: 1; overflow: hidden; }
+
+/* ===== ビュー切替 ===== */
+.view { display: none; height: 100%; }
+.view.active { display: block; }
+
+/* ===== 3ペインレイアウト ===== */
+.split-layout {
+  display: grid;
+  grid-template-columns: 220px 380px minmax(0, 1fr);
+  height: 100%;
+}
+
+/* ===== フォルダサイドバー ===== */
+.folder-sidebar {
+  background: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-sidebar-border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.folder-compose-btn {
+  margin: 12px 12px 8px;
+  display: block;
+  width: calc(100% - 24px);
+  height: 36px;
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.folder-compose-btn:hover { background: var(--color-accent-dark); }
+.folder-section {
+  padding: 10px 12px 4px;
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--color-sidebar-text);
+  opacity: 0.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.folder-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-sidebar-text);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.12s;
+}
+.folder-item:hover { background: var(--color-sidebar-hover); color: #fff; }
+.folder-item.active {
+  background: var(--color-sidebar-active);
+  color: #fff;
+  border-left-color: var(--color-accent);
+}
+.folder-item .ico { width: 18px; text-align: center; font-size: 13px; }
+.folder-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+.folder-badge.accent { background: var(--color-accent); }
+.folder-badge.danger { background: var(--color-danger); }
+
+/* ===== メール一覧ペイン ===== */
+.mail-list-pane {
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.list-head {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  flex-shrink: 0;
+}
+.list-head-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.list-head-top b { font-size: 14px; color: var(--color-text); }
+.search-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.search-input {
+  flex: 1;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+.filter-select {
+  height: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 8px;
+  font-size: 12px;
+  color: var(--color-text);
+  background: var(--color-bg);
+  min-width: 90px;
+}
+.list-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.pill-red    { background: var(--color-danger-bg);   color: var(--color-danger); }
+.pill-amber  { background: var(--color-warning-bg);  color: var(--color-warning); }
+.pill-green  { background: var(--color-success-bg);  color: var(--color-success); }
+.pill-blue   { background: var(--color-info-bg);     color: var(--color-info); }
+.pill-gray   { background: var(--color-beige-light); color: var(--color-text-sub); }
+.pill-accent { background: var(--color-accent-bg);   color: var(--color-accent-dark); }
+
+.mail-scroll { overflow-y: auto; flex: 1; }
+.mail-card {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  padding: 11px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-bg-card);
+  text-align: left;
+  width: 100%;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.mail-card:hover { background: var(--color-beige-light); }
+.mail-card.active {
+  background: var(--color-accent-bg);
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+.mail-card.unread { background: #fffdf8; }
+.mail-card.unread.active { background: var(--color-accent-bg); }
+.mail-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-beige);
+  color: var(--color-primary);
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.mail-avatar.red   { background: var(--color-danger-bg);  color: var(--color-danger); }
+.mail-avatar.green { background: var(--color-success-bg); color: var(--color-success); }
+.mail-avatar.amber { background: var(--color-warning-bg); color: var(--color-warning); }
+.mail-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.mail-from {
+  font-weight: 700;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text);
+}
+.mail-time {
+  margin-left: auto;
+  font-size: 10.5px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.mail-subject {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1.4;
+  margin-top: 2px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mail-card:not(.unread) .mail-subject { font-weight: 500; color: var(--color-text-sub); }
+.mail-excerpt {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.mail-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+
+/* ===== 本文プレビューペイン ===== */
+.reading-pane {
+  background: var(--color-bg-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.reading-toolbar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  flex-shrink: 0;
+}
+.reading-content {
+  padding: 16px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+.reading-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-bottom: 14px;
+  margin-bottom: 12px;
+}
+.reading-title h3 {
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 0 0 6px;
+  color: var(--color-text);
+}
+.reading-title p {
+  margin: 0 0 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.action-card {
+  padding: 10px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+.action-card b { display: block; font-size: 12px; margin-bottom: 3px; color: var(--color-text); }
+.action-card span { font-size: 11px; color: var(--color-text-muted); line-height: 1.4; }
+.timeline-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+}
+.tl-node {
+  height: 7px;
+  flex: 1;
+  border-radius: 999px;
+  background: var(--color-beige-dark);
+}
+.tl-node.done    { background: var(--color-primary); }
+.tl-node.current { background: var(--color-accent); }
+.tl-labels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  font-size: 10.5px;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+  text-align: center;
+}
+.mail-body-text {
+  line-height: 1.9;
+  white-space: pre-line;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: var(--color-bg-card);
+  font-size: 13px;
+  color: var(--color-text);
+}
+.mail-quote {
+  margin-top: 10px;
+  border: 1px dashed var(--color-border);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+  line-height: 1.7;
+}
+.meta-grid {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 12px;
+}
+.meta-grid div { padding: 8px 11px; border-bottom: 1px solid var(--color-border-light); font-size: 12px; }
+.meta-grid div:nth-last-child(-n+2) { border-bottom: 0; }
+.meta-key { background: var(--color-bg); color: var(--color-text-muted); font-weight: 700; }
+
+/* ===== 詳細ビュー ===== */
+.detail-layout {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  height: 100%;
+}
+.detail-sidebar {
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border);
+  padding: 14px;
+  overflow-y: auto;
+}
+.patient-card {
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 10px;
+}
+.patient-card h3 { margin: 0 0 6px; font-size: 15px; color: var(--color-text); }
+.patient-card p  { margin: 0; color: var(--color-text-muted); font-size: 12px; line-height: 1.7; }
+.kv-grid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 8px;
+}
+.kv-grid div { padding: 7px 9px; border-bottom: 1px solid var(--color-border-light); font-size: 11.5px; }
+.kv-grid div:nth-last-child(-n+2) { border-bottom: 0; }
+.kv-grid div:nth-child(odd) { background: var(--color-bg); color: var(--color-text-muted); font-weight: 700; }
+.detail-main { background: var(--color-bg-card); display: flex; flex-direction: column; overflow: hidden; }
+.detail-content { padding: 16px; overflow-y: auto; flex: 1; }
+.section-box {
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.section-box h4 {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: 13px;
+  color: var(--color-text);
+}
+.thread-body {
+  padding: 14px;
+  line-height: 1.85;
+  white-space: pre-line;
+  font-size: 13px;
+  color: var(--color-text);
+}
+.history-row {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: 12px;
+}
+.history-row:last-child { border-bottom: 0; }
+.history-row span { color: var(--color-text-muted); }
+
+/* ===== 新規作成ビュー ===== */
+.compose-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  height: 100%;
+}
+.template-panel {
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border);
+  padding: 14px;
+  overflow-y: auto;
+}
+.tpl-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  padding: 10px 11px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.tpl-btn:hover { background: var(--color-accent-bg); border-color: var(--color-accent); }
+.tpl-btn b { display: block; margin-bottom: 3px; font-size: 13px; color: var(--color-text); }
+.tpl-btn span { color: var(--color-text-muted); font-size: 11px; line-height: 1.5; }
+.compose-main { background: var(--color-bg-card); display: flex; flex-direction: column; overflow: hidden; }
+.compose-form { padding: 16px; overflow-y: auto; flex: 1; }
+.form-field { margin-bottom: 10px; }
+.form-field label { display: block; font-weight: 700; margin-bottom: 5px; color: var(--color-text-sub); font-size: 12px; }
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 13px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+}
+.form-field textarea { min-height: 240px; line-height: 1.75; resize: vertical; }
+.form-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.check-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.check-card {
+  padding: 10px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+.check-card b { display: block; font-size: 12px; margin-bottom: 3px; color: var(--color-text); }
+.check-card span { font-size: 11px; color: var(--color-text-muted); }
+.sendbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+  flex-shrink: 0;
+}
+
+/* ===== ボタン共通 ===== */
+.ibtn {
+  height: 32px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+.ibtn:hover { background: var(--color-beige-light); }
+.ibtn.primary { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.ibtn.primary:hover { background: var(--color-primary-dark); }
+.ibtn.accent  { background: var(--color-accent);  border-color: var(--color-accent);  color: #fff; }
+.ibtn.accent:hover  { background: var(--color-accent-dark); }
+.ibtn.danger  { background: var(--color-danger-bg); border-color: transparent; color: var(--color-danger); }
+
+/* ===== トースト ===== */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 999;
+  background: var(--color-primary-dark);
+  color: #fff;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: 0.2s;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ===== 空状態 ===== */
+.empty-state { padding: 28px; color: var(--color-text-muted); text-align: center; font-size: 13px; }
+
+@media (max-width: 1100px) {
+  .split-layout { grid-template-columns: 200px 320px minmax(0, 1fr); }
+  .action-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 860px) {
+  .split-layout, .detail-layout, .compose-layout { grid-template-columns: 1fr; }
+  .folder-sidebar, .template-panel { border-right: 0; border-bottom: 1px solid var(--color-border); }
+  .reading-pane, .detail-main, .compose-main { min-height: 500px; }
+}
 </style>
 </head>
 <body data-page="mail">
 <div id="header-container"></div>
-<div class="mail-layout">
-  <!-- メールサイドバー -->
-  <div class="mail-sidebar">
-    <div style="padding:0.5rem 1rem; margin-bottom:0.25rem;">
-      <a href="#" class="btn btn-primary" style="width:100%; text-align:center; font-size:0.8rem;">メール作成</a>
-    </div>
-    <div style="font-size:0.72rem; color:var(--text-muted); padding:0.25rem 1rem; margin-bottom:0.25rem;">最終受信: 14:54</div>
-    <div class="mail-sidebar-section">処理フォルダ</div>
-    <div class="mail-sidebar-item active">処理メール <span class="mail-sidebar-badge">7</span></div>
-    <div class="mail-sidebar-item">担当メール <span class="mail-sidebar-badge">1</span></div>
-    <div class="mail-sidebar-item">確認メール</div>
-    <div class="mail-sidebar-item">送信待ちメール</div>
-    <div class="mail-sidebar-item">送信予約済みメール</div>
-    <div class="mail-sidebar-section">受信・送信</div>
-    <div class="mail-sidebar-item">受信メール <span class="mail-sidebar-badge" style="background:#6b7280;">46,087</span></div>
-    <div class="mail-sidebar-item">送信済みメール <span class="mail-sidebar-badge" style="background:#6b7280;">12,801</span></div>
-    <div class="mail-sidebar-section">フォルダ</div>
-    <div class="mail-sidebar-item">[未分類] <span class="mail-sidebar-badge" style="background:#6b7280;">94,717</span></div>
-    <div class="mail-sidebar-item">★一般助成金証明書 <span class="mail-sidebar-badge" style="background:#6b7280;">721</span></div>
-    <div class="mail-sidebar-item">★紹介状 <span class="mail-sidebar-badge" style="background:#6b7280;">1,858</span></div>
-    <div class="mail-sidebar-item">Q&A <span class="mail-sidebar-badge" style="background:#6b7280;">153</span></div>
-    <div class="mail-sidebar-item">院長 <span class="mail-sidebar-badge" style="background:#6b7280;">2</span></div>
-    <div class="mail-sidebar-item">看護師</div>
-    <div class="mail-sidebar-item">培養士</div>
-    <div class="mail-sidebar-item">受付 <span class="mail-sidebar-badge" style="background:#6b7280;">42</span></div>
-    <div class="mail-sidebar-item">事務長 <span class="mail-sidebar-badge" style="background:#6b7280;">1</span></div>
-    <div class="mail-sidebar-item">無料カウンセ <span class="mail-sidebar-badge" style="background:#6b7280;">221</span></div>
-    <div class="mail-sidebar-item">スタッフ募集 <span class="mail-sidebar-badge" style="background:#6b7280;">132</span></div>
-    <div class="mail-sidebar-item" style="color:#dc2626;">ごみ箱 <span class="mail-sidebar-badge" style="background:#dc2626;">395</span></div>
+
+<div class="mail-shell">
+  <!-- タイトルバー -->
+  <div class="mail-titlebar">
+    <h2>メール受信箱</h2>
+    <span class="spacer"></span>
+    <button class="mode-btn active" data-view="list">一覧</button>
+    <button class="mode-btn" data-view="detail">詳細</button>
+    <button class="mode-btn" data-view="compose">新規作成</button>
   </div>
 
-  <!-- メール一覧 -->
-  <div class="mail-list">
-    <div class="mail-toolbar">
-      <input type="checkbox" style="width:16px; height:16px;">
-      <button class="btn btn-sm btn-outline" style="color:#dc2626; border-color:#dc2626;">削除する</button>
-      <button class="btn btn-sm btn-outline">一括設定する</button>
-      <select>
-        <option>状況・確認者</option>
-        <option>（未処理）</option>
-        <option>（処理中）</option>
-        <option>◆外勤対応</option>
-        <option>★院内確認</option>
-      </select>
-      <select>
-        <option>担当者</option>
-        <option>（未設定）</option>
-        <option>テストユーザ</option>
-        <option>赤川真智子</option>
-        <option>恵島明日香</option>
-        <option>大嶋華子</option>
-        <option>内野唯香</option>
-        <option>田村麻由子</option>
-      </select>
-      <div style="margin-left:auto; display:flex; gap:0.5rem;">
-        <input type="text" class="form-control" style="width:180px; font-size:0.78rem; padding:0.25rem 0.5rem;" placeholder="キーワード検索">
-        <button class="btn btn-sm btn-primary">検索</button>
-        <button class="btn btn-sm btn-outline">詳細検索</button>
-      </div>
-    </div>
+  <div class="mail-body">
 
-    <!-- メール1 -->
-    <div class="mail-item unread">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">山内 玲</div>
-        <div class="mail-date">2026/05/03 14:54</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-unprocessed">未処理</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">Re: Re: 紹介状の宛先についてのご確認（恵比寿ウィメンズクリニック）（4月25日）</div>
-        <div class="mail-preview">ご担当者様 承知いたしました。ありがとうございます。よろしくお願いいたします。山内</div>
-      </div>
-      <div></div>
-    </div>
+    <!-- ===== 一覧ビュー ===== -->
+    <div id="view-list" class="view active">
+      <div class="split-layout">
 
-    <!-- メール2 -->
-    <div class="mail-item unread">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">荻原 彩花</div>
-        <div class="mail-date">2026/05/03 12:26</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-unprocessed">未処理</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">Re: 紹介先の病院様について（恵比寿ウィメンズクリニック）（5月2日）</div>
-        <div class="mail-preview">お世話になっております。転院先ですが、あゆみレディースクリニック高田馬場にすることにしました。宜しくお願いいたします。</div>
-      </div>
-      <div></div>
-    </div>
+        <!-- フォルダサイドバー -->
+        <aside class="folder-sidebar">
+          <button id="composeSide" class="folder-compose-btn">＋ 新規メール作成</button>
+          <div class="folder-section">処理フォルダ</div>
+          <div class="folder-item active"><span class="ico">📥</span>受信トレイ<span class="folder-badge accent">18</span></div>
+          <div class="folder-item"><span class="ico">⏳</span>未処理<span class="folder-badge accent">7</span></div>
+          <div class="folder-item"><span class="ico">🟡</span>処理中<span class="folder-badge">3</span></div>
+          <div class="folder-item"><span class="ico">✅</span>処理済み<span class="folder-badge">8</span></div>
+          <div class="folder-item"><span class="ico">📝</span>下書き<span class="folder-badge">2</span></div>
+          <div class="folder-section">カテゴリ</div>
+          <div class="folder-item"><span class="ico">👤</span>患者Q&amp;A<span class="folder-badge">9</span></div>
+          <div class="folder-item"><span class="ico">📄</span>紹介状・書類<span class="folder-badge">4</span></div>
+          <div class="folder-item"><span class="ico">🏥</span>医療機関連携<span class="folder-badge">2</span></div>
+          <div class="folder-item"><span class="ico">🏢</span>院内確認<span class="folder-badge">1</span></div>
+          <div class="folder-item"><span class="ico">📢</span>スタッフ募集<span class="folder-badge">1</span></div>
+          <div class="folder-section">受信・送信</div>
+          <div class="folder-item"><span class="ico">📨</span>受信メール<span class="folder-badge">46,087</span></div>
+          <div class="folder-item"><span class="ico">📤</span>送信済み<span class="folder-badge">12,801</span></div>
+          <div class="folder-section">フォルダ</div>
+          <div class="folder-item"><span class="ico">📁</span>[未分類]<span class="folder-badge">94,717</span></div>
+          <div class="folder-item"><span class="ico">⭐</span>一般助成金証明書<span class="folder-badge">721</span></div>
+          <div class="folder-item"><span class="ico">⭐</span>紹介状<span class="folder-badge">1,858</span></div>
+          <div class="folder-item"><span class="ico">💬</span>Q&amp;A<span class="folder-badge">153</span></div>
+          <div class="folder-item"><span class="ico">🗑</span><span style="color:#e57373;">ごみ箱</span><span class="folder-badge danger">395</span></div>
+        </aside>
 
-    <!-- メール3 -->
-    <div class="mail-item unread">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">美山 明音</div>
-        <div class="mail-date">2026/05/03 09:13</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-unprocessed">未処理</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">（体外受精）生理開始の報告</div>
-        <div class="mail-preview">101205 美山明音です。生理が5/2の夜22時過ぎに始まりました。5/3に先程お電話しましたが、繋がらず...</div>
-      </div>
-      <div></div>
-    </div>
+        <!-- メール一覧ペイン -->
+        <div class="mail-list-pane">
+          <div class="list-head">
+            <div class="list-head-top">
+              <b>受信トレイ</b>
+              <span class="pill pill-red" id="countPill">18件</span>
+            </div>
+            <div class="search-row">
+              <input type="text" class="search-input" id="search" placeholder="キーワード検索…">
+              <select class="filter-select" id="status">
+                <option value="all">すべて</option>
+                <option value="未処理">未処理</option>
+                <option value="処理中">処理中</option>
+                <option value="処理済み">処理済み</option>
+              </select>
+            </div>
+            <div class="list-meta">
+              <span class="pill pill-red">未処理 7</span>
+              <span class="pill pill-amber">処理中 3</span>
+              <span class="pill pill-green">処理済み 8</span>
+            </div>
+          </div>
+          <div class="mail-scroll" id="mailList"></div>
+        </div>
 
-    <!-- メール4 -->
-    <div class="mail-item unread">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">小暮 楓</div>
-        <div class="mail-date">2026/05/03 05:20</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-unprocessed">未処理</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">選択してください</div>
-        <div class="mail-preview">具体的な相談内容：受診指示をいただいている訳ではないのですが、排卵日や着床確認をさせていただきたく5/9に予約しております。</div>
-      </div>
-      <div></div>
-    </div>
+        <!-- 本文プレビューペイン -->
+        <div class="reading-pane">
+          <div class="reading-toolbar">
+            <button class="ibtn" id="reply">↩ 返信</button>
+            <button class="ibtn" id="done">✓ 処理済み</button>
+            <button class="ibtn" id="openDetail">詳細を開く</button>
+            <span class="spacer"></span>
+            <button class="ibtn" id="density">密度: 標準</button>
+          </div>
+          <div class="reading-content" id="reading"></div>
+        </div>
 
-    <!-- メール5 -->
-    <div class="mail-item unread">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">宇山 優（海老原）</div>
-        <div class="mail-date">2026/05/02 22:14</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-unprocessed">未処理</span></div>
       </div>
-      <div>
-        <div class="mail-subject">【ご確認】MRワクチン在庫について</div>
-        <div class="mail-preview">恵比寿ウィメンズクリニック ご担当者様 5/10(日)9:45〜予約をしました海老原と申します。お電話で伺った際に、MRワクチンの在庫があるか...</div>
-      </div>
-      <div></div>
-    </div>
+    </div><!-- /view-list -->
 
-    <!-- メール6 -->
-    <div class="mail-item">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">泰村 莉奈</div>
-        <div class="mail-date">2026/05/02 18:05</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-done">処理済</span> <span style="font-size:0.7rem; color:var(--text-muted);">内野唯香</span></div>
+    <!-- ===== 詳細ビュー ===== -->
+    <div id="view-detail" class="view">
+      <div class="detail-layout">
+        <aside class="detail-sidebar">
+          <div class="patient-card">
+            <h3 id="patientName">—</h3>
+            <p>患者情報・担当者・処理状況</p>
+            <div class="kv-grid">
+              <div>ステータス</div><div id="detailStatus">—</div>
+              <div>担当者</div><div id="detailAssignee">—</div>
+              <div>確認者</div><div id="detailChecker">—</div>
+              <div>緊急度</div><div id="detailUrgency">—</div>
+            </div>
+          </div>
+        </aside>
+        <div class="detail-main">
+          <div class="reading-toolbar">
+            <button class="ibtn" data-view="list">← 一覧に戻る</button>
+            <span class="spacer"></span>
+            <button class="ibtn" id="detailReply">↩ 返信</button>
+            <button class="ibtn accent" id="detailDone">✓ 処理済み</button>
+          </div>
+          <div class="detail-content">
+            <div class="reading-header" id="detailHeader"></div>
+            <div id="detailBody"></div>
+          </div>
+        </div>
       </div>
-      <div>
-        <div class="mail-subject">Re: ※ご返信ください※初診のご予約確認について(恵比寿ウィメンズクリニック)</div>
-        <div class="mail-preview">間違いありません。よろしくお願いします。</div>
-      </div>
-      <div></div>
-    </div>
+    </div><!-- /view-detail -->
 
-    <!-- メール7 -->
-    <div class="mail-item">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">加藤 早苗</div>
-        <div class="mail-date">2026/05/02 15:33</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-done">処理済</span> <span style="font-size:0.7rem; color:var(--text-muted);">赤川真智子</span></div>
+    <!-- ===== 新規作成ビュー ===== -->
+    <div id="view-compose" class="view">
+      <div class="compose-layout">
+        <aside class="template-panel">
+          <div style="font-size:11px;font-weight:900;color:var(--color-text-muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">テンプレート</div>
+          <button class="tpl-btn" data-template="予約変更"><b>予約変更案内</b><span>予約日時変更・キャンセル連絡向け</span></button>
+          <button class="tpl-btn" data-template="書類案内"><b>書類発行案内</b><span>証明書・診断書・領収書など</span></button>
+          <button class="tpl-btn" data-template="紹介状"><b>紹介状案内</b><span>宛先確認・発行予定日の連絡</span></button>
+          <button class="tpl-btn" data-template="検査結果"><b>検査結果確認</b><span>確認方法や来院案内</span></button>
+          <div style="margin-top:14px;padding:10px 11px;border:1px solid var(--color-border-light);border-radius:var(--radius-md);background:var(--color-accent-bg);">
+            <b style="display:block;margin-bottom:5px;font-size:12px;color:var(--color-accent-dark);">送信前チェック</b>
+            <p style="margin:0;font-size:11px;color:var(--color-text-muted);line-height:1.7;">患者名、宛先、個人情報、添付ファイル、署名を確認してから送信。</p>
+          </div>
+        </aside>
+        <div class="compose-main">
+          <div class="reading-toolbar">
+            <button class="ibtn" data-view="list">← 一覧に戻る</button>
+            <span class="spacer"></span>
+            <button class="ibtn">下書き保存</button>
+            <button class="ibtn primary">送信プレビュー</button>
+          </div>
+          <div class="compose-form">
+            <div class="form-grid2">
+              <div class="form-field"><label>宛先</label><input id="to" value=""></div>
+              <div class="form-field"><label>CC</label><input value=""></div>
+            </div>
+            <div class="form-field"><label>件名</label><input id="subject" value=""></div>
+            <div class="form-grid2">
+              <div class="form-field"><label>テンプレート種別</label>
+                <select><option>患者様向け</option><option>医療機関連携</option><option>採用応募者向け</option><option>院内確認</option></select>
+              </div>
+              <div class="form-field"><label>確認者</label>
+                <select><option>未設定</option><option>受付リーダー</option><option>秦</option><option>医師確認</option></select>
+              </div>
+            </div>
+            <div class="form-field"><label>本文</label><textarea id="composeBody"></textarea></div>
+            <div class="check-grid">
+              <div class="check-card"><b>宛先確認</b><span>患者本人または連携先か</span></div>
+              <div class="check-card"><b>表現確認</b><span>不安を強める表現がないか</span></div>
+              <div class="check-card"><b>添付確認</b><span>添付漏れ・誤添付がないか</span></div>
+            </div>
+          </div>
+          <div class="sendbar">
+            <button class="ibtn">ファイル添付</button>
+            <button class="ibtn">テンプレ保存</button>
+            <span class="spacer"></span>
+            <button class="ibtn">下書き</button>
+            <button class="ibtn accent">送信する</button>
+          </div>
+        </div>
       </div>
-      <div>
-        <div class="mail-subject">Re: Re: Re: Re: Re: Re: Re: Re: Re: 次回受診時期についてのご案内（恵比寿ウィメンズクリニック）（1月26日）</div>
-        <div class="mail-preview">ご担当者様 お世話になっております。加藤早苗です。数ヶ月前頃からタイミングをとったあとに出血をすることが多く...</div>
-      </div>
-      <div></div>
-    </div>
+    </div><!-- /view-compose -->
 
-    <!-- メール8 -->
-    <div class="mail-item">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">藤田 千穂</div>
-        <div class="mail-date">2026/05/02 14:22</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-done">処理済</span> <span style="font-size:0.7rem; color:var(--text-muted);">恵島明日香</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">Re: ※ご返信ください※初診のご予約確認について(恵比寿ウィメンズクリニック)</div>
-        <div class="mail-preview">間違いないです！よろしくお願いいたします！</div>
-      </div>
-      <div></div>
-    </div>
+  </div><!-- /mail-body -->
+</div><!-- /mail-shell -->
 
-    <!-- メール9 -->
-    <div class="mail-item unread">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">原 ひとみ</div>
-        <div class="mail-date">2026/05/02 11:47</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-unprocessed">未処理</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">凍結胚更新について〈診察券番号116660原〉</div>
-        <div class="mail-preview">お世話になっております。凍結胚の更新についてご連絡いただきありがとうございます。更新を希望いたします。</div>
-      </div>
-      <div></div>
-    </div>
+<div id="toast" class="toast"></div>
 
-    <!-- メール10 -->
-    <div class="mail-item unread">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">打越 絵美</div>
-        <div class="mail-date">2026/05/02 09:30</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-unprocessed">未処理</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">Re: 【恵比寿ウィメンズクリニック】体外受精 無料カウンセリングのご案内（5月1日）</div>
-        <div class="mail-preview">ご連絡いただきありがとうございます。無料カウンセリングについて詳しく教えていただけますでしょうか。</div>
-      </div>
-      <div></div>
-    </div>
-
-    <!-- メール11 -->
-    <div class="mail-item">
-      <div class="mail-item-check"><input type="checkbox"></div>
-      <div>
-        <div class="mail-sender">品川 杏理</div>
-        <div class="mail-date">2026/05/02 08:15</div>
-        <div style="margin-top:4px;"><span class="mail-status-badge status-done">処理済</span></div>
-      </div>
-      <div>
-        <div class="mail-subject">Re: お問い合わせに関しまして（恵比寿ウィメンズクリニック）（5月1日）</div>
-        <div class="mail-preview">ご丁寧なご返信をいただきありがとうございます。ご説明いただいた内容について承知いたしました。</div>
-      </div>
-      <div></div>
-    </div>
-
-    <!-- ページネーション -->
-    <div style="display:flex; justify-content:center; gap:0.5rem; padding:1rem; border-top:1px solid var(--border-color);">
-      <a href="#" class="btn btn-sm btn-outline">前へ</a>
-      <span class="btn btn-sm btn-primary">1</span>
-      <a href="#" class="btn btn-sm btn-outline">2</a>
-      <a href="#" class="btn btn-sm btn-outline">3</a>
-      <a href="#" class="btn btn-sm btn-outline">次へ</a>
-    </div>
-  </div>
-</div>
 <script src="components.js"></script>
+<script>
+const mails = [
+  {id:1, from:"山内 玲",      avatar:"山", date:"2026/05/08 14:54", status:"未処理", priority:"大至急", folder:"紹介状・書類", assignee:"未設定",  checker:"未設定",      urgency:"高",
+   subject:"Re: Re: 紹介状の宛先についてのご確認（恵比寿ウィメンズクリニック）（4月25日）",
+   excerpt:"ご担当者様 承知いたしました。ありがとうございます。よろしくお願いいたします。山内",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\n承知いたしました。ありがとうございます。\nよろしくお願いいたします。\n\n山内 玲", current:0},
+  {id:2, from:"荻原 彩花",    avatar:"荻", date:"2026/05/08 12:26", status:"未処理", priority:"至急",   folder:"紹介状・書類", assignee:"未設定",  checker:"未設定",      urgency:"中",
+   subject:"Re: 紹介先の病院様について（恵比寿ウィメンズクリニック）（5月2日）",
+   excerpt:"お世話になっております。転院先ですが、あゆみレディースクリニック高田馬場にすることにしました。宜しくお願いいたします。",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\nお世話になっております。\n転院先ですが、あゆみレディースクリニック高田馬場にすることにしました。\n宜しくお願いいたします。\n\n荻原 彩花", current:0},
+  {id:3, from:"美山 明音",    avatar:"美", date:"2026/05/08 09:13", status:"未処理", priority:"大至急", folder:"患者Q&A",    assignee:"未設定",  checker:"未設定",      urgency:"高",
+   subject:"（体外受精）生理開始の報告",
+   excerpt:"101205 美山明音です。生理が5/2の夜22時過ぎに始まりました。5/3に先程お電話しましたが、繋がらず...",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\n101205 美山明音です。\n生理が5/2の夜22時過ぎに始まりました。\n5/3に先程お電話しましたが、繋がらずメールでご連絡いたします。\n\nご確認のほどよろしくお願いいたします。\n\n美山 明音", current:0},
+  {id:4, from:"小暮 楓",      avatar:"小", date:"2026/05/08 05:20", status:"未処理", priority:"通常",   folder:"患者Q&A",    assignee:"未設定",  checker:"未設定",      urgency:"通常",
+   subject:"選択してください",
+   excerpt:"具体的な相談内容：受診指示をいただいている訳ではないのですが、排卵日や着床確認をさせていただきたく5/9に予約しております。",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\n具体的な相談内容：\n受診指示をいただいている訳ではないのですが、排卵日や着床確認をさせていただきたく5/9に予約しております。\n\nご確認よろしくお願いいたします。\n\n小暮 楓", current:0},
+  {id:5, from:"宇山 優（海老原）", avatar:"宇", date:"2026/05/07 22:14", status:"未処理", priority:"通常", folder:"患者Q&A", assignee:"未設定", checker:"未設定", urgency:"通常",
+   subject:"【ご確認】MRワクチン在庫について",
+   excerpt:"恵比寿ウィメンズクリニック ご担当者様 5/10(日)9:45〜予約をしました海老原と申します。お電話で伺った際に、MRワクチンの在庫があるか...",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\n5/10(日)9:45〜予約をしました海老原と申します。\nお電話で伺った際に、MRワクチンの在庫があるかご確認いただけますでしょうか。\n\n宇山 優（海老原）", current:0},
+  {id:6, from:"泰村 莉奈",    avatar:"泰", date:"2026/05/07 18:05", status:"処理済み", priority:"通常",  folder:"患者Q&A",    assignee:"内野唯香", checker:"受付リーダー", urgency:"通常",
+   subject:"Re: ※ご返信ください※初診のご予約確認について(恵比寿ウィメンズクリニック)",
+   excerpt:"間違いありません。よろしくお願いします。",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\n間違いありません。よろしくお願いします。\n\n泰村 莉奈", current:3},
+  {id:7, from:"加藤 早苗",    avatar:"加", date:"2026/05/07 15:33", status:"処理済み", priority:"通常",  folder:"患者Q&A",    assignee:"赤川真智子", checker:"受付リーダー", urgency:"通常",
+   subject:"Re: Re: Re: 次回受診時期についてのご案内（恵比寿ウィメンズクリニック）（1月26日）",
+   excerpt:"ご担当者様 お世話になっております。加藤早苗です。数ヶ月前頃からタイミングをとったあとに出血をすることが多く...",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\nお世話になっております。加藤早苗です。\n数ヶ月前頃からタイミングをとったあとに出血をすることが多くなりました。\nご相談させてください。\n\n加藤 早苗", current:3},
+  {id:8, from:"藤田 千穂",    avatar:"藤", date:"2026/05/07 14:22", status:"処理済み", priority:"通常",  folder:"患者Q&A",    assignee:"恵島明日香", checker:"受付リーダー", urgency:"通常",
+   subject:"Re: ※ご返信ください※初診のご予約確認について(恵比寿ウィメンズクリニック)",
+   excerpt:"間違いないです！よろしくお願いいたします！",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\n間違いないです！よろしくお願いいたします！\n\n藤田 千穂", current:3},
+  {id:9, from:"原 ひとみ",    avatar:"原", date:"2026/05/07 11:47", status:"未処理", priority:"通常",   folder:"患者Q&A",    assignee:"未設定",  checker:"未設定",      urgency:"通常",
+   subject:"凍結胚更新について〈診察券番号116660原〉",
+   excerpt:"お世話になっております。凍結胚の更新についてご連絡いただきありがとうございます。更新を希望いたします。",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\nお世話になっております。\n凍結胚の更新についてご連絡いただきありがとうございます。\n更新を希望いたします。\n\n原 ひとみ（診察券番号116660）", current:0},
+  {id:10, from:"打越 絵美",   avatar:"打", date:"2026/05/07 09:30", status:"未処理", priority:"通常",   folder:"患者Q&A",    assignee:"未設定",  checker:"未設定",      urgency:"通常",
+   subject:"Re: 【恵比寿ウィメンズクリニック】体外受精 無料カウンセリングのご案内（5月1日）",
+   excerpt:"ご連絡いただきありがとうございます。無料カウンセリングについて詳しく教えていただけますでしょうか。",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\nご連絡いただきありがとうございます。\n無料カウンセリングについて詳しく教えていただけますでしょうか。\n\n打越 絵美", current:0},
+  {id:11, from:"品川 杏理",   avatar:"品", date:"2026/05/07 08:15", status:"処理済み", priority:"低",    folder:"患者Q&A",    assignee:"大嶋華子", checker:"受付リーダー", urgency:"低",
+   subject:"Re: お問い合わせに関しまして（恵比寿ウィメンズクリニック）（5月1日）",
+   excerpt:"ご丁寧なご返信をいただきありがとうございます。ご説明いただいた内容について承知いたしました。",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\nご丁寧なご返信をいただきありがとうございます。\nご説明いただいた内容について承知いたしました。\n\n品川 杏理", current:3},
+  {id:12, from:"ABC検査センター", avatar:"A", date:"2026/05/06 10:05", status:"未処理", priority:"通常", folder:"医療機関連携", assignee:"未設定", checker:"未設定", urgency:"通常",
+   subject:"検査報告書送付の件",
+   excerpt:"検査報告書を送付いたします。ご確認をお願いいたします。",
+   body:"恵比寿ウィメンズクリニック ご担当者様\n\n検査報告書を送付いたします。\n内容をご確認いただき、不備がございましたらご連絡ください。\n\nABC検査センター", current:0},
+  {id:13, from:"院内 受付",   avatar:"受", date:"2026/05/06 15:11", status:"処理中",  priority:"低",    folder:"院内確認",   assignee:"秦",      checker:"未設定",      urgency:"低",
+   subject:"患者様向けテンプレートの表現確認",
+   excerpt:"患者様向けメールテンプレートの表現確認をお願いします。",
+   body:"秦さん\n\n患者様向けメールテンプレートの文面を更新しました。\n表現が強くなりすぎていないか確認をお願いします。\n\n受付", current:2},
+  {id:14, from:"採用応募者",  avatar:"採", date:"2026/05/05 17:18", status:"未処理", priority:"低",     folder:"スタッフ募集", assignee:"未設定", checker:"未設定",      urgency:"低",
+   subject:"リモート受付スタッフ応募の件",
+   excerpt:"求人を拝見し、リモート受付スタッフ職に応募したくご連絡しました。",
+   body:"採用ご担当者様\n\n求人を拝見し、リモート受付スタッフ職に応募したくご連絡しました。\n履歴書を添付いたしますので、ご確認のほどよろしくお願いいたします。", current:0}
+];
+
+let selectedId = 1;
+const statusClass = { "未処理":"pill-red", "処理中":"pill-amber", "処理済み":"pill-green" };
+const priorityClass = { "大至急":"pill-red", "至急":"pill-amber", "通常":"pill-blue", "低":"pill-gray" };
+const avatarClass = { "未処理":"red", "処理中":"amber", "処理済み":"green" };
+
+const $ = id => document.getElementById(id);
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+}
+
+function toast(t) {
+  const el = $("toast");
+  el.textContent = t;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 1600);
+}
+
+function filtered() {
+  const q = $("search").value.trim().toLowerCase();
+  const st = $("status").value;
+  return mails.filter(m =>
+    [m.from, m.subject, m.excerpt, m.body, m.folder, m.assignee].join(" ").toLowerCase().includes(q) &&
+    (st === "all" || m.status === st)
+  );
+}
+
+function renderList() {
+  const rows = filtered();
+  $("countPill").textContent = rows.length + "件";
+  if (!rows.length) {
+    $("mailList").innerHTML = '<div class="empty-state">該当するメールはありません。</div>';
+    return;
+  }
+  if (!rows.some(m => m.id === selectedId)) selectedId = rows[0].id;
+  $("mailList").innerHTML = rows.map(m => `
+    <button class="mail-card ${m.id === selectedId ? 'active' : ''} ${m.status === '未処理' ? 'unread' : ''}" data-id="${m.id}">
+      <span class="mail-avatar ${avatarClass[m.status] || ''}">${esc(m.avatar)}</span>
+      <span>
+        <span class="mail-top">
+          <span class="mail-from">${esc(m.from)}</span>
+          <span class="mail-time">${esc(m.date.slice(5))}</span>
+        </span>
+        <span class="mail-subject">${esc(m.subject)}</span>
+        <span class="mail-excerpt">${esc(m.excerpt)}</span>
+        <span class="mail-tags">
+          <span class="pill ${statusClass[m.status]}">${esc(m.status)}</span>
+          <span class="pill ${priorityClass[m.priority]}">${esc(m.priority)}</span>
+          <span class="pill pill-gray">${esc(m.folder)}</span>
+        </span>
+      </span>
+    </button>`).join("");
+  document.querySelectorAll(".mail-card").forEach(b => b.onclick = () => {
+    selectedId = Number(b.dataset.id);
+    renderAll();
+  });
+}
+
+function selected() { return mails.find(m => m.id === selectedId) || mails[0]; }
+
+function renderReading() {
+  const m = selected();
+  const nodes = ["受信","確認中","返信","完了"].map((x, i) =>
+    `<span class="tl-node ${i < m.current ? 'done' : i === m.current ? 'current' : ''}" title="${x}"></span>`
+  ).join("");
+  $("reading").innerHTML = `
+    <div class="reading-header">
+      <div class="mail-avatar ${avatarClass[m.status] || ''}" style="width:38px;height:38px;font-size:15px;flex-shrink:0;">${esc(m.avatar)}</div>
+      <div class="reading-title">
+        <h3>${esc(m.subject)}</h3>
+        <p>${esc(m.from)} → 恵比寿ウィメンズクリニック / ${esc(m.date)}</p>
+        <span class="pill ${statusClass[m.status]}">${esc(m.status)}</span>
+        <span class="pill ${priorityClass[m.priority]}">${esc(m.priority)}</span>
+        <span class="pill pill-gray">確認者 ${esc(m.checker)}</span>
+      </div>
+    </div>
+    <div class="action-grid">
+      <div class="action-card"><b>次にすること</b><span>${m.status === '処理済み' ? '履歴確認のみ。必要時は再オープン。' : '本文確認後、返信または担当者を設定。'}</span></div>
+      <div class="action-card"><b>担当者</b><span>${esc(m.assignee)}</span></div>
+      <div class="action-card"><b>フォルダ</b><span>${esc(m.folder)}</span></div>
+      <div class="action-card"><b>緊急度</b><span>${esc(m.urgency)}</span></div>
+    </div>
+    <div class="timeline-wrap">${nodes}</div>
+    <div class="tl-labels"><span>受信</span><span>確認中</span><span>返信</span><span>完了</span></div>
+    <div class="mail-body-text">${esc(m.body)}</div>
+    <div class="mail-quote">引用メールや過去スレッドはここに折りたたみ表示。初期表示では本文確認を優先し、長い引用で右ペインが埋まらないようにします。</div>
+    <div class="meta-grid">
+      <div class="meta-key">処理状況</div><div><span class="pill ${statusClass[m.status]}">${esc(m.status)}</span></div>
+      <div class="meta-key">担当者</div><div>${esc(m.assignee)}</div>
+      <div class="meta-key">確認者</div><div>${esc(m.checker)}</div>
+      <div class="meta-key">フォルダ</div><div>${esc(m.folder)}</div>
+      <div class="meta-key">受信日時</div><div>${esc(m.date)}</div>
+    </div>`;
+}
+
+function renderDetail() {
+  const m = selected();
+  $("patientName").textContent = m.from;
+  $("detailStatus").innerHTML   = `<span class="pill ${statusClass[m.status]}">${esc(m.status)}</span>`;
+  $("detailAssignee").textContent = m.assignee;
+  $("detailChecker").textContent  = m.checker;
+  $("detailUrgency").textContent  = m.urgency;
+  $("detailHeader").innerHTML = `
+    <div class="mail-avatar ${avatarClass[m.status] || ''}" style="width:38px;height:38px;font-size:15px;flex-shrink:0;">${esc(m.avatar)}</div>
+    <div class="reading-title">
+      <h3>${esc(m.subject)}</h3>
+      <p>${esc(m.from)} → 恵比寿ウィメンズクリニック / ${esc(m.date)}</p>
+      <span class="pill ${statusClass[m.status]}">${esc(m.status)}</span>
+      <span class="pill ${priorityClass[m.priority]}">${esc(m.priority)}</span>
+      <span class="pill pill-gray">担当 ${esc(m.assignee)}</span>
+      <span class="pill pill-gray">確認者 ${esc(m.checker)}</span>
+    </div>`;
+  $("detailBody").innerHTML = `
+    <div class="section-box"><h4>本文</h4><div class="thread-body">${esc(m.body)}</div></div>
+    <div class="section-box"><h4>メール属性</h4>
+      <div class="meta-grid" style="border:0;border-radius:0;">
+        <div class="meta-key">処理状況</div><div><span class="pill ${statusClass[m.status]}">${esc(m.status)}</span></div>
+        <div class="meta-key">担当者</div><div>${esc(m.assignee)}</div>
+        <div class="meta-key">確認者</div><div>${esc(m.checker)}</div>
+        <div class="meta-key">フォルダ</div><div>${esc(m.folder)}</div>
+        <div class="meta-key">緊急度</div><div>${esc(m.urgency)}</div>
+        <div class="meta-key">受信日時</div><div>${esc(m.date)}</div>
+      </div>
+    </div>
+    <div class="section-box"><h4>処理履歴</h4>
+      <div class="history-row"><b>受信</b><span>${esc(m.date)} / 自動取り込み</span></div>
+      <div class="history-row"><b>確認</b><span>${m.current >= 1 ? '受付が内容確認済み' : '未確認'}</span></div>
+      <div class="history-row"><b>返信</b><span>${m.current >= 2 ? '返信済みまたは作成中' : '未返信'}</span></div>
+      <div class="history-row"><b>完了</b><span>${m.status === '処理済み' ? '処理済み' : '未完了'}</span></div>
+    </div>
+    <div class="section-box"><h4>引用・スレッド</h4>
+      <div class="mail-quote" style="margin:0;border-radius:0;border:0;">過去の返信、転送履歴、添付ファイル、関連患者情報へのリンクをこの領域に展開します。</div>
+    </div>`;
+}
+
+function setView(v) {
+  document.querySelectorAll('.view').forEach(x => x.classList.toggle('active', x.id === 'view-' + v));
+  document.querySelectorAll('.mode-btn').forEach(x => x.classList.toggle('active', x.dataset.view === v));
+  if (v === 'detail') renderDetail();
+  if (v === 'compose' && !$("subject").value) hydrateCompose(false);
+}
+
+function hydrateCompose(reply) {
+  const m = selected();
+  if (reply) {
+    $("to").value = m.from + " 様";
+    $("subject").value = 'Re: ' + m.subject;
+    $("composeBody").value = `${m.from}様\n\n恵比寿ウィメンズクリニックでございます。\nお問い合わせいただきありがとうございます。\n\n\n\nご不明点がございましたら、再度ご連絡ください。\n\n恵比寿ウィメンズクリニック\n秦\n\n--- 元のメール ---\n${m.body}`;
+  }
+}
+
+function reply() { hydrateCompose(true); setView('compose'); }
+function done() {
+  const m = selected();
+  m.status = '処理済み';
+  m.current = 3;
+  renderAll();
+  toast('処理済みにしました');
+}
+
+function renderAll() { renderList(); renderReading(); renderDetail(); }
+
+$("search").oninput = renderAll;
+$("status").onchange = renderAll;
+$("reply").onclick = reply;
+$("done").onclick = done;
+$("openDetail").onclick = () => setView('detail');
+$("detailReply").onclick = reply;
+$("detailDone").onclick = done;
+$("composeSide").onclick = () => setView('compose');
+$("density").onclick = e => {
+  document.body.classList.toggle('compact');
+  e.currentTarget.textContent = document.body.classList.contains('compact') ? '密度: コンパクト' : '密度: 標準';
+};
+
+document.querySelectorAll('[data-view]').forEach(b => b.onclick = () => setView(b.dataset.view));
+
+document.querySelectorAll('.tpl-btn').forEach(b => b.onclick = () => {
+  const snippets = {
+    予約変更: '〇〇様\n\n恵比寿ウィメンズクリニックでございます。\n予約変更についてご連絡いたします。\n\nご希望日時を確認のうえ、改めてご案内いたします。\n\n恵比寿ウィメンズクリニック\n秦',
+    書類案内: '〇〇様\n\n恵比寿ウィメンズクリニックでございます。\n書類発行についてご案内いたします。\n\n発行にあたり、本人確認と対象期間の確認が必要です。\n\n恵比寿ウィメンズクリニック\n秦',
+    紹介状:   '〇〇様\n\n恵比寿ウィメンズクリニックでございます。\n紹介状についてご連絡いたします。\n\n宛先・送付方法を確認後、対応いたします。\n\n恵比寿ウィメンズクリニック\n秦',
+    検査結果: '〇〇様\n\n恵比寿ウィメンズクリニックでございます。\n検査結果の確認方法についてご案内いたします。\n\n個別の内容によりご案内が異なるため、確認のうえ改めてご連絡いたします。\n\n恵比寿ウィメンズクリニック\n秦'
+  };
+  $("composeBody").value = snippets[b.dataset.template] || '';
+  toast('テンプレートを挿入しました');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key.toLowerCase() === 'r') reply();
+  if (e.key.toLowerCase() === 'e') done();
+});
+
+/* コンパクト表示 */
+const style = document.createElement('style');
+style.textContent = '.compact .mail-card { padding-top:7px; padding-bottom:7px; } .compact .mail-excerpt { display:none; } .compact .mail-tags { margin-top:3px; }';
+document.head.appendChild(style);
+
+renderAll();
+</script>
 </body>
 </html>
