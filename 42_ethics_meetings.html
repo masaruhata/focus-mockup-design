@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会 開催管理</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_meetings">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="38_ethics_dashboard.html">倫理委員会</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">委員会開催管理</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">委員会開催管理</h1>
+        <div class="page-subtitle">定例委員会・臨時委員会の開催、議題編成、出欠管理および議事録を管理します</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline">開催通知を送信</a>
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          委員会を登録
+        </a>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item active">次回開催</div>
+      <div class="tab-item">開催履歴</div>
+      <div class="tab-item">迅速審査（持ち回り）</div>
+      <div class="tab-item">年間開催計画</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start;">
+
+      <!-- 左：会議サマリ -->
+      <div>
+        <div class="meeting-card mb-md">
+          <div class="meeting-card-head">
+            <div class="meeting-card-round">第48回 定例委員会</div>
+            <div class="meeting-card-date">2026/09/16（水） 18:30</div>
+            <div class="meeting-card-place">本院 3F 第1会議室 / Web併用（Zoom）</div>
+          </div>
+          <div class="card-body">
+            <table class="detail-table" style="font-size:12px;">
+              <tr><th style="width:88px;">議長</th><td>秦 勝（委員長）</td></tr>
+              <tr><th>審議議題</th><td>4件</td></tr>
+              <tr><th>報告事項</th><td>3件</td></tr>
+              <tr><th>予定時間</th><td>18:30 〜 20:00</td></tr>
+              <tr><th>資料締切</th><td><span style="color:var(--color-danger);font-weight:700;">2026/09/09（水）</span></td></tr>
+              <tr><th>状態</th><td><span class="badge badge-info">開催予定</span></td></tr>
+            </table>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:12px;">
+              <a href="#" class="btn btn-outline btn-sm" style="justify-content:center;">議事次第を出力</a>
+              <a href="#" class="btn btn-outline btn-sm" style="justify-content:center;">審議資料を一括ダウンロード</a>
+              <a href="#" class="btn btn-outline btn-sm" style="justify-content:center;">出欠確認を再送</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 定足数 -->
+        <div class="card mb-md">
+          <div class="section-title">定足数判定</div>
+          <div class="card-body">
+            <div class="verdict-panel approved" style="margin-bottom:12px;">
+              <div class="verdict-title">成立見込み</div>
+              <div class="verdict-body">出席予定 11名 / 委員 13名</div>
+            </div>
+            <ul class="checklist">
+              <li><span class="check-mark ok">✓</span><div>委員の過半数の出席（11 / 7名以上）</div></li>
+              <li><span class="check-mark ok">✓</span><div>外部委員 1名以上の出席（3名）</div></li>
+              <li><span class="check-mark ok">✓</span><div>一般の立場を代表する委員の出席（1名）</div></li>
+              <li><span class="check-mark ok">✓</span><div>男女両性の委員の出席</div></li>
+              <li><span class="check-mark ok">✓</span><div>医学・医療の専門家の出席（5名）</div></li>
+              <li><span class="check-mark ok">✓</span><div>倫理・法律の専門家の出席（2名）</div></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 出欠 -->
+        <div class="card">
+          <div class="section-title">出欠状況<span class="section-title-sub">回答 12 / 13</span></div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table class="table" style="font-size:12px;">
+                <thead><tr><th>委員</th><th style="width:78px;">出欠</th></tr></thead>
+                <tbody>
+                  <tr><td>秦 勝<span class="text-xs text-muted">（委員長）</span></td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>花輪 千尋<span class="text-xs text-muted">（副委員長）</span></td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>三栖 有津紗</td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>鶴田 有希</td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>内野 唯香</td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>赤川 真智子</td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>恵島 明日香<span class="text-xs text-muted">（事務局）</span></td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>大野 敬三<span class="text-xs text-muted">（外部）</span></td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>白石 由紀<span class="text-xs text-muted">（外部）</span></td><td><span class="attend-pill present">Web</span></td></tr>
+                  <tr><td>森 千代<span class="text-xs text-muted">（外部・一般）</span></td><td><span class="attend-pill present">出席</span></td></tr>
+                  <tr><td>岸本 亮<span class="text-xs text-muted">（外部）</span></td><td><span class="attend-pill absent">欠席</span></td></tr>
+                  <tr><td>山際 智子</td><td><span class="attend-pill present">Web</span></td></tr>
+                  <tr><td>藤堂 響</td><td><span class="attend-pill absent">未回答</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右：議題 -->
+      <div>
+        <div class="card mb-md">
+          <div class="section-title">
+            議事次第 — 第48回 定例委員会
+            <span class="section-title-sub">審議 4件 / 報告 3件</span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:64px;">議題</th>
+                  <th style="width:112px;">申請番号</th>
+                  <th>件名</th>
+                  <th style="width:92px;">実施責任者</th>
+                  <th style="width:130px;">主査 / 副査</th>
+                  <th style="width:104px;">状態</th>
+                  <th style="width:56px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-sm text-muted no-wrap">第1号</td>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-019</a></td>
+                  <td class="text-sm">PGT-M（着床前単一遺伝子検査）実施申請 — 筋強直性ジストロフィー<div class="text-xs text-muted">前回からの継続審議</div></td>
+                  <td class="text-sm">花輪 千尋</td>
+                  <td class="text-sm">大野 敬三 / 森 千代</td>
+                  <td><span class="badge badge-warning">継続審議</span></td>
+                  <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm text-muted no-wrap">第2号</td>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-023</a></td>
+                  <td class="text-sm">PGT-A（着床前胚染色体異数性検査）実施申請 — 反復流産症例<div class="text-xs text-muted">予備審査完了 / 第2版</div></td>
+                  <td class="text-sm">花輪 千尋</td>
+                  <td class="text-sm">白石 由紀 / 大野 敬三</td>
+                  <td><span class="badge badge-primary">審査中</span></td>
+                  <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm text-muted no-wrap">第3号</td>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-022</a></td>
+                  <td class="text-sm">臨床研究「反復着床不全に対する子宮内膜受容能検査の有用性」計画変更<div class="text-xs text-muted">修正版の再提出待ち（09/05期限）</div></td>
+                  <td class="text-sm">三栖 有津紗</td>
+                  <td class="text-sm">白石 由紀 / 岸本 亮</td>
+                  <td><span class="badge badge-accent">修正依頼</span></td>
+                  <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm text-muted no-wrap">第4号</td>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-025</a></td>
+                  <td class="text-sm">卵子凍結（社会的適応）の実施体制に関する申請<div class="text-xs text-muted">資料提出待ち</div></td>
+                  <td class="text-sm">秦 勝</td>
+                  <td class="text-sm text-muted">未指名</td>
+                  <td><span class="badge badge-muted">下書き</span></td>
+                  <td><a href="41_ethics_application_new.html" class="btn btn-xs btn-outline">編集</a></td>
+                </tr>
+                <tr style="background:var(--color-beige-light);">
+                  <td colspan="7" class="text-xs" style="font-weight:700;color:var(--color-text-sub);">報告事項</td>
+                </tr>
+                <tr>
+                  <td class="text-sm text-muted">報告1</td>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-024</a></td>
+                  <td class="text-sm">未受精卵子凍結保存の実施について（乳癌治療前・医学的適応）<div class="text-xs text-muted">迅速審査の結果報告</div></td>
+                  <td class="text-sm">秦 勝</td>
+                  <td class="text-sm">白石 由紀 / —</td>
+                  <td><span class="badge badge-info">事務局確認中</span></td>
+                  <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm text-muted">報告2</td>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-018</a></td>
+                  <td class="text-sm">症例報告の学会発表・論文投稿について（子宮腺筋症合併不妊の1例）<div class="text-xs text-muted">迅速審査 承認済</div></td>
+                  <td class="text-sm">内野 唯香</td>
+                  <td class="text-sm">大野 敬三 / —</td>
+                  <td><span class="badge badge-success">承認</span></td>
+                  <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm text-muted">報告3</td>
+                  <td class="text-sm text-muted">—</td>
+                  <td class="text-sm">承認条件の履行状況および継続審査の実施状況について<div class="text-xs text-muted">事務局報告</div></td>
+                  <td class="text-sm">恵島 明日香</td>
+                  <td class="text-sm text-muted">—</td>
+                  <td><span class="badge badge-muted">報告</span></td>
+                  <td><a href="#" class="btn btn-xs btn-outline">資料</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-body" style="border-top:1px solid var(--color-border-light);display:flex;gap:8px;">
+            <a href="#" class="btn btn-sm btn-outline">議題を追加</a>
+            <a href="#" class="btn btn-sm btn-outline">議題の順序を変更</a>
+            <a href="#" class="btn btn-sm btn-outline">主査・副査を指名</a>
+          </div>
+        </div>
+
+        <!-- 開催履歴 -->
+        <div class="card mb-md">
+          <div class="section-title">開催履歴<span class="section-title-sub">2026年度</span></div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:110px;">回次</th>
+                  <th style="width:120px;">開催日</th>
+                  <th style="width:74px;">種別</th>
+                  <th style="width:88px;">出席</th>
+                  <th style="width:74px;">定足数</th>
+                  <th>審議結果</th>
+                  <th style="width:104px;">議事録</th>
+                  <th style="width:56px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-sm" style="font-weight:600;">第47回</td>
+                  <td class="text-sm">2026/08/19（水）</td>
+                  <td><span class="badge badge-muted">定例</span></td>
+                  <td class="text-sm">12 / 13</td>
+                  <td><span class="badge badge-success">成立</span></td>
+                  <td class="text-sm">承認 2件 / 条件付承認 1件 / 継続審議 1件</td>
+                  <td><span class="badge badge-success">確定済</span></td>
+                  <td><a href="#" class="btn btn-xs btn-outline">表示</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm" style="font-weight:600;">臨時</td>
+                  <td class="text-sm">2026/07/22（火）</td>
+                  <td><span class="badge badge-danger">臨時</span></td>
+                  <td class="text-sm">9 / 13</td>
+                  <td><span class="badge badge-success">成立</span></td>
+                  <td class="text-sm">重篤有害事象報告 受理 1件</td>
+                  <td><span class="badge badge-success">確定済</span></td>
+                  <td><a href="#" class="btn btn-xs btn-outline">表示</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm" style="font-weight:600;">第46回</td>
+                  <td class="text-sm">2026/07/15（水）</td>
+                  <td><span class="badge badge-muted">定例</span></td>
+                  <td class="text-sm">10 / 13</td>
+                  <td><span class="badge badge-success">成立</span></td>
+                  <td class="text-sm">承認 1件 / 不承認 1件 / 受理 1件</td>
+                  <td><span class="badge badge-success">確定済</span></td>
+                  <td><a href="#" class="btn btn-xs btn-outline">表示</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm" style="font-weight:600;">第45回</td>
+                  <td class="text-sm">2026/06/17（水）</td>
+                  <td><span class="badge badge-muted">定例</span></td>
+                  <td class="text-sm">11 / 13</td>
+                  <td><span class="badge badge-success">成立</span></td>
+                  <td class="text-sm">承認 3件 / 条件付承認 1件</td>
+                  <td><span class="badge badge-success">確定済</span></td>
+                  <td><a href="#" class="btn btn-xs btn-outline">表示</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm" style="font-weight:600;">第44回</td>
+                  <td class="text-sm">2026/05/20（水）</td>
+                  <td><span class="badge badge-muted">定例</span></td>
+                  <td class="text-sm">6 / 13</td>
+                  <td><span class="badge badge-danger">不成立</span></td>
+                  <td class="text-sm text-muted">定足数未充足のため延期（05/27に振替開催）</td>
+                  <td><span class="badge badge-muted">—</span></td>
+                  <td><a href="#" class="btn btn-xs btn-outline">表示</a></td>
+                </tr>
+                <tr>
+                  <td class="text-sm" style="font-weight:600;">第43回</td>
+                  <td class="text-sm">2026/04/15（水）</td>
+                  <td><span class="badge badge-muted">定例</span></td>
+                  <td class="text-sm">12 / 13</td>
+                  <td><span class="badge badge-success">成立</span></td>
+                  <td class="text-sm">承認 2件 / 委員改選の承認</td>
+                  <td><span class="badge badge-success">確定済</span></td>
+                  <td><a href="#" class="btn btn-xs btn-outline">表示</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 議事録 -->
+        <div class="card">
+          <div class="section-title">議事録（第47回 定例委員会）<span class="section-title-sub">2026/08/26 確定 / 委員長承認済</span></div>
+          <div class="card-body" style="font-size:13px;color:var(--color-text-sub);line-height:1.9;">
+            <table class="detail-table mb-md" style="font-size:12px;">
+              <tr><th style="width:100px;">開催日時</th><td>2026年8月19日（水）18:30 〜 20:05</td><th style="width:88px;">場所</th><td>本院 3F 第1会議室（Web併用）</td></tr>
+              <tr><th>出席委員</th><td colspan="3">秦 勝（議長）、三栖 有津紗、鶴田 有希、内野 唯香、赤川 真智子、恵島 明日香、大野 敬三、白石 由紀、森 千代、岸本 亮、山際 智子、藤堂 響（計12名）</td></tr>
+              <tr><th>欠席委員</th><td colspan="3">花輪 千尋（利益相反により第1号議案を退席、以降欠席）</td></tr>
+            </table>
+            <p style="margin:0 0 10px;"><strong style="color:var(--color-primary-dark);">第1号議案　EC-2026-021 非配偶者間人工授精（AID）の実施について</strong><br>
+            実施責任者より申請内容の説明があった。提供者の匿名性の取扱いおよび出自を知る権利への対応について質疑が行われ、将来の法制度の変更に対応できるよう提供者情報の長期保管体制を整備することを条件として、<strong style="color:var(--color-success);">条件付承認</strong>とすることが賛成多数（賛成10・保留1）で決定された。</p>
+            <p style="margin:0 0 10px;"><strong style="color:var(--color-primary-dark);">第2号議案　EC-2026-019 PGT-M 実施申請</strong><br>
+            対象疾患の重篤性の判断根拠および遺伝カウンセリング体制について、外部の臨床遺伝専門医の意見書を追加提出したうえで再審議することとし、<strong style="color:var(--color-warning);">継続審議</strong>とされた。</p>
+            <p style="margin:0;"><strong style="color:var(--color-primary-dark);">第3号議案　EC-2026-020 余剰胚を用いた基礎研究の継続審査</strong><br>
+            実施状況および有害事象がない旨の報告を受け、原案どおり<strong style="color:var(--color-success);">承認</strong>された（全会一致）。</p>
+            <div style="margin-top:14px;display:flex;gap:8px;">
+              <a href="#" class="btn btn-sm btn-outline">議事録PDFを出力</a>
+              <a href="#" class="btn btn-sm btn-outline">全文を表示</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

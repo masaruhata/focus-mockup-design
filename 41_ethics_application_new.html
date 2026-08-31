@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会 新規申請</title>
+<link rel="stylesheet" href="theme.css">
+<style>
+.radio-card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:8px; }
+.radio-card { display:flex; align-items:flex-start; gap:8px; padding:10px 12px; border:1px solid var(--color-border-light); border-radius:var(--radius-sm); background:var(--color-bg-card); cursor:pointer; font-size:12.5px; transition:all .15s; }
+.radio-card:hover { border-color:var(--color-primary); }
+.radio-card.selected { border-color:var(--color-accent); background:var(--color-accent-bg); }
+.radio-card-name { display:block; font-weight:700; color:var(--color-primary-dark); }
+.radio-card-desc { display:block; font-size:11px; color:var(--color-text-muted); margin-top:2px; line-height:1.5; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; }
+.form-hint { font-size:11px; color:var(--color-text-muted); margin-top:4px; line-height:1.6; }
+.upload-box { border:2px dashed var(--color-border); border-radius:var(--radius-md); padding:20px; text-align:center; background:var(--color-beige-light); font-size:12.5px; color:var(--color-text-muted); }
+</style>
+</head>
+<body data-page="ethics_applications">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="38_ethics_dashboard.html">倫理委員会</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="39_ethics_applications.html">申請一覧</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">新規申請</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">倫理委員会 新規申請</h1>
+        <div class="page-subtitle">EC-2026-025（下書き） — 最終保存 2026/08/31 10:24</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline">下書き保存</a>
+        <a href="39_ethics_applications.html" class="btn btn-ghost">キャンセル</a>
+      </div>
+    </div>
+
+    <!-- ステップ -->
+    <div class="step-nav">
+      <div class="step-nav-item done"><span class="step-nav-num">1</span>申請区分</div>
+      <div class="step-nav-item done"><span class="step-nav-num">2</span>申請内容</div>
+      <div class="step-nav-item active"><span class="step-nav-num">3</span>対象・実施体制</div>
+      <div class="step-nav-item"><span class="step-nav-num">4</span>添付書類</div>
+      <div class="step-nav-item"><span class="step-nav-num">5</span>確認・提出</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start;">
+
+      <div>
+        <!-- STEP1 -->
+        <div class="card mb-md">
+          <div class="section-title">1. 申請区分<span class="section-title-sub">入力済</span></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label required">申請区分</label>
+              <div class="radio-card-grid">
+                <label class="radio-card selected"><input type="radio" name="apptype" checked><span><span class="radio-card-name">新規申請</span><span class="radio-card-desc">新たに実施する医療行為・研究</span></span></label>
+                <label class="radio-card"><input type="radio" name="apptype"><span><span class="radio-card-name">変更申請</span><span class="radio-card-desc">承認済計画の変更</span></span></label>
+                <label class="radio-card"><input type="radio" name="apptype"><span><span class="radio-card-name">継続審査</span><span class="radio-card-desc">年次の実施状況報告</span></span></label>
+                <label class="radio-card"><input type="radio" name="apptype"><span><span class="radio-card-name">終了報告</span><span class="radio-card-desc">終了・中止の報告</span></span></label>
+                <label class="radio-card"><input type="radio" name="apptype"><span><span class="radio-card-name">重篤有害事象報告</span><span class="radio-card-desc">直ちに報告が必要な事象</span></span></label>
+                <label class="radio-card"><input type="radio" name="apptype"><span><span class="radio-card-name">逸脱・不適合報告</span><span class="radio-card-desc">計画からの逸脱の報告</span></span></label>
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:14px;">
+              <div class="form-group">
+                <label class="form-label required">対象種別</label>
+                <select class="form-control">
+                  <option>妊孕性温存（卵子・精子・卵巣組織の凍結）</option>
+                  <option>着床前遺伝学的検査（PGT-A / PGT-M / PGT-SR）</option>
+                  <option>第三者提供配偶子（AID・提供精子・提供卵子）</option>
+                  <option>臨床研究・観察研究</option>
+                  <option>症例報告・学会発表・論文投稿</option>
+                  <option>余剰胚・配偶子の研究利用</option>
+                  <option>その他（新規医療技術の導入等）</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label required">希望する審査区分</label>
+                <select class="form-control">
+                  <option>通常審査（委員会審議）</option>
+                  <option>迅速審査（持ち回り）</option>
+                  <option>報告事項</option>
+                </select>
+                <div class="form-hint">審査区分は事務局の形式確認により最終決定されます。迅速審査の要件に該当しない場合は通常審査となります。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP2 -->
+        <div class="card mb-md">
+          <div class="section-title">2. 申請内容<span class="section-title-sub">入力済</span></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label required">件名</label>
+              <input type="text" class="form-control" value="卵子凍結（社会的適応）の実施体制に関する申請">
+            </div>
+            <div class="form-group">
+              <label class="form-label required">目的</label>
+              <textarea class="form-control" style="min-height:70px;">将来の妊娠に備えた未受精卵子の凍結保存（社会的適応）について、当院における実施基準・年齢要件・説明体制・保存期間および廃棄手順を定め、適切な体制のもとで実施することを目的とする。</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label required">実施方法の概要</label>
+              <textarea class="form-control" style="min-height:100px;">日本産科婦人科学会および日本生殖医学会の指針に基づき、原則として採卵時年齢40歳未満を対象とする。調節卵巣刺激後に経腟超音波下で採卵を行い、成熟卵子をガラス化法により凍結保存する。保存期間は原則として本人が生殖年齢を超えない範囲とし、毎年の更新確認を行う。</textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required">予測される利益</label>
+                <textarea class="form-control">加齢に伴う妊孕性低下に備え、将来の妊娠の選択肢を確保できる。</textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label required">予測される不利益・リスク</label>
+                <textarea class="form-control">卵巣過剰刺激症候群（OHSS）・採卵に伴う出血や感染、凍結融解による卵子の損失、将来の妊娠が保証されるものではないこと、費用負担。</textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required">倫理的配慮</label>
+              <textarea class="form-control" style="min-height:70px;">実施前に医師およびカウンセラーが個別に説明を行い、十分な検討期間（原則1週間以上）を確保したうえで文書同意を得る。同意はいつでも撤回可能とし、撤回による診療上の不利益は生じない。</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP3 -->
+        <div class="card mb-md">
+          <div class="section-title">3. 対象・実施体制<span class="section-title-sub">入力中</span></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required">実施責任者</label>
+                <select class="form-control">
+                  <option>秦 勝（院長 / 産婦人科専門医・生殖医療専門医）</option>
+                  <option>花輪 千尋（副院長 / 生殖医療専門医）</option>
+                  <option>三栖 有津紗（医師）</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">実施分担者</label>
+                <input type="text" class="form-control" value="鶴田 有希（胚培養士長）、内野 唯香（看護師長）、赤川 真智子（不妊カウンセラー）">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required">実施部門</label>
+                <input type="text" class="form-control" value="生殖医療科 / ART ラボ">
+              </div>
+              <div class="form-group">
+                <label class="form-label">共同実施施設</label>
+                <input type="text" class="form-control" placeholder="他施設と共同で実施する場合に入力">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required">対象者の範囲</label>
+                <select class="form-control">
+                  <option>特定の患者を対象としない（体制・方針の申請）</option>
+                  <option>特定の患者（1名）を対象とする</option>
+                  <option>一定の条件を満たす患者群を対象とする</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">対象患者</label>
+                <div style="display:flex;gap:8px;">
+                  <input type="text" class="form-control" placeholder="患者番号を入力または検索" disabled>
+                  <button class="btn btn-outline" disabled>患者検索</button>
+                </div>
+                <div class="form-hint">「特定の患者を対象とする」を選択した場合に入力できます。</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required">実施予定期間（開始）</label>
+                <input type="date" class="form-control" value="2026-10-01">
+              </div>
+              <div class="form-group">
+                <label class="form-label required">実施予定期間（終了）</label>
+                <input type="date" class="form-control" value="2029-03-31">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required">費用負担</label>
+                <select class="form-control">
+                  <option>自費（患者負担）</option>
+                  <option>保険診療</option>
+                  <option>研究費負担</option>
+                  <option>助成金を利用</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label required">利益相反（COI）</label>
+                <select class="form-control">
+                  <option>該当なし</option>
+                  <option>該当あり（内容を記載）</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required">個人情報・試料の取扱い</label>
+              <textarea class="form-control">連結可能匿名化を行い、対応表は実施責任者が施錠管理する。凍結検体は専用タンクで管理し、入出庫を記録する。</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">関連する指針・見解</label>
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--color-text-sub);">
+                <label style="display:flex;gap:6px;align-items:center;"><input type="checkbox" checked> 日本産科婦人科学会「未受精卵子および卵巣組織の凍結・保存に関する見解」</label>
+                <label style="display:flex;gap:6px;align-items:center;"><input type="checkbox" checked> 日本生殖医学会「未受精卵子および卵巣組織の凍結・保存に関するガイドライン」</label>
+                <label style="display:flex;gap:6px;align-items:center;"><input type="checkbox"> 人を対象とする生命科学・医学系研究に関する倫理指針</label>
+                <label style="display:flex;gap:6px;align-items:center;"><input type="checkbox"> 臨床研究法</label>
+                <label style="display:flex;gap:6px;align-items:center;"><input type="checkbox"> その他（自由記載）</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP4 -->
+        <div class="card mb-md">
+          <div class="section-title">4. 添付書類<span class="section-title-sub">未入力</span></div>
+          <div class="card-body">
+            <div class="upload-box mb-md">
+              ファイルをここにドラッグ＆ドロップ、または<a href="#" style="color:var(--color-info);font-weight:600;">ファイルを選択</a><br>
+              <span class="text-xs">PDF / Word / Excel（1ファイル 20MB まで）</span>
+            </div>
+            <div class="text-xs text-muted mb-sm" style="font-weight:700;">申請区分・対象種別に応じた必要書類</div>
+            <ul class="checklist">
+              <li><span class="check-mark ok">✓</span><div><strong>実施計画書</strong><span class="badge badge-danger" style="margin-left:6px;">必須</span><div class="text-xs text-muted">実施計画書_卵子凍結_第1版.pdf（1.2 MB）</div></div></li>
+              <li><span class="check-mark ok">✓</span><div><strong>患者説明文書</strong><span class="badge badge-danger" style="margin-left:6px;">必須</span><div class="text-xs text-muted">説明文書_卵子凍結_第1版.pdf（760 KB）</div></div></li>
+              <li><span class="check-mark wait">…</span><div><strong>同意書様式</strong><span class="badge badge-danger" style="margin-left:6px;">必須</span><div class="text-xs text-muted">未提出</div></div></li>
+              <li><span class="check-mark wait">…</span><div><strong>利益相反（COI）自己申告書</strong><span class="badge badge-danger" style="margin-left:6px;">必須</span><div class="text-xs text-muted">未提出</div></div></li>
+              <li><span class="check-mark wait">…</span><div><strong>実施体制・設備に関する資料</strong><span class="badge badge-muted" style="margin-left:6px;">任意</span><div class="text-xs text-muted">未提出</div></div></li>
+              <li><span class="check-mark wait">…</span><div><strong>参考文献・関連ガイドライン</strong><span class="badge badge-muted" style="margin-left:6px;">任意</span><div class="text-xs text-muted">未提出</div></div></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 操作 -->
+        <div class="card">
+          <div class="card-body" style="display:flex;justify-content:space-between;gap:8px;">
+            <a href="#" class="btn btn-outline">« 前へ</a>
+            <div style="display:flex;gap:8px;">
+              <a href="#" class="btn btn-outline">下書き保存</a>
+              <a href="#" class="btn btn-primary">次へ（確認画面）»</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右カラム -->
+      <div>
+        <div class="card mb-md">
+          <div class="section-title">提出前チェック</div>
+          <div class="card-body">
+            <ul class="checklist">
+              <li><span class="check-mark ok">✓</span><div>申請区分・対象種別の選択</div></li>
+              <li><span class="check-mark ok">✓</span><div>件名・目的・実施方法の記載</div></li>
+              <li><span class="check-mark ok">✓</span><div>利益・不利益および倫理的配慮</div></li>
+              <li><span class="check-mark wait">…</span><div>実施体制の入力（残り2項目）</div></li>
+              <li><span class="check-mark ng">!</span><div>必須添付書類（2/4 未提出）</div></li>
+              <li><span class="check-mark wait">…</span><div>実施責任者の電子承認</div></li>
+            </ul>
+            <div class="verdict-panel pending" style="margin-top:12px;padding:10px 12px;">
+              <div style="font-size:12px;font-weight:700;color:var(--color-warning);">提出できません</div>
+              <div style="font-size:11px;color:var(--color-text-sub);margin-top:3px;line-height:1.6;">必須項目 3件が未入力です。すべて入力すると提出ボタンが有効になります。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-md">
+          <div class="section-title">審査スケジュール</div>
+          <div class="card-body">
+            <table class="detail-table" style="font-size:12px;">
+              <tr><th style="width:84px;">資料締切</th><td><strong style="color:var(--color-danger);">2026/09/09（水）</strong></td></tr>
+              <tr><th>審査委員会</th><td>第48回 定例<br>2026/09/16（水）18:30</td></tr>
+              <tr><th>判定通知</th><td>2026/09/19 頃（予定）</td></tr>
+            </table>
+            <div class="text-xs text-muted" style="margin-top:10px;line-height:1.7;">
+              資料締切を過ぎた申請は次回（第49回 2026/10/21）の審議となります。迅速審査の場合は受付から概ね1週間で判定されます。
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">ヘルプ</div>
+          <div class="card-body" style="font-size:12px;color:var(--color-text-sub);line-height:1.8;">
+            <div style="margin-bottom:8px;"><a href="#" style="color:var(--color-info);font-weight:600;">申請書記載要領（PDF）</a></div>
+            <div style="margin-bottom:8px;"><a href="#" style="color:var(--color-info);font-weight:600;">倫理委員会規程・標準業務手順書</a></div>
+            <div style="margin-bottom:8px;"><a href="#" style="color:var(--color-info);font-weight:600;">様式ダウンロード（実施計画書・同意書 等）</a></div>
+            <div>お問い合わせ: 倫理委員会事務局（恵島 明日香 / 内線 2140）</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

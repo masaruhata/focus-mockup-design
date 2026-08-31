@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会申請一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_applications">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="38_ethics_dashboard.html">倫理委員会</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">申請一覧</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">倫理委員会 申請一覧</h1>
+        <div class="page-subtitle">院内倫理審査委員会に提出された申請の受付・審査状況を管理します</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          CSV出力
+        </a>
+        <a href="41_ethics_application_new.html" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          新規申請
+        </a>
+      </div>
+    </div>
+
+    <!-- 検索パネル -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:repeat(4, 1fr);">
+        <div>
+          <label class="form-label">申請番号・件名</label>
+          <input type="text" class="form-control" placeholder="EC-2026-0xx または キーワード">
+        </div>
+        <div>
+          <label class="form-label">申請区分</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>新規申請</option>
+            <option>変更申請</option>
+            <option>継続審査</option>
+            <option>終了報告</option>
+            <option>重篤有害事象報告</option>
+            <option>逸脱・不適合報告</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">審査区分</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>通常審査（委員会審議）</option>
+            <option>迅速審査</option>
+            <option>報告事項</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">状態</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>下書き</option>
+            <option>事務局確認中</option>
+            <option>審査中</option>
+            <option>修正依頼</option>
+            <option>継続審議</option>
+            <option>承認</option>
+            <option>条件付承認</option>
+            <option>不承認</option>
+            <option>取下げ</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-grid" style="grid-template-columns:repeat(4, 1fr); margin-top:12px;">
+        <div>
+          <label class="form-label">対象種別</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>PGT-A / PGT-M</option>
+            <option>第三者提供配偶子（AID等）</option>
+            <option>妊孕性温存（卵子・精子凍結）</option>
+            <option>臨床研究・観察研究</option>
+            <option>症例報告・学会発表</option>
+            <option>余剰胚の研究利用</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">実施責任者</label>
+          <input type="text" class="form-control" placeholder="医師・職員名">
+        </div>
+        <div>
+          <label class="form-label">申請日（開始）</label>
+          <input type="date" class="form-control">
+        </div>
+        <div>
+          <label class="form-label">申請日（終了）</label>
+          <input type="date" class="form-control">
+        </div>
+      </div>
+      <div class="search-grid" style="grid-template-columns:repeat(4, 1fr); margin-top:12px;">
+        <div>
+          <label class="form-label">審査委員会（回次）</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>第48回 定例（2026/09/16）</option>
+            <option>第47回 定例（2026/08/19）</option>
+            <option>臨時（2026/07/22）</option>
+            <option>第46回 定例（2026/07/15）</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">患者番号</label>
+          <input type="text" class="form-control" placeholder="患者番号">
+        </div>
+        <div>
+          <label class="form-label">年度</label>
+          <select class="form-control">
+            <option>2026年度</option>
+            <option>2025年度</option>
+            <option>2024年度</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:8px;">
+          <button class="btn btn-primary">検索</button>
+          <a href="#" class="btn btn-outline">クリア</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- クイックフィルタ -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+      <a href="#" class="btn btn-sm btn-outline" style="background:var(--color-primary);color:#fff;border-color:var(--color-primary);">すべて（24）</a>
+      <a href="#" class="btn btn-sm btn-outline">事務局確認中（3）</a>
+      <a href="#" class="btn btn-sm btn-outline">審査中（5）</a>
+      <a href="#" class="btn btn-sm btn-outline" style="color:var(--color-accent-dark);border-color:var(--color-accent);">要対応（2）</a>
+      <a href="#" class="btn btn-sm btn-outline" style="color:#dc2626;border-color:#dc2626;">◆期限超過（1）</a>
+      <a href="#" class="btn btn-sm btn-outline">次回委員会 議題（4）</a>
+      <a href="#" class="btn btn-sm btn-outline">自分が担当（6）</a>
+    </div>
+
+    <!-- 一覧 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="text-sm text-muted">全 24 件中 1〜12 件を表示</span>
+        <div style="display:flex;gap:6px;">
+          <select class="form-control" style="width:auto;padding:4px 26px 4px 10px;font-size:12px;">
+            <option>申請日（新しい順）</option>
+            <option>申請日（古い順）</option>
+            <option>審査期限が近い順</option>
+            <option>状態順</option>
+          </select>
+          <button class="btn btn-sm btn-outline">表示設定</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:112px;">申請番号</th>
+              <th style="width:74px;">申請区分</th>
+              <th style="width:82px;">審査区分</th>
+              <th>件名 / 対象種別</th>
+              <th style="width:132px;">対象患者</th>
+              <th style="width:94px;">実施責任者</th>
+              <th style="width:86px;">申請日</th>
+              <th style="width:104px;">審査委員会</th>
+              <th style="width:106px;">状態</th>
+              <th style="width:56px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-025</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td class="text-sm text-muted">—</td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">卵子凍結（社会的適応）の実施体制に関する申請</div>
+                <div class="text-xs text-muted">妊孕性温存</div>
+              </td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm">秦 勝</td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm text-muted">—</td>
+              <td><span class="badge badge-muted">下書き</span></td>
+              <td><a href="41_ethics_application_new.html" class="btn btn-xs btn-outline">編集</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-024</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td><span class="badge badge-accent">迅速</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">未受精卵子凍結保存の実施について（乳癌治療前・医学的適応）</div>
+                <div class="text-xs text-muted">妊孕性温存 / 他院連携（乳腺外科）</div>
+              </td>
+              <td class="text-sm">皆川 彩音<br><span class="text-muted">118204</span></td>
+              <td class="text-sm">秦 勝</td>
+              <td class="text-sm">2026/08/24</td>
+              <td class="text-sm text-muted">持ち回り<br>（09/02締切）</td>
+              <td><span class="badge badge-info">事務局確認中</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-023</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td><span class="badge badge-info">通常</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">PGT-A（着床前胚染色体異数性検査）実施申請 — 反復流産症例</div>
+                <div class="text-xs text-muted">PGT-A / 日本産科婦人科学会 施設・症例申請あり</div>
+              </td>
+              <td class="text-sm">長崎 なつみ<br><span class="text-muted">100009</span></td>
+              <td class="text-sm">花輪 千尋</td>
+              <td class="text-sm">2026/08/20</td>
+              <td class="text-sm">第48回<br><span class="text-muted">09/16</span></td>
+              <td><span class="badge badge-primary">審査中</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-022</a></td>
+              <td><span class="badge badge-muted">変更</span></td>
+              <td><span class="badge badge-accent">迅速</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">臨床研究「反復着床不全に対する子宮内膜受容能検査の有用性」計画変更（症例数追加）</div>
+                <div class="text-xs text-muted">臨床研究（介入なし・観察研究）</div>
+              </td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm">三栖 有津紗</td>
+              <td class="text-sm">2026/08/18</td>
+              <td class="text-sm">第48回<br><span class="text-muted">09/16</span></td>
+              <td>
+                <span class="badge badge-accent">修正依頼</span>
+                <div class="text-xs" style="color:var(--color-danger);margin-top:3px;">期限 09/05</div>
+              </td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-021</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td><span class="badge badge-info">通常</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">非配偶者間人工授精（AID）の実施について</div>
+                <div class="text-xs text-muted">第三者提供配偶子 / カウンセリング体制</div>
+              </td>
+              <td class="text-sm">加藤 佳奈<br><span class="text-muted">100003</span></td>
+              <td class="text-sm">秦 勝</td>
+              <td class="text-sm">2026/08/12</td>
+              <td class="text-sm">第47回<br><span class="text-muted">08/19</span></td>
+              <td><span class="badge badge-success">条件付承認</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-020</a></td>
+              <td><span class="badge badge-muted">継続</span></td>
+              <td><span class="badge badge-muted">報告</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">余剰胚を用いた基礎研究の継続審査（第2報）</div>
+                <div class="text-xs text-muted">余剰胚の研究利用</div>
+              </td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm">鶴田 有希</td>
+              <td class="text-sm">2026/08/05</td>
+              <td class="text-sm">第47回<br><span class="text-muted">08/19</span></td>
+              <td><span class="badge badge-success">承認</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-019</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td><span class="badge badge-info">通常</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">PGT-M（着床前単一遺伝子検査）実施申請 — 筋強直性ジストロフィー</div>
+                <div class="text-xs text-muted">PGT-M / 遺伝カウンセリング実施済</div>
+              </td>
+              <td class="text-sm">九冨 里絵<br><span class="text-muted">119506</span></td>
+              <td class="text-sm">花輪 千尋</td>
+              <td class="text-sm">2026/07/30</td>
+              <td class="text-sm">第47回<br><span class="text-muted">08/19</span></td>
+              <td>
+                <span class="badge badge-warning">継続審議</span>
+                <div class="text-xs text-muted" style="margin-top:3px;">第48回へ</div>
+              </td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-018</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td><span class="badge badge-accent">迅速</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">症例報告の学会発表・論文投稿について（子宮腺筋症合併不妊の1例）</div>
+                <div class="text-xs text-muted">症例報告・学会発表</div>
+              </td>
+              <td class="text-sm">庄形 恵美<br><span class="text-muted">100004</span></td>
+              <td class="text-sm">内野 唯香</td>
+              <td class="text-sm">2026/07/28</td>
+              <td class="text-sm text-muted">持ち回り<br>（08/05）</td>
+              <td><span class="badge badge-success">承認</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-017</a></td>
+              <td><span class="badge badge-danger">報告</span></td>
+              <td><span class="badge badge-info">通常</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">重篤有害事象報告（重症OHSSによる入院症例）</div>
+                <div class="text-xs text-muted">重篤有害事象 / 臨時委員会にて審議</div>
+              </td>
+              <td class="text-sm">瀬戸口 ユリア<br><span class="text-muted">100005</span></td>
+              <td class="text-sm">秦 勝</td>
+              <td class="text-sm">2026/07/22</td>
+              <td class="text-sm">臨時<br><span class="text-muted">07/22</span></td>
+              <td><span class="badge badge-success">受理</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-016</a></td>
+              <td><span class="badge badge-muted">終了</span></td>
+              <td><span class="badge badge-muted">報告</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">観察研究「AMH値と採卵成績の関連」終了報告</div>
+                <div class="text-xs text-muted">臨床研究・観察研究</div>
+              </td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm">三栖 有津紗</td>
+              <td class="text-sm">2026/07/15</td>
+              <td class="text-sm">第46回<br><span class="text-muted">07/15</span></td>
+              <td><span class="badge badge-success">受理</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-015</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td><span class="badge badge-info">通常</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">精子提供による生殖補助医療の実施体制について</div>
+                <div class="text-xs text-muted">第三者提供配偶子 / 提供者管理体制</div>
+              </td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm">秦 勝</td>
+              <td class="text-sm">2026/07/10</td>
+              <td class="text-sm">第46回<br><span class="text-muted">07/15</span></td>
+              <td><span class="badge badge-danger">不承認</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td><a href="40_ethics_application_detail.html">EC-2026-014</a></td>
+              <td><span class="badge badge-muted">新規</span></td>
+              <td><span class="badge badge-info">通常</span></td>
+              <td>
+                <div class="text-sm" style="font-weight:600;">着床前検査に関する患者説明文書・同意書の改訂（第3版）</div>
+                <div class="text-xs text-muted">説明同意文書 / 電子同意書連携</div>
+              </td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm">赤川 真智子</td>
+              <td class="text-sm">2026/06/24</td>
+              <td class="text-sm">第45回<br><span class="text-muted">06/17</span></td>
+              <td><span class="badge badge-muted">取下げ</span></td>
+              <td><a href="40_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

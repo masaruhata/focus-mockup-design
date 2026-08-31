@@ -150,6 +150,28 @@ const SIDEBAR_HTML = `
   <div class="sidebar-divider"></div>
 
   <div class="sidebar-section">
+    <div class="sidebar-section-label">倫理委員会</div>
+    <a href="38_ethics_dashboard.html" class="sidebar-item" data-page="ethics_dashboard">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 1l7 3v5c0 4.03-2.83 7.79-7 9-4.17-1.21-7-4.97-7-9V4l7-3zm3.707 6.707a1 1 0 00-1.414-1.414L9 9.586 7.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      <span class="sidebar-item-text">倫理委員会ホーム</span>
+    </a>
+    <a href="39_ethics_applications.html" class="sidebar-item" data-page="ethics_applications">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 5a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
+      <span class="sidebar-item-text">倫理申請一覧</span>
+    </a>
+    <a href="42_ethics_meetings.html" class="sidebar-item" data-page="ethics_meetings">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm9 6H5v8h10V8zm-8 2h2v2H7v-2z" clip-rule="evenodd"/></svg>
+      <span class="sidebar-item-text">委員会開催管理</span>
+    </a>
+    <a href="43_ethics_members.html" class="sidebar-item" data-page="ethics_members">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.97 5.97 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/></svg>
+      <span class="sidebar-item-text">委員名簿・COI</span>
+    </a>
+  </div>
+
+  <div class="sidebar-divider"></div>
+
+  <div class="sidebar-section">
     <div class="sidebar-section-label">予約・診療</div>
     <a href="14_appointments.html" class="sidebar-item" data-page="appointments">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>

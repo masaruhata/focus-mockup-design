@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会ダッシュボード</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_dashboard">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">倫理委員会ダッシュボード</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">倫理委員会ダッシュボード</h1>
+        <div class="page-subtitle">恵比寿女性クリニック 倫理審査委員会 — 2026年度（第48期）</div>
+      </div>
+      <div class="page-actions">
+        <a href="39_ethics_applications.html" class="btn btn-outline">申請一覧</a>
+        <a href="41_ethics_application_new.html" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          新規申請
+        </a>
+      </div>
+    </div>
+
+    <!-- 要対応アラート -->
+    <div class="notice-card">
+      <div class="notice-title">要対応 3件</div>
+      <div class="notice-body">
+        ・<a href="40_ethics_application_detail.html" style="color:var(--color-info);font-weight:600;">EC-2026-022</a> 修正依頼に対する再提出期限が <strong>2026/09/05</strong>（あと5日）です。<br>
+        ・<a href="40_ethics_application_detail.html" style="color:var(--color-info);font-weight:600;">EC-2026-024</a> 迅速審査の委員回答が2名未回答です（期限 2026/09/02）。<br>
+        ・第48回定例委員会（2026/09/16）の資料締切は <strong>2026/09/09</strong> です。未提出 2件。
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-card-label">事務局確認中</div>
+        <div class="kpi-card-value">3</div>
+        <div class="kpi-card-unit">件（形式審査）</div>
+        <a href="39_ethics_applications.html" class="kpi-card-link">一覧を見る →</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">審査中</div>
+        <div class="kpi-card-value">5</div>
+        <div class="kpi-card-unit">件（うち迅速 2件）</div>
+        <a href="39_ethics_applications.html" class="kpi-card-link">一覧を見る →</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">修正・継続審議</div>
+        <div class="kpi-card-value" style="color:var(--color-warning);">2</div>
+        <div class="kpi-card-unit">件（申請者対応待ち）</div>
+        <a href="39_ethics_applications.html" class="kpi-card-link">一覧を見る →</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">今年度 承認</div>
+        <div class="kpi-card-value" style="color:var(--color-success);">14</div>
+        <div class="kpi-card-unit">件 / 申請 24件</div>
+        <a href="39_ethics_applications.html" class="kpi-card-link">実績を見る →</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">期限超過</div>
+        <div class="kpi-card-value" style="color:var(--color-danger);">1</div>
+        <div class="kpi-card-unit">件（継続審査未提出）</div>
+        <a href="39_ethics_applications.html" class="kpi-card-link">確認する →</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">次回委員会まで</div>
+        <div class="kpi-card-value">16</div>
+        <div class="kpi-card-unit">日（09/16 開催）</div>
+        <a href="42_ethics_meetings.html" class="kpi-card-link">開催情報 →</a>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start;">
+
+      <!-- 左カラム -->
+      <div>
+        <!-- 直近の申請 -->
+        <div class="card mb-md">
+          <div class="section-title">
+            直近の申請
+            <a href="39_ethics_applications.html" class="section-title-sub" style="color:var(--color-info);">すべて表示 →</a>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width:110px;">申請番号</th>
+                  <th style="width:78px;">区分</th>
+                  <th>件名</th>
+                  <th style="width:96px;">実施責任者</th>
+                  <th style="width:88px;">申請日</th>
+                  <th style="width:104px;">状態</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-024</a></td>
+                  <td><span class="badge badge-muted">新規</span></td>
+                  <td class="text-sm">未受精卵子凍結保存の実施について（乳癌治療前・医学的適応）</td>
+                  <td class="text-sm">秦 勝</td>
+                  <td class="text-sm">2026/08/24</td>
+                  <td><span class="badge badge-info">事務局確認中</span></td>
+                </tr>
+                <tr>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-023</a></td>
+                  <td><span class="badge badge-muted">新規</span></td>
+                  <td class="text-sm">PGT-A（着床前胚染色体異数性検査）実施申請 — 反復流産症例</td>
+                  <td class="text-sm">花輪 千尋</td>
+                  <td class="text-sm">2026/08/20</td>
+                  <td><span class="badge badge-primary">審査中</span></td>
+                </tr>
+                <tr>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-022</a></td>
+                  <td><span class="badge badge-muted">変更</span></td>
+                  <td class="text-sm">臨床研究「反復着床不全に対する子宮内膜受容能検査」計画変更（症例数追加）</td>
+                  <td class="text-sm">三栖 有津紗</td>
+                  <td class="text-sm">2026/08/18</td>
+                  <td><span class="badge badge-accent">修正依頼</span></td>
+                </tr>
+                <tr>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-021</a></td>
+                  <td><span class="badge badge-muted">新規</span></td>
+                  <td class="text-sm">非配偶者間人工授精（AID）の実施について</td>
+                  <td class="text-sm">秦 勝</td>
+                  <td class="text-sm">2026/08/12</td>
+                  <td><span class="badge badge-success">条件付承認</span></td>
+                </tr>
+                <tr>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-020</a></td>
+                  <td><span class="badge badge-muted">継続</span></td>
+                  <td class="text-sm">余剰胚を用いた基礎研究の継続審査（第2報）</td>
+                  <td class="text-sm">鶴田 有希</td>
+                  <td class="text-sm">2026/08/05</td>
+                  <td><span class="badge badge-success">承認</span></td>
+                </tr>
+                <tr>
+                  <td><a href="40_ethics_application_detail.html">EC-2026-019</a></td>
+                  <td><span class="badge badge-muted">新規</span></td>
+                  <td class="text-sm">PGT-M（着床前単一遺伝子検査）実施申請 — 筋強直性ジストロフィー</td>
+                  <td class="text-sm">花輪 千尋</td>
+                  <td class="text-sm">2026/07/30</td>
+                  <td><span class="badge badge-warning">継続審議</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 集計 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="card">
+            <div class="section-title">申請種別内訳<span class="section-title-sub">2026年度 24件</span></div>
+            <div class="card-body">
+              <div class="stat-row"><span class="stat-row-label">PGT-A / PGT-M</span><span class="stat-row-track"><span class="stat-row-fill" style="width:33%"></span></span><span class="stat-row-value">8件</span></div>
+              <div class="stat-row"><span class="stat-row-label">臨床研究・観察研究</span><span class="stat-row-track"><span class="stat-row-fill info" style="width:25%"></span></span><span class="stat-row-value">6件</span></div>
+              <div class="stat-row"><span class="stat-row-label">症例報告・学会発表</span><span class="stat-row-track"><span class="stat-row-fill accent" style="width:17%"></span></span><span class="stat-row-value">4件</span></div>
+              <div class="stat-row"><span class="stat-row-label">第三者提供配偶子</span><span class="stat-row-track"><span class="stat-row-fill" style="width:12%"></span></span><span class="stat-row-value">3件</span></div>
+              <div class="stat-row"><span class="stat-row-label">妊孕性温存</span><span class="stat-row-track"><span class="stat-row-fill success" style="width:8%"></span></span><span class="stat-row-value">2件</span></div>
+              <div class="stat-row"><span class="stat-row-label">有害事象・逸脱報告</span><span class="stat-row-track"><span class="stat-row-fill danger" style="width:4%"></span></span><span class="stat-row-value">1件</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-title">判定結果内訳<span class="section-title-sub">審査済 18件</span></div>
+            <div class="card-body">
+              <div class="stat-row"><span class="stat-row-label">承認</span><span class="stat-row-track"><span class="stat-row-fill success" style="width:56%"></span></span><span class="stat-row-value">10件</span></div>
+              <div class="stat-row"><span class="stat-row-label">条件付承認</span><span class="stat-row-track"><span class="stat-row-fill accent" style="width:22%"></span></span><span class="stat-row-value">4件</span></div>
+              <div class="stat-row"><span class="stat-row-label">継続審議</span><span class="stat-row-track"><span class="stat-row-fill" style="width:11%"></span></span><span class="stat-row-value">2件</span></div>
+              <div class="stat-row"><span class="stat-row-label">不承認</span><span class="stat-row-track"><span class="stat-row-fill danger" style="width:6%"></span></span><span class="stat-row-value">1件</span></div>
+              <div class="stat-row"><span class="stat-row-label">取下げ</span><span class="stat-row-track"><span class="stat-row-fill" style="width:6%"></span></span><span class="stat-row-value">1件</span></div>
+              <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--color-border-table);font-size:11px;color:var(--color-text-muted);line-height:1.7;">
+                平均審査日数（申請受付〜判定通知）: <strong style="color:var(--color-primary-dark);">21.4日</strong><br>
+                迅速審査の平均: <strong style="color:var(--color-primary-dark);">6.8日</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右カラム -->
+      <div>
+        <!-- 次回委員会 -->
+        <div class="meeting-card mb-md">
+          <div class="meeting-card-head">
+            <div class="meeting-card-round">第48回 定例委員会</div>
+            <div class="meeting-card-date">2026/09/16（水） 18:30</div>
+            <div class="meeting-card-place">本院 3F 第1会議室 / Web併用（Zoom）</div>
+          </div>
+          <div class="card-body">
+            <table class="detail-table" style="font-size:12px;">
+              <tr><th style="width:88px;">審議議題</th><td>4件</td></tr>
+              <tr><th>報告事項</th><td>3件（迅速審査 2件を含む）</td></tr>
+              <tr><th>出席予定</th><td>11名 / 13名</td></tr>
+              <tr><th>資料締切</th><td><span style="color:var(--color-danger);font-weight:700;">2026/09/09（水）</span></td></tr>
+            </table>
+            <div class="verdict-panel approved" style="margin-top:12px;padding:10px 12px;">
+              <div style="font-size:12px;font-weight:700;color:var(--color-success);">定足数 充足見込み</div>
+              <div style="font-size:11px;color:var(--color-text-sub);margin-top:3px;line-height:1.6;">委員13名中11名出席予定（過半数7名以上）／外部委員3名・一般の立場の委員1名を含む</div>
+            </div>
+            <a href="42_ethics_meetings.html" class="btn btn-outline btn-sm w-full" style="margin-top:12px;justify-content:center;">開催情報・議題を見る</a>
+          </div>
+        </div>
+
+        <!-- 期限管理 -->
+        <div class="card mb-md">
+          <div class="section-title">期限管理</div>
+          <div class="card-body">
+            <ul class="checklist">
+              <li><span class="check-mark ng">!</span><div><strong>EC-2025-031</strong> 継続審査報告 未提出<div class="text-xs text-muted">期限 2026/08/20（11日超過） / 三栖 有津紗</div></div></li>
+              <li><span class="check-mark wait">…</span><div><strong>EC-2026-022</strong> 修正版の再提出<div class="text-xs text-muted">期限 2026/09/05（あと5日） / 三栖 有津紗</div></div></li>
+              <li><span class="check-mark wait">…</span><div><strong>EC-2026-024</strong> 迅速審査 委員回答<div class="text-xs text-muted">期限 2026/09/02 / 未回答 2名</div></div></li>
+              <li><span class="check-mark ok">✓</span><div><strong>EC-2026-021</strong> 承認条件の履行報告<div class="text-xs text-muted">2026/08/28 受理済</div></div></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- クイックリンク -->
+        <div class="card">
+          <div class="section-title">関連機能</div>
+          <div class="card-body">
+            <div class="func-grid" style="grid-template-columns:1fr 1fr;">
+              <a href="39_ethics_applications.html" class="func-card"><div class="func-card-name">申請一覧</div><div class="func-card-row"><span>審査中</span><span>5件</span></div></a>
+              <a href="42_ethics_meetings.html" class="func-card"><div class="func-card-name">委員会開催</div><div class="func-card-row"><span>次回</span><span>09/16</span></div></a>
+              <a href="43_ethics_members.html" class="func-card"><div class="func-card-name">委員名簿</div><div class="func-card-row"><span>委員</span><span>13名</span></div></a>
+              <a href="21_consent_letters.html" class="func-card"><div class="func-card-name">電子同意書</div><div class="func-card-row"><span>連携</span><span>説明文書</span></div></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>
