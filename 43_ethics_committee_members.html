@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会 委員名簿・COI</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_members">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">倫理委員会 委員名簿・COI</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">倫理委員会 委員名簿・COI 管理</h1>
+        <div class="page-subtitle">委員構成の要件充足、任期、利益相反（COI）申告の状況を管理します</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline btn-sm">名簿を出力</a>
+        <a href="#" class="btn btn-outline btn-sm">COI 申告を一括依頼</a>
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          委員を登録
+        </a>
+      </div>
+    </div>
+
+    <!-- 構成要件 -->
+    <div class="card mb-md">
+      <div class="section-title">委員構成の要件チェック（2026年度）</div>
+      <div class="card-body">
+        <div class="callout mb-md">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+          <div>現在の委員構成は <strong>要件を充足</strong> しています。次の任期満了は <strong>2026年9月30日（森　千鶴 委員）</strong> です。</div>
+        </div>
+        <div class="req-list">
+          <div class="req-item"><span class="req-icon ok">✓</span><span>委員総数 <strong>13 名</strong>（規程上の下限 5 名）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span>医学・医療の専門家 <strong>7 名</strong>（産婦人科医 3・胚培養士 1・看護 1・遺伝カウンセラー 1・小児科医 1）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span>倫理学・法律学の有識者 <strong>2 名</strong>（相馬〈弁護士〉・大久保〈生命倫理学〉）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span>一般の立場を代表する委員 <strong>1 名</strong>（森　千鶴）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span>当該医療機関に属さない外部委員 <strong>5 名</strong>（下限 2 名）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span>男女両性で構成（男性 5 名・女性 8 名）</span></div>
+          <div class="req-item"><span class="req-icon ng">!</span><span>2026年度 COI 申告 <strong>11／13 名 提出済</strong>（未提出：高梨　美和、岸　洋平）</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 検索 -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div>
+          <label class="form-label">氏名</label>
+          <input type="text" class="form-control" placeholder="委員名">
+        </div>
+        <div>
+          <label class="form-label">区分</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>内部委員</option>
+            <option>外部委員</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">専門分野</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>医学・医療</option>
+            <option>法律</option>
+            <option>生命倫理</option>
+            <option>心理</option>
+            <option>一般の立場</option>
+            <option>事務</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">在任状況</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>在任中</option>
+            <option>任期満了間近（90日以内）</option>
+            <option>退任</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+        <button class="btn btn-primary">検索</button>
+        <a href="#" class="btn btn-outline">クリア</a>
+      </div>
+    </div>
+
+    <!-- 名簿 -->
+    <div class="card">
+      <div class="flex-between mb-md">
+        <span class="text-sm text-muted">全 13 名（在任中）</span>
+        <button class="btn btn-sm btn-outline">表示設定</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:150px;">氏名</th>
+              <th style="width:100px;">役職</th>
+              <th style="width:70px;">区分</th>
+              <th style="width:150px;">専門・所属</th>
+              <th style="width:70px;">性別</th>
+              <th style="width:170px;">任期</th>
+              <th style="width:120px;">COI申告</th>
+              <th style="width:90px;">出席率</th>
+              <th style="width:56px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-sm"><a href="#">秦　勝</a><br><span class="text-muted">ハタ　マサル</span></td>
+              <td><span class="badge badge-primary">委員長</span></td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">院長・生殖医療科</td>
+              <td class="text-sm">男性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">100%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">桐生　真理子</a><br><span class="text-muted">キリュウ　マリコ</span></td>
+              <td><span class="badge badge-primary">副委員長</span></td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">産婦人科部長</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">100%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">神谷　徹</a><br><span class="text-muted">カミヤ　トオル</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">生殖医療専門医</td>
+              <td class="text-sm">男性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">80%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">白石　由香</a><br><span class="text-muted">シライシ　ユカ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">胚培養士（主任）</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">100%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">三栖　有津紗</a><br><span class="text-muted">ミス　アツサ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">看護部長</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">80%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">鶴田　有希</a><br><span class="text-muted">ツルタ　ユキ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">認定遺伝カウンセラー</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-warning">COI あり</span><br><span class="text-xs text-muted">EC-2026-0051</span></td>
+              <td class="text-sm">100%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">高梨　美和</a><br><span class="text-muted">タカナシ　ミワ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">薬剤師</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2025/10/01 〜 2027/09/30</td>
+              <td><span class="badge badge-danger">未提出</span></td>
+              <td class="text-sm">60%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">内野　唯香</a><br><span class="text-muted">ウチノ　ユイカ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-muted">内部</span></td>
+              <td class="text-sm">事務長</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">100%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">相馬　健一郎</a><br><span class="text-muted">ソウマ　ケンイチロウ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-accent">外部</span></td>
+              <td class="text-sm">弁護士（医事法）</td>
+              <td class="text-sm">男性</td>
+              <td class="text-sm">2024/10/01 〜 2026/09/30</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">100%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">大久保　法子</a><br><span class="text-muted">オオクボ　ノリコ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-accent">外部</span></td>
+              <td class="text-sm">生命倫理学（大学教授）</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2024/10/01 〜 2026/09/30</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">100%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="#">森　千鶴</a><br><span class="text-muted">モリ　チヅル</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-accent">外部</span></td>
+              <td class="text-sm">一般の立場（市民代表）</td>
+              <td class="text-sm">女性</td>
+              <td class="text-sm">2024/10/01 〜 2026/09/30<br><span style="color:var(--color-warning);">任期満了まで 133 日</span></td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">80%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">井筒　貴之</a><br><span class="text-muted">イヅツ　タカユキ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-accent">外部</span></td>
+              <td class="text-sm">臨床心理士</td>
+              <td class="text-sm">男性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-success">提出済</span></td>
+              <td class="text-sm">80%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">岸　洋平</a><br><span class="text-muted">キシ　ヨウヘイ</span></td>
+              <td class="text-sm">委員</td>
+              <td><span class="badge badge-accent">外部</span></td>
+              <td class="text-sm">小児科医（他院）</td>
+              <td class="text-sm">男性</td>
+              <td class="text-sm">2025/04/01 〜 2027/03/31</td>
+              <td><span class="badge badge-danger">未提出</span></td>
+              <td class="text-sm">60%</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 事務局 -->
+    <div class="card mt-md">
+      <div class="section-title">事務局</div>
+      <div class="card-body">
+        <table class="detail-table">
+          <tr>
+            <th>事務局長</th>
+            <td>内野　唯香（事務長）</td>
+            <th>事務局担当</th>
+            <td>恵島　明日香 ／ 赤川　真智子</td>
+          </tr>
+          <tr>
+            <th>問い合わせ先</th>
+            <td>内線 2140 ／ ethics@example.local</td>
+            <th>規程</th>
+            <td><a href="#">倫理委員会規程（第4版・2025年4月1日改訂）</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

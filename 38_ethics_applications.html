@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会 申請一覧</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_applications">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">倫理委員会 申請一覧</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">倫理委員会 申請一覧</h1>
+        <div class="page-subtitle">PGT・第三者提供・妊孕性温存・臨床研究などの倫理審査申請を一元管理します</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline btn-sm">CSV出力</a>
+        <a href="41_ethics_meetings.html" class="btn btn-outline btn-sm">委員会開催</a>
+        <a href="40_ethics_application_new.html" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          新規申請
+        </a>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid mb-md">
+      <div class="kpi-card">
+        <div class="kpi-card-label">事務局受付待ち</div>
+        <div class="kpi-card-value">6</div>
+        <div class="kpi-card-unit">件 / 形式審査前</div>
+        <a href="#" class="kpi-card-link">一覧を表示</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">第48回 付議予定</div>
+        <div class="kpi-card-value">9</div>
+        <div class="kpi-card-unit">件 / 2026年5月20日 開催</div>
+        <a href="42_ethics_meeting_detail.html" class="kpi-card-link">議事次第を表示</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">条件付承認（条件未充足）</div>
+        <div class="kpi-card-value" style="color:var(--color-accent-dark);">3</div>
+        <div class="kpi-card-unit">件 / 資料再提出待ち</div>
+        <a href="#" class="kpi-card-link">一覧を表示</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">対応期限超過</div>
+        <div class="kpi-card-value" style="color:var(--color-danger);">2</div>
+        <div class="kpi-card-unit">件 / 差戻し・報告未提出</div>
+        <a href="44_ethics_reports.html" class="kpi-card-link">一覧を表示</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">今年度 審査実績</div>
+        <div class="kpi-card-value">64</div>
+        <div class="kpi-card-unit">件 / 承認 52・条件付 8・継続 3・不承認 1</div>
+        <a href="#" class="kpi-card-link">統計を表示</a>
+      </div>
+    </div>
+
+    <!-- 検索パネル -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div>
+          <label class="form-label">申請番号・件名</label>
+          <input type="text" class="form-control" placeholder="EC-2026-0000 または件名">
+        </div>
+        <div>
+          <label class="form-label">申請区分</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>PGT-A（着床前胚異数性検査）</option>
+            <option>PGT-SR（染色体構造異常）</option>
+            <option>PGT-M（単一遺伝子疾患）</option>
+            <option>非配偶者間人工授精（AID）</option>
+            <option>精子・卵子提供</option>
+            <option>未受精卵子凍結（社会的適応）</option>
+            <option>妊孕性温存（がん・生殖医療）</option>
+            <option>臨床研究（観察研究）</option>
+            <option>臨床研究（介入研究）</option>
+            <option>症例報告・学会発表</option>
+            <option>特殊症例（個別審査）</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">審査区分</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>通常審査（委員会）</option>
+            <option>迅速審査</option>
+            <option>継続審査</option>
+            <option>報告のみ</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">状態</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>下書き</option>
+            <option>事務局受付待ち</option>
+            <option>形式審査中</option>
+            <option>差戻し</option>
+            <option>審議待ち</option>
+            <option>審議中</option>
+            <option>条件付承認</option>
+            <option>承認</option>
+            <option>継続審査</option>
+            <option>不承認</option>
+            <option>取下げ</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-grid" style="grid-template-columns:repeat(4,1fr); margin-top:0.75rem;">
+        <div>
+          <label class="form-label">患者番号・患者名</label>
+          <input type="text" class="form-control" placeholder="番号または氏名">
+        </div>
+        <div>
+          <label class="form-label">申請者（担当医）</label>
+          <input type="text" class="form-control" placeholder="医師名">
+        </div>
+        <div>
+          <label class="form-label">申請日（開始）</label>
+          <input type="date" class="form-control">
+        </div>
+        <div>
+          <label class="form-label">申請日（終了）</label>
+          <input type="date" class="form-control">
+        </div>
+      </div>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+        <button class="btn btn-primary">検索</button>
+        <a href="#" class="btn btn-outline">クリア</a>
+        <a href="#" class="btn btn-ghost">検索条件を保存</a>
+      </div>
+    </div>
+
+    <!-- クイックフィルタ -->
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+      <a href="#" class="btn btn-sm btn-outline" style="background:var(--color-accent);color:#fff;border-color:var(--color-accent);">すべて（14）</a>
+      <a href="#" class="btn btn-sm btn-outline">事務局受付待ち（6）</a>
+      <a href="#" class="btn btn-sm btn-outline">審議待ち（9）</a>
+      <a href="#" class="btn btn-sm btn-outline">条件付承認（3）</a>
+      <a href="#" class="btn btn-sm btn-outline" style="color:#c62828;border-color:#c62828;">◆差戻し（1）</a>
+      <a href="#" class="btn btn-sm btn-outline" style="color:#c62828;border-color:#c62828;">★期限超過（2）</a>
+      <a href="#" class="btn btn-sm btn-outline">自分が申請者</a>
+    </div>
+
+    <!-- 一覧 -->
+    <div class="card">
+      <div class="flex-between mb-md">
+        <span class="text-sm text-muted">全 14 件（1〜14 件を表示）</span>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-sm btn-outline">表示設定</button>
+          <button class="btn btn-sm btn-outline">一括付議</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:112px;">申請番号</th>
+              <th style="width:150px;">申請区分</th>
+              <th>件名</th>
+              <th style="width:130px;">対象患者</th>
+              <th style="width:90px;">申請者</th>
+              <th style="width:88px;">審査区分</th>
+              <th style="width:110px;">状態</th>
+              <th style="width:88px;">申請日</th>
+              <th style="width:96px;">審議回</th>
+              <th style="width:56px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="39_ethics_application_detail.html">EC-2026-0051</a></td>
+              <td><span class="badge badge-accent">PGT-M</span></td>
+              <td><a href="39_ethics_application_detail.html" style="color:var(--color-primary);font-weight:500;">単一遺伝子疾患に対する着床前遺伝学的検査の実施について</a></td>
+              <td class="text-sm">伊佐　あかね<br><span class="text-muted">113185</span></td>
+              <td class="text-sm">秦勝</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-warning">審議待ち</span></td>
+              <td class="text-sm">2026/05/01</td>
+              <td class="text-sm"><a href="42_ethics_meeting_detail.html">第48回</a></td>
+              <td><a href="39_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="39_ethics_application_detail.html">EC-2026-0050</a></td>
+              <td><span class="badge badge-info">PGT-A</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">反復流産症例に対する着床前胚異数性検査の実施について</a></td>
+              <td class="text-sm">笹岡　香<br><span class="text-muted">113948</span></td>
+              <td class="text-sm">桐生真理子</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-warning">審議待ち</span></td>
+              <td class="text-sm">2026/04/30</td>
+              <td class="text-sm"><a href="42_ethics_meeting_detail.html">第48回</a></td>
+              <td><a href="39_ethics_application_detail.html" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0049</a></td>
+              <td><span class="badge badge-accent">妊孕性温存</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">乳がん治療前の未受精卵子凍結保存（がん・生殖医療）</a></td>
+              <td class="text-sm">山下　思穂<br><span class="text-muted">116895</span></td>
+              <td class="text-sm">神谷徹</td>
+              <td><span class="badge badge-primary">迅速審査</span></td>
+              <td><span class="badge badge-success">承認</span></td>
+              <td class="text-sm">2026/04/27</td>
+              <td class="text-sm text-muted">迅速 05/07</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0048</a></td>
+              <td><span class="badge badge-muted">臨床研究</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">当院における凍結融解胚移植の妊娠転帰に関する後方視的観察研究</a></td>
+              <td class="text-sm text-muted">—<br><span class="text-muted">対象 312 例</span></td>
+              <td class="text-sm">桐生真理子</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-warning">審議待ち</span></td>
+              <td class="text-sm">2026/04/24</td>
+              <td class="text-sm"><a href="42_ethics_meeting_detail.html">第48回</a></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0047</a></td>
+              <td><span class="badge badge-accent">AID</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">非配偶者間人工授精の実施可否について（無精子症）</a></td>
+              <td class="text-sm">時吉　李奈<br><span class="text-muted">119640</span></td>
+              <td class="text-sm">秦勝</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-info">審議待ち</span></td>
+              <td class="text-sm">2026/04/22</td>
+              <td class="text-sm"><a href="42_ethics_meeting_detail.html">第48回</a></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="#">EC-2026-0046</a></td>
+              <td><span class="badge badge-info">PGT-SR</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">均衡型相互転座に対する着床前遺伝学的検査の実施について</a></td>
+              <td class="text-sm">亀井　夏美<br><span class="text-muted">115981</span></td>
+              <td class="text-sm">神谷徹</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-accent">条件付承認</span></td>
+              <td class="text-sm">2026/04/18</td>
+              <td class="text-sm">第47回</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="#">EC-2026-0045</a></td>
+              <td><span class="badge badge-accent">卵子凍結</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">社会的適応による未受精卵子凍結保存の実施について</a></td>
+              <td class="text-sm">藤田　栞菜<br><span class="text-muted">119642</span></td>
+              <td class="text-sm">桐生真理子</td>
+              <td><span class="badge badge-primary">迅速審査</span></td>
+              <td><span class="badge badge-accent">条件付承認</span></td>
+              <td class="text-sm">2026/04/16</td>
+              <td class="text-sm text-muted">迅速 04/23</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr class="row-alert">
+              <td class="text-sm"><a href="#">EC-2026-0044</a></td>
+              <td><span class="badge badge-muted">特殊症例</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">凍結胚の取扱いに関する個別審査（夫の同意撤回事例）</a></td>
+              <td class="text-sm">石郷岡　彩乃<br><span class="text-muted">119653</span></td>
+              <td class="text-sm">秦勝</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-danger">差戻し</span></td>
+              <td class="text-sm">2026/04/15</td>
+              <td class="text-sm text-muted">—</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0043</a></td>
+              <td><span class="badge badge-info">PGT-A</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">反復着床不全症例に対する着床前胚異数性検査の実施について</a></td>
+              <td class="text-sm">屋比久　希<br><span class="text-muted">103944</span></td>
+              <td class="text-sm">神谷徹</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-success">承認</span></td>
+              <td class="text-sm">2026/04/10</td>
+              <td class="text-sm">第47回</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0042</a></td>
+              <td><span class="badge badge-muted">症例報告</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">稀少症例に関する学会発表（第78回日本産科婦人科学会）</a></td>
+              <td class="text-sm">加藤　みゆき<br><span class="text-muted">101726</span></td>
+              <td class="text-sm">桐生真理子</td>
+              <td><span class="badge badge-primary">迅速審査</span></td>
+              <td><span class="badge badge-success">承認</span></td>
+              <td class="text-sm">2026/04/08</td>
+              <td class="text-sm text-muted">迅速 04/12</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0041</a></td>
+              <td><span class="badge badge-muted">臨床研究</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">AMH値と採卵成績の関連に関する研究（変更申請 第1回）</a></td>
+              <td class="text-sm text-muted">—<br><span class="text-muted">対象 180 例</span></td>
+              <td class="text-sm">神谷徹</td>
+              <td><span class="badge badge-primary">迅速審査</span></td>
+              <td><span class="badge badge-success">承認</span></td>
+              <td class="text-sm">2026/04/03</td>
+              <td class="text-sm text-muted">迅速 04/09</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0040</a></td>
+              <td><span class="badge badge-accent">精子提供</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">第三者精子提供の受入体制および出自を知る権利への対応</a></td>
+              <td class="text-sm text-muted">—<br><span class="text-muted">体制整備</span></td>
+              <td class="text-sm">内野唯香</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-info">継続審査</span></td>
+              <td class="text-sm">2026/03/28</td>
+              <td class="text-sm"><a href="42_ethics_meeting_detail.html">第48回</a></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0039</a></td>
+              <td><span class="badge badge-muted">個人情報</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">診療情報の二次利用（匿名加工情報の学術利用）について</a></td>
+              <td class="text-sm text-muted">—<br><span class="text-muted">対象 1,204 例</span></td>
+              <td class="text-sm">内野唯香</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-success">承認</span></td>
+              <td class="text-sm">2026/03/24</td>
+              <td class="text-sm">第46回</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">EC-2026-0038</a></td>
+              <td><span class="badge badge-info">PGT-A</span></td>
+              <td><a href="#" style="color:var(--color-primary);font-weight:500;">高年齢症例に対する着床前胚異数性検査の実施について</a></td>
+              <td class="text-sm">カークウッド　由里子<br><span class="text-muted">107550</span></td>
+              <td class="text-sm">秦勝</td>
+              <td><span class="badge badge-muted">通常審査</span></td>
+              <td><span class="badge badge-danger">不承認</span></td>
+              <td class="text-sm">2026/03/19</td>
+              <td class="text-sm">第46回</td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">3</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

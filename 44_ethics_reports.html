@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会 実施報告・年次報告</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_reports">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">実施報告・年次報告</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">実施報告・年次報告</h1>
+        <div class="page-subtitle">承認済み案件の実施状況・変更・終了・有害事象の報告を管理します</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline btn-sm">CSV出力</a>
+        <a href="40_ethics_application_new.html" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          報告を登録
+        </a>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid mb-md">
+      <div class="kpi-card">
+        <div class="kpi-card-label">提出期限 30日以内</div>
+        <div class="kpi-card-value" style="color:var(--color-warning);">5</div>
+        <div class="kpi-card-unit">件 / 年次報告 3・実施報告 2</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">提出期限 超過</div>
+        <div class="kpi-card-value" style="color:var(--color-danger);">2</div>
+        <div class="kpi-card-unit">件 / 申請者へ督促済</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">実施中の承認案件</div>
+        <div class="kpi-card-value">28</div>
+        <div class="kpi-card-unit">件 / 有効期限内</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">重篤な有害事象</div>
+        <div class="kpi-card-value">1</div>
+        <div class="kpi-card-unit">件 / 今年度・委員会報告済</div>
+      </div>
+    </div>
+
+    <div class="callout callout-danger mb-md">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.647-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      <div><strong>提出期限を超過した報告が 2 件あります。</strong> 年次報告が未提出の案件は、規程により承認の効力が停止します（RP-2026-0009・RP-2026-0011）。</div>
+    </div>
+
+    <!-- 検索 -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div>
+          <label class="form-label">報告番号・申請番号</label>
+          <input type="text" class="form-control" placeholder="RP-2026-0000 / EC-2026-0000">
+        </div>
+        <div>
+          <label class="form-label">報告種別</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>実施報告（症例ごと）</option>
+            <option>年次報告（継続）</option>
+            <option>変更申請</option>
+            <option>終了報告</option>
+            <option>重篤な有害事象報告</option>
+            <option>逸脱・不適合報告</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">状態</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>未提出</option>
+            <option>提出済（確認待ち）</option>
+            <option>委員会報告済</option>
+            <option>差戻し</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">提出期限（〜）</label>
+          <input type="date" class="form-control">
+        </div>
+      </div>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+        <button class="btn btn-primary">検索</button>
+        <a href="#" class="btn btn-outline">クリア</a>
+        <a href="#" class="btn btn-ghost">未提出者へ一括督促</a>
+      </div>
+    </div>
+
+    <!-- 一覧 -->
+    <div class="card">
+      <div class="flex-between mb-md">
+        <span class="text-sm text-muted">全 11 件</span>
+        <button class="btn btn-sm btn-outline">表示設定</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:112px;">報告番号</th>
+              <th style="width:112px;">元申請</th>
+              <th style="width:130px;">報告種別</th>
+              <th>件名</th>
+              <th style="width:90px;">申請者</th>
+              <th style="width:96px;">提出期限</th>
+              <th style="width:96px;">提出日</th>
+              <th style="width:120px;">状態</th>
+              <th style="width:56px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-alert">
+              <td class="text-sm"><a href="#">RP-2026-0011</a></td>
+              <td class="text-sm"><a href="#">EC-2025-0117</a></td>
+              <td><span class="badge badge-muted">年次報告</span></td>
+              <td class="text-sm">AMH値と採卵成績の関連に関する研究（第2年次）</td>
+              <td class="text-sm">神谷徹</td>
+              <td class="text-sm" style="color:var(--color-danger);">2026/04/30</td>
+              <td class="text-sm text-muted">—</td>
+              <td><span class="badge badge-danger">期限超過</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">督促</a></td>
+            </tr>
+            <tr class="row-alert">
+              <td class="text-sm"><a href="#">RP-2026-0009</a></td>
+              <td class="text-sm"><a href="#">EC-2025-0102</a></td>
+              <td><span class="badge badge-muted">年次報告</span></td>
+              <td class="text-sm">凍結保存胚の長期保管に関する実態調査（第1年次）</td>
+              <td class="text-sm">桐生真理子</td>
+              <td class="text-sm" style="color:var(--color-danger);">2026/04/15</td>
+              <td class="text-sm text-muted">—</td>
+              <td><span class="badge badge-danger">期限超過</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">督促</a></td>
+            </tr>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="#">RP-2026-0014</a></td>
+              <td class="text-sm"><a href="#">EC-2026-0043</a></td>
+              <td><span class="badge badge-info">実施報告</span></td>
+              <td class="text-sm">PGT-A 実施報告（1症例目・生検 6 胚／正倍数体 2 胚）</td>
+              <td class="text-sm">神谷徹</td>
+              <td class="text-sm">2026/05/29</td>
+              <td class="text-sm text-muted">—</td>
+              <td><span class="badge badge-warning">期限 30日以内</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="#">RP-2026-0015</a></td>
+              <td class="text-sm"><a href="#">EC-2026-0046</a></td>
+              <td><span class="badge badge-accent">条件充足報告</span></td>
+              <td class="text-sm">PGT-SR 条件付承認に対する説明文書改訂版の提出</td>
+              <td class="text-sm">神谷徹</td>
+              <td class="text-sm">2026/06/01</td>
+              <td class="text-sm text-muted">—</td>
+              <td><span class="badge badge-warning">期限 30日以内</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="#">RP-2026-0016</a></td>
+              <td class="text-sm"><a href="#">EC-2026-0045</a></td>
+              <td><span class="badge badge-accent">条件充足報告</span></td>
+              <td class="text-sm">未受精卵子凍結：保管期間・廃棄手順の説明文書の提出</td>
+              <td class="text-sm">桐生真理子</td>
+              <td class="text-sm">2026/06/05</td>
+              <td class="text-sm text-muted">—</td>
+              <td><span class="badge badge-warning">期限 30日以内</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">RP-2026-0013</a></td>
+              <td class="text-sm"><a href="#">EC-2026-0049</a></td>
+              <td><span class="badge badge-info">実施報告</span></td>
+              <td class="text-sm">妊孕性温存：未受精卵子凍結の実施報告（採卵 11 個・凍結 9 個）</td>
+              <td class="text-sm">神谷徹</td>
+              <td class="text-sm">2026/06/12</td>
+              <td class="text-sm">2026/05/14</td>
+              <td><span class="badge badge-info">確認待ち</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">RP-2026-0012</a></td>
+              <td class="text-sm"><a href="#">EC-2025-0098</a></td>
+              <td><span class="badge badge-danger">有害事象</span></td>
+              <td class="text-sm">採卵後 OHSS による入院（重篤・因果関係あり）</td>
+              <td class="text-sm">秦勝</td>
+              <td class="text-sm">2026/04/05</td>
+              <td class="text-sm">2026/04/02</td>
+              <td><span class="badge badge-success">委員会報告済</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">RP-2026-0010</a></td>
+              <td class="text-sm"><a href="#">EC-2025-0088</a></td>
+              <td><span class="badge badge-muted">終了報告</span></td>
+              <td class="text-sm">初診時 AMH 値の分布に関する観察研究の終了報告</td>
+              <td class="text-sm">桐生真理子</td>
+              <td class="text-sm">2026/03/31</td>
+              <td class="text-sm">2026/03/26</td>
+              <td><span class="badge badge-success">委員会報告済</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">RP-2026-0008</a></td>
+              <td class="text-sm"><a href="#">EC-2025-0117</a></td>
+              <td><span class="badge badge-muted">変更申請</span></td>
+              <td class="text-sm">研究責任者の変更および対象症例数の追加（180 → 260 例）</td>
+              <td class="text-sm">神谷徹</td>
+              <td class="text-sm">2026/03/20</td>
+              <td class="text-sm">2026/03/18</td>
+              <td><span class="badge badge-success">承認済</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">RP-2026-0007</a></td>
+              <td class="text-sm"><a href="#">EC-2025-0091</a></td>
+              <td><span class="badge badge-muted">逸脱報告</span></td>
+              <td class="text-sm">同意取得手順の逸脱（説明文書の版数相違・是正済）</td>
+              <td class="text-sm">内野唯香</td>
+              <td class="text-sm">2026/02/28</td>
+              <td class="text-sm">2026/02/24</td>
+              <td><span class="badge badge-success">委員会報告済</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">RP-2026-0006</a></td>
+              <td class="text-sm"><a href="#">EC-2025-0074</a></td>
+              <td><span class="badge badge-info">実施報告</span></td>
+              <td class="text-sm">AID 実施報告（1周期目・妊娠成立せず）</td>
+              <td class="text-sm">秦勝</td>
+              <td class="text-sm">2026/02/15</td>
+              <td class="text-sm">2026/02/10</td>
+              <td><span class="badge badge-success">委員会報告済</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">詳細</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">2</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+
+    <!-- 承認案件の有効期限 -->
+    <div class="card mt-md">
+      <div class="section-title">承認の有効期限が近い案件</div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:112px;">申請番号</th>
+                <th>件名</th>
+                <th style="width:110px;">承認日</th>
+                <th style="width:110px;">有効期限</th>
+                <th style="width:110px;">残日数</th>
+                <th style="width:120px;">更新申請</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-attention">
+                <td class="text-sm"><a href="#">EC-2025-0102</a></td>
+                <td class="text-sm">凍結保存胚の長期保管に関する実態調査</td>
+                <td class="text-sm">2025/06/18</td>
+                <td class="text-sm">2026/06/17</td>
+                <td class="text-sm" style="color:var(--color-warning);">31 日</td>
+                <td><span class="badge badge-warning">未申請</span></td>
+              </tr>
+              <tr>
+                <td class="text-sm"><a href="#">EC-2025-0117</a></td>
+                <td class="text-sm">AMH値と採卵成績の関連に関する研究</td>
+                <td class="text-sm">2025/07/16</td>
+                <td class="text-sm">2026/07/15</td>
+                <td class="text-sm">59 日</td>
+                <td><span class="badge badge-muted">準備中</span></td>
+              </tr>
+              <tr>
+                <td class="text-sm"><a href="#">EC-2025-0074</a></td>
+                <td class="text-sm">非配偶者間人工授精の実施（継続症例）</td>
+                <td class="text-sm">2025/09/17</td>
+                <td class="text-sm">2026/09/16</td>
+                <td class="text-sm">122 日</td>
+                <td><span class="badge badge-muted">—</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

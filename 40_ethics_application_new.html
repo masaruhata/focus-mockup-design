@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会 新規申請</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_applications">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="38_ethics_applications.html">倫理委員会 申請一覧</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">新規申請</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">倫理委員会 新規申請</h1>
+        <div class="page-subtitle">申請区分を選択すると、必要な入力項目と提出書類が自動で切り替わります</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline btn-sm">下書き保存</a>
+        <a href="38_ethics_applications.html" class="btn btn-ghost btn-sm">一覧へ戻る</a>
+      </div>
+    </div>
+
+    <!-- ステップ -->
+    <div class="step-nav">
+      <div class="step-nav-item done"><span class="step-nav-num">✓</span>申請区分</div>
+      <div class="step-nav-item active"><span class="step-nav-num">2</span>対象・申請内容</div>
+      <div class="step-nav-item"><span class="step-nav-num">3</span>提出書類</div>
+      <div class="step-nav-item"><span class="step-nav-num">4</span>COI申告</div>
+      <div class="step-nav-item"><span class="step-nav-num">5</span>確認・提出</div>
+    </div>
+
+    <div class="callout mb-md">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+      <div>
+        選択された申請区分は <strong>PGT-M（単一遺伝子疾患）</strong> です。この区分は <strong>通常審査（委員会審議）</strong> の対象で、院内承認後に<strong>日本産科婦人科学会への申請</strong>が必要です。次回委員会は <strong>2026年5月20日</strong>、締切は開催 7 日前（<strong>5月13日</strong>）です。
+      </div>
+    </div>
+
+    <!-- 申請区分 -->
+    <div class="card mb-md">
+      <div class="section-title">1. 申請区分</div>
+      <div class="card-body">
+        <div class="search-grid" style="grid-template-columns:1fr 1fr 1fr;">
+          <div>
+            <label class="form-label required">申請区分</label>
+            <select class="form-control">
+              <option>PGT-M（単一遺伝子疾患）</option>
+              <option>PGT-A（着床前胚異数性検査）</option>
+              <option>PGT-SR（染色体構造異常）</option>
+              <option>非配偶者間人工授精（AID）</option>
+              <option>精子・卵子提供</option>
+              <option>未受精卵子凍結（社会的適応）</option>
+              <option>妊孕性温存（がん・生殖医療）</option>
+              <option>臨床研究（観察研究）</option>
+              <option>臨床研究（介入研究）</option>
+              <option>症例報告・学会発表</option>
+              <option>診療情報の二次利用</option>
+              <option>特殊症例（個別審査）</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label required">申請種別</label>
+            <select class="form-control">
+              <option>新規申請</option>
+              <option>変更申請</option>
+              <option>継続（年次）申請</option>
+              <option>終了報告</option>
+              <option>重篤な有害事象報告</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">審査区分（自動判定）</label>
+            <input type="text" class="form-control" value="通常審査（委員会審議）" readonly style="background:var(--color-beige-light);">
+          </div>
+        </div>
+        <div class="search-grid mt-md" style="grid-template-columns:1fr 1fr 1fr;">
+          <div>
+            <label class="form-label required">申請者（担当医）</label>
+            <select class="form-control">
+              <option>秦　勝（生殖医療科）</option>
+              <option>桐生　真理子（産婦人科）</option>
+              <option>神谷　徹（生殖医療科）</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">共同申請者</label>
+            <input type="text" class="form-control" placeholder="氏名を入力して追加">
+          </div>
+          <div>
+            <label class="form-label">希望審議回</label>
+            <select class="form-control">
+              <option>第48回（2026/05/20）</option>
+              <option>第49回（2026/06/17）</option>
+              <option>次回以降で調整</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 対象・申請内容 -->
+    <div class="card mb-md">
+      <div class="section-title">2. 対象・申請内容</div>
+      <div class="card-body">
+        <div class="search-grid" style="grid-template-columns:1fr 1fr;">
+          <div>
+            <label class="form-label required">対象患者</label>
+            <div style="display:flex;gap:6px;">
+              <input type="text" class="form-control" value="113185　伊佐　あかね">
+              <button class="btn btn-outline btn-sm no-wrap">患者検索</button>
+            </div>
+          </div>
+          <div>
+            <label class="form-label">配偶者・パートナー</label>
+            <input type="text" class="form-control" value="伊佐　健吾（39歳）">
+          </div>
+        </div>
+        <div class="form-group mt-md">
+          <label class="form-label required">件名</label>
+          <input type="text" class="form-control" value="単一遺伝子疾患に対する着床前遺伝学的検査の実施について">
+        </div>
+        <div class="search-grid" style="grid-template-columns:1fr 1fr;">
+          <div>
+            <label class="form-label required">対象疾患</label>
+            <input type="text" class="form-control" value="脊髄性筋萎縮症（SMA・常染色体潜性遺伝）">
+          </div>
+          <div>
+            <label class="form-label required">重篤性の判断根拠</label>
+            <input type="text" class="form-control" value="成人に達する以前に日常生活を著しく損なう状態が出現し得る">
+          </div>
+        </div>
+        <div class="form-group mt-md">
+          <label class="form-label required">申請理由・医学的適応</label>
+          <textarea class="form-control" rows="5" placeholder="適応の根拠、治療歴、実施しない場合の選択肢の説明状況などを記載します"></textarea>
+        </div>
+        <div class="search-grid" style="grid-template-columns:1fr 1fr 1fr;">
+          <div>
+            <label class="form-label required">実施予定時期</label>
+            <input type="text" class="form-control" placeholder="2026年7月〜">
+          </div>
+          <div>
+            <label class="form-label">実施予定件数・周期数</label>
+            <input type="text" class="form-control" placeholder="採卵 最大3周期">
+          </div>
+          <div>
+            <label class="form-label">費用負担</label>
+            <select class="form-control">
+              <option>自費（患者負担）</option>
+              <option>保険診療</option>
+              <option>研究費負担</option>
+              <option>一部助成あり</option>
+            </select>
+          </div>
+        </div>
+        <div class="search-grid mt-md" style="grid-template-columns:1fr 1fr;">
+          <div>
+            <label class="form-label required">遺伝カウンセリング実施状況</label>
+            <select class="form-control">
+              <option>実施済（2回以上）</option>
+              <option>実施済（1回）</option>
+              <option>実施予定</option>
+              <option>該当なし</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label required">説明・同意の取得状況</label>
+            <select class="form-control">
+              <option>本人・配偶者ともに取得済</option>
+              <option>本人のみ取得済</option>
+              <option>未取得（実施前に取得予定）</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group mt-md">
+          <label class="form-label required">個人情報・試料の取扱い</label>
+          <textarea class="form-control" rows="3" placeholder="匿名化の方法、対応表の管理者、院外提供の有無、保管期間などを記載します"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 提出書類 -->
+    <div class="card mb-md">
+      <div class="section-title">3. 提出書類（申請区分に応じた必須書類）</div>
+      <div class="card-body">
+        <div class="req-list mb-md">
+          <div class="req-item"><span class="req-icon ok">✓</span><span><strong>倫理審査申請書（様式1）</strong> — 添付済（application_form_v1.pdf）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span><strong>実施計画書</strong> — 添付済（plan_v1.pdf）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span><strong>患者説明文書・同意書（案）</strong> — 添付済（ic_v1.pdf）</span></div>
+          <div class="req-item"><span class="req-icon ng">!</span><span><strong>遺伝カウンセリング記録</strong> — 未添付（PGT 区分では必須です）</span></div>
+          <div class="req-item"><span class="req-icon ng">!</span><span><strong>遺伝学的検査結果報告書（夫婦）</strong> — 未添付（PGT-M 区分では必須です）</span></div>
+          <div class="req-item"><span class="req-icon na">–</span><span><strong>日本産科婦人科学会 申請書（写し）</strong> — 院内承認後の提出で可</span></div>
+          <div class="req-item"><span class="req-icon na">–</span><span><strong>検査委託先との契約書（写し）</strong> — 任意</span></div>
+        </div>
+        <div style="border:2px dashed var(--color-border); border-radius:var(--radius-md); padding:24px; text-align:center; color:var(--color-text-muted); font-size:13px;">
+          <svg viewBox="0 0 20 20" fill="currentColor" style="width:28px;height:28px;opacity:.4;"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+          <div style="margin-top:8px;">ファイルをドラッグ＆ドロップ、または <a href="#">クリックして選択</a></div>
+          <div class="text-xs" style="margin-top:4px;">PDF / Word / Excel / 画像（1ファイル 20MB まで）</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COI申告 -->
+    <div class="card mb-md">
+      <div class="section-title">4. 利益相反（COI）申告</div>
+      <div class="card-body">
+        <table class="detail-table">
+          <tr>
+            <th>申請者の COI 申告（当年度）</th>
+            <td colspan="3"><span class="badge badge-success">提出済</span> 2026/04/01 提出（開示すべき利益相反なし）</td>
+          </tr>
+          <tr>
+            <th>本申請に関する COI</th>
+            <td colspan="3">
+              <label style="font-size:13px;margin-right:16px;"><input type="radio" name="coi" checked> なし</label>
+              <label style="font-size:13px;"><input type="radio" name="coi"> あり（下記に記載）</label>
+            </td>
+          </tr>
+          <tr>
+            <th>研究資金・提供元</th>
+            <td>該当なし（院内費用で実施）</td>
+            <th>検査機関との関係</th>
+            <td>該当なし</td>
+          </tr>
+          <tr>
+            <th>補足</th>
+            <td colspan="3"><textarea class="form-control" rows="2" placeholder="COI がある場合はその内容と、審議・採決への不参加の要否を記載します"></textarea></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 確認・提出 -->
+    <div class="card mb-md">
+      <div class="section-title">5. 確認・提出</div>
+      <div class="card-body">
+        <div class="callout callout-warning mb-md">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.647-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <div><strong>未入力・未添付が 3 件あります。</strong> 申請理由・個人情報の取扱い・必須書類 2 件を入力すると提出できます。下書き保存はいつでも可能です。</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary" disabled style="opacity:.5;cursor:not-allowed;">申請を提出</button>
+          <button class="btn btn-outline">下書き保存</button>
+          <a href="#" class="btn btn-ghost">入力内容をプレビュー</a>
+          <a href="38_ethics_applications.html" class="btn btn-ghost">キャンセル</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>

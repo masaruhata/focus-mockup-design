@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus — 倫理委員会 開催管理</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="ethics_meetings">
+<div id="header-container"></div>
+<div class="body-layout">
+  <div id="sidebar-container"></div>
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="02_home.html">ホーム</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">倫理委員会 開催管理</span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">倫理委員会 開催管理</h1>
+        <div class="page-subtitle">開催回ごとの議事次第・出欠・審議結果・議事録を管理します</div>
+      </div>
+      <div class="page-actions">
+        <a href="#" class="btn btn-outline btn-sm">年間開催予定</a>
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+          開催回を登録
+        </a>
+      </div>
+    </div>
+
+    <!-- 次回開催 -->
+    <div class="card mb-md">
+      <div class="section-title">次回開催</div>
+      <div class="card-body">
+        <div class="flex-between mb-md" style="flex-wrap:wrap;gap:12px;">
+          <div>
+            <div class="flex-center gap-sm mb-sm" style="flex-wrap:wrap;">
+              <span class="app-header-no">第48回</span>
+              <span class="badge badge-warning">準備中</span>
+              <span class="badge badge-muted">対面 ＋ Web 併用</span>
+            </div>
+            <div class="app-header-title">2026年5月20日（水）18:30 〜 20:00</div>
+            <div class="app-header-meta">
+              <span><strong>会場</strong>本院 3F 会議室A ／ Web 会議併用</span>
+              <span><strong>議長</strong>秦　勝（委員長）</span>
+              <span><strong>事務局</strong>恵島　明日香</span>
+              <span><strong>審議案件</strong>9 件（新規 6・変更 2・継続 1）</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+            <a href="42_ethics_meeting_detail.html" class="btn btn-accent btn-sm">議事次第を開く</a>
+            <a href="#" class="btn btn-outline btn-sm">開催通知を送信</a>
+            <a href="#" class="btn btn-ghost btn-sm">資料一式をダウンロード</a>
+          </div>
+        </div>
+        <div class="req-list">
+          <div class="req-item"><span class="req-icon ok">✓</span><span>開催通知の送信（2026/05/06 送信済・13名）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span>付議案件の確定（5月13日締切・9件）</span></div>
+          <div class="req-item"><span class="req-icon ok">✓</span><span>事前資料の配付（2026/05/14 配付済）</span></div>
+          <div class="req-item"><span class="req-icon ng">!</span><span>出欠回答 <strong>11／13 名</strong>（未回答：高梨　美和、岸　洋平）</span></div>
+          <div class="req-item"><span class="req-icon ng">!</span><span>事前意見の回答 <strong>8／13 名</strong>（回答期限 5月18日）</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="kpi-grid mb-md">
+      <div class="kpi-card">
+        <div class="kpi-card-label">今年度 開催回数</div>
+        <div class="kpi-card-value">5</div>
+        <div class="kpi-card-unit">回 / 年6回開催予定</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">平均出席率</div>
+        <div class="kpi-card-value">86<span style="font-size:14px;">%</span></div>
+        <div class="kpi-card-unit">直近5回平均（定足数はすべて充足）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">議事録 未確定</div>
+        <div class="kpi-card-value" style="color:var(--color-warning);">1</div>
+        <div class="kpi-card-unit">回 / 第47回（委員長承認待ち）</div>
+        <a href="#" class="kpi-card-link">議事録を確認</a>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card-label">迅速審査 実施件数</div>
+        <div class="kpi-card-value">12</div>
+        <div class="kpi-card-unit">件 / 今年度（次回委員会で報告）</div>
+      </div>
+    </div>
+
+    <!-- 検索 -->
+    <div class="search-panel">
+      <div class="search-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div>
+          <label class="form-label">開催回</label>
+          <input type="text" class="form-control" placeholder="第00回">
+        </div>
+        <div>
+          <label class="form-label">開催形式</label>
+          <select class="form-control">
+            <option value="">すべて</option>
+            <option>対面</option>
+            <option>Web</option>
+            <option>対面 ＋ Web 併用</option>
+            <option>持ち回り（迅速審査）</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">開催日（開始）</label>
+          <input type="date" class="form-control">
+        </div>
+        <div>
+          <label class="form-label">開催日（終了）</label>
+          <input type="date" class="form-control">
+        </div>
+      </div>
+      <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+        <button class="btn btn-primary">検索</button>
+        <a href="#" class="btn btn-outline">クリア</a>
+      </div>
+    </div>
+
+    <!-- 開催履歴 -->
+    <div class="card">
+      <div class="flex-between mb-md">
+        <span class="text-sm text-muted">全 8 件</span>
+        <button class="btn btn-sm btn-outline">CSV出力</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:84px;">開催回</th>
+              <th style="width:150px;">開催日時</th>
+              <th style="width:140px;">形式・会場</th>
+              <th style="width:120px;">出席／定足数</th>
+              <th style="width:70px;">審議</th>
+              <th style="width:210px;">判定内訳</th>
+              <th style="width:110px;">議事録</th>
+              <th style="width:90px;">状態</th>
+              <th style="width:56px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-attention">
+              <td class="text-sm"><a href="42_ethics_meeting_detail.html">第48回</a></td>
+              <td class="text-sm">2026/05/20（水）18:30</td>
+              <td class="text-sm">対面＋Web<br><span class="text-muted">会議室A</span></td>
+              <td class="text-sm">回答 11 名<br><span class="text-muted">定足数 7 名</span></td>
+              <td class="text-sm">9</td>
+              <td class="text-sm text-muted">—</td>
+              <td class="text-sm text-muted">—</td>
+              <td><span class="badge badge-warning">準備中</span></td>
+              <td><a href="42_ethics_meeting_detail.html" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">第47回</a></td>
+              <td class="text-sm">2026/04/15（水）18:30</td>
+              <td class="text-sm">対面＋Web<br><span class="text-muted">会議室A</span></td>
+              <td class="text-sm">12 ／ 13 名<br><span class="text-muted">外部 4 名出席</span></td>
+              <td class="text-sm">8</td>
+              <td class="text-sm">承認 6・条件付 2</td>
+              <td><span class="badge badge-warning">承認待ち</span></td>
+              <td><span class="badge badge-info">開催済</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">迅速審査</a></td>
+              <td class="text-sm">2026/05/07（木）持ち回り</td>
+              <td class="text-sm">持ち回り<br><span class="text-muted">電子決裁</span></td>
+              <td class="text-sm">3 ／ 3 名<br><span class="text-muted">委員長指名</span></td>
+              <td class="text-sm">2</td>
+              <td class="text-sm">承認 2</td>
+              <td><span class="badge badge-success">確定</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">第46回</a></td>
+              <td class="text-sm">2026/03/18（水）18:30</td>
+              <td class="text-sm">対面＋Web<br><span class="text-muted">会議室A</span></td>
+              <td class="text-sm">11 ／ 13 名<br><span class="text-muted">外部 3 名出席</span></td>
+              <td class="text-sm">10</td>
+              <td class="text-sm">承認 7・条件付 2・不承認 1</td>
+              <td><span class="badge badge-success">確定</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">第45回</a></td>
+              <td class="text-sm">2026/01/21（水）18:30</td>
+              <td class="text-sm">Web<br><span class="text-muted">オンライン</span></td>
+              <td class="text-sm">10 ／ 13 名<br><span class="text-muted">外部 3 名出席</span></td>
+              <td class="text-sm">7</td>
+              <td class="text-sm">承認 5・条件付 1・継続 1</td>
+              <td><span class="badge badge-success">確定</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">第44回</a></td>
+              <td class="text-sm">2025/11/19（水）18:30</td>
+              <td class="text-sm">対面＋Web<br><span class="text-muted">会議室A</span></td>
+              <td class="text-sm">12 ／ 13 名<br><span class="text-muted">外部 4 名出席</span></td>
+              <td class="text-sm">9</td>
+              <td class="text-sm">承認 8・条件付 1</td>
+              <td><span class="badge badge-success">確定</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">第43回</a></td>
+              <td class="text-sm">2025/09/17（水）18:30</td>
+              <td class="text-sm">対面<br><span class="text-muted">会議室A</span></td>
+              <td class="text-sm">9 ／ 13 名<br><span class="text-muted">外部 2 名出席</span></td>
+              <td class="text-sm">6</td>
+              <td class="text-sm">承認 5・継続 1</td>
+              <td><span class="badge badge-success">確定</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+            <tr>
+              <td class="text-sm"><a href="#">第42回</a></td>
+              <td class="text-sm">2025/07/16（水）18:30</td>
+              <td class="text-sm">対面＋Web<br><span class="text-muted">会議室A</span></td>
+              <td class="text-sm">11 ／ 13 名<br><span class="text-muted">外部 3 名出席</span></td>
+              <td class="text-sm">8</td>
+              <td class="text-sm">承認 7・条件付 1</td>
+              <td><span class="badge badge-success">確定</span></td>
+              <td><span class="badge badge-success">完了</span></td>
+              <td><a href="#" class="btn btn-xs btn-outline">開く</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="page-btn disabled">«</div>
+        <div class="page-btn disabled">‹</div>
+        <div class="page-btn active">1</div>
+        <div class="page-btn">›</div>
+        <div class="page-btn">»</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="components.js"></script>
+</body>
+</html>
