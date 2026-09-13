@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — お知らせ</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.notice { display:flex; gap:12px; padding:14px 16px; border-bottom:1px solid var(--pm-border-light); }
+.notice.unread { background:var(--pm-primary-light); }
+.notice:last-child { border-bottom:none; }
+.notice-kind { display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; padding:1px 8px; border-radius:100px; }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow" style="max-width:900px">
+
+      <div class="pm-page-head">
+        <div>
+          <h1 class="pm-page-title">お知らせ</h1>
+          <div class="pm-page-sub" id="sub"></div>
+        </div>
+        <div class="pm-page-actions">
+          <button class="pm-btn" id="btn-read"></button>
+        </div>
+      </div>
+
+      <div class="pm-tabs">
+        <button class="pm-tab active" data-f="all">すべて</button>
+        <button class="pm-tab" data-f="unread">未読</button>
+        <button class="pm-tab" data-f="mention">メンション</button>
+      </div>
+
+      <div class="pm-card"><div id="list"></div></div>
+
+      <div class="pm-card">
+        <div class="pm-card-head"><div class="pm-card-title">通知の設定</div></div>
+        <div class="pm-card-body">
+          <div class="mb8"><label class="pm-check"><input type="checkbox" checked> 自分が担当者に設定されたとき</label></div>
+          <div class="mb8"><label class="pm-check"><input type="checkbox" checked> 自分の課題にコメントが付いたとき</label></div>
+          <div class="mb8"><label class="pm-check"><input type="checkbox" checked> メンションされたとき</label></div>
+          <div class="mb8"><label class="pm-check"><input type="checkbox" checked> 期限日の3日前</label></div>
+          <div class="mb8"><label class="pm-check"><input type="checkbox"> プロジェクト内のすべての更新</label></div>
+          <button class="pm-btn pm-btn-primary pm-btn-sm mt8" onclick="PMUI.toast('通知設定を保存しました')">設定を保存</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('notices');
+document.getElementById('btn-read').innerHTML = PMUI.icon('check') + 'すべて既読にする';
+
+var KIND = {
+  assign:  ['担当者',    'green'],
+  comment: ['コメント',  'blue'],
+  status:  ['状態変更',  ''],
+  mention: ['メンション', 'amber'],
+  pr:      ['プルリク',  'blue'],
+  due:     ['期限',      'red']
+};
+var filter = 'all';
+
+function render() {
+  var list = PM.notices().filter(function(n){
+    if (filter === 'unread') return !n.read;
+    if (filter === 'mention') return n.type === 'mention';
+    return true;
+  });
+  document.getElementById('sub').textContent = '未読 ' + PM.unreadCount() + ' 件 / 全 ' + PM.notices().length + ' 件';
+  document.getElementById('list').innerHTML = list.length ? list.map(function(n){
+    var k = KIND[n.type] || ['通知', ''];
+    var href = n.issue.indexOf('PR') === 0 ? '12_git.html' : '05_issue_detail.html?key=' + n.issue;
+    return '<div class="notice' + (n.read ? '' : ' unread') + '">' +
+      (n.by ? PMUI.avatar(n.by, 'sm') : '<span class="pm-avatar sm" style="background:#c3cad2">!</span>') +
+      '<div class="flex1">' +
+        '<div class="pm-row g8 mb4 pm-wrap">' +
+          '<span class="pm-chip ' + k[1] + '">' + k[0] + '</span>' +
+          '<a href="' + href + '" class="bold fs12">' + n.issue + '</a>' +
+          '<span class="fs11 muted">' + PMUI.fmtDateTime(n.at) + '（' + PMUI.relTime(n.at) + '）</span>' +
+        '</div>' +
+        '<div class="fs13 ' + (n.read ? 'sub' : 'bold') + '">' + PMUI.esc(n.text) + '</div>' +
+        (n.by ? '<div class="fs11 muted mt4">' + PM.user(n.by).name + '</div>' : '') +
+      '</div>' +
+      (n.read ? '' : '<span class="pm-chip red">未読</span>') +
+    '</div>';
+  }).join('') : '<div class="pm-empty">' + PMUI.icon('bell') + '通知はありません</div>';
+}
+
+document.querySelectorAll('.pm-tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.pm-tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active'); filter = t.dataset.f; render();
+  });
+});
+document.getElementById('btn-read').addEventListener('click', function(){
+  PM.markNoticesRead(); PMUI.toast('すべて既読にしました'); render();
+});
+
+render();
+</script>
+</body>
+</html>

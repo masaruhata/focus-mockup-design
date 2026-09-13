@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — ファイル</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.dropzone { border:2px dashed var(--pm-border); border-radius:var(--pm-radius-md); padding:26px; text-align:center; color:var(--pm-text-muted); font-size:12px; background:var(--pm-soft); margin-bottom:16px; }
+.dropzone.hover { border-color:var(--pm-primary); background:var(--pm-primary-light); color:var(--pm-primary-dark); }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow">
+
+      <div class="pm-page-head">
+        <div>
+          <h1 class="pm-page-title">ファイル</h1>
+          <div class="pm-page-sub">プロジェクトの共有フォルダ。課題への添付とは別に、資料をまとめて管理します。</div>
+        </div>
+        <div class="pm-page-actions">
+          <button class="pm-btn" id="btn-folder"></button>
+          <button class="pm-btn pm-btn-primary" id="btn-upload"></button>
+        </div>
+      </div>
+
+      <div class="pm-breadcrumb"><a href="#">共有ファイル</a> › <span>Focus 患者管理システム</span></div>
+
+      <div class="dropzone" id="dz">ここにファイルをドラッグ＆ドロップしてアップロード<br>
+        <span class="fs11">（モックアップのため、実際のアップロードは行われません）</span></div>
+
+      <div class="pm-card">
+        <div class="pm-card-head">
+          <div class="pm-card-title">ファイル一覧</div>
+          <div class="pm-row g8">
+            <input class="pm-input pm-btn-sm" id="q" type="search" placeholder="ファイル名で検索" style="width:190px;padding:4px 10px">
+            <select class="pm-select" id="sort" style="width:auto;padding:4px 8px">
+              <option value="updated">更新日順</option>
+              <option value="name">名前順</option>
+              <option value="size">サイズ順</option>
+            </select>
+          </div>
+        </div>
+        <div id="files"></div>
+        <div class="pm-pager"><div class="pm-pager-info" id="info"></div>
+          <div class="fs11 muted">使用容量 5.4 GB / 100 GB</div></div>
+      </div>
+
+      <div class="pm-card">
+        <div class="pm-card-head"><div class="pm-card-title">課題に添付されたファイル</div></div>
+        <div id="attached"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('files');
+document.getElementById('btn-folder').innerHTML = PMUI.icon('folder') + 'フォルダ作成';
+document.getElementById('btn-upload').innerHTML = PMUI.icon('plus') + 'アップロード';
+
+var ICON = { dir: 'folder', pdf: 'doc', xlsx: 'sheet', img: 'image', md: 'doc', doc: 'doc' };
+var state = { q: '', sort: 'updated' };
+
+function render() {
+  var list = PM.files.filter(function(f){
+    return !state.q || f.name.toLowerCase().indexOf(state.q.toLowerCase()) !== -1;
+  }).slice().sort(function(a, b){
+    if (a.type === 'dir' && b.type !== 'dir') return -1;
+    if (b.type === 'dir' && a.type !== 'dir') return 1;
+    if (state.sort === 'name') return a.name < b.name ? -1 : 1;
+    if (state.sort === 'size') return b.size - a.size;
+    return a.updated < b.updated ? 1 : -1;
+  });
+
+  document.getElementById('files').innerHTML = list.length ? list.map(function(f){
+    return '<div class="pm-filerow">' +
+      '<div class="pm-fileicon"' + (f.type === 'dir' ? ' style="background:#fdf1dc;color:#c58b1f"' : '') + '>' + PMUI.icon(ICON[f.type] || 'doc') + '</div>' +
+      '<div class="flex1"><a href="#" class="bold">' + PMUI.esc(f.name) + '</a>' +
+        '<div class="fs11 muted">' + PM.user(f.by).name + ' ・ ' + PMUI.fmtDateTime(f.updated) +
+        (f.type === 'dir' ? ' ・ ' + f.count + ' 件' : '') + '</div></div>' +
+      '<div class="fs12 muted nowrap" style="width:80px;text-align:right">' + (f.type === 'dir' ? '—' : PMUI.fileSize(f.size)) + '</div>' +
+      '<button class="pm-btn pm-btn-sm" onclick="PMUI.toast(\'ダウンロードを開始しました（モックアップ）\')">取得</button>' +
+    '</div>';
+  }).join('') : '<div class="pm-empty">ファイルがありません</div>';
+
+  document.getElementById('info').textContent = list.length + ' 件を表示';
+}
+
+document.getElementById('q').addEventListener('input', function(){ state.q = this.value; render(); });
+document.getElementById('sort').addEventListener('change', function(){ state.sort = this.value; render(); });
+document.getElementById('btn-upload').addEventListener('click', function(){ PMUI.toast('アップロード画面を開きます（モックアップ）'); });
+document.getElementById('btn-folder').addEventListener('click', function(){ PMUI.toast('フォルダを作成しました（モックアップ）'); });
+
+var dz = document.getElementById('dz');
+['dragenter','dragover'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.add('hover'); }); });
+['dragleave','drop'].forEach(function(ev){ dz.addEventListener(ev, function(e){ e.preventDefault(); dz.classList.remove('hover'); }); });
+dz.addEventListener('drop', function(){ PMUI.toast('モックアップのため保存はされません'); });
+
+/* 課題添付 */
+var att = [];
+PM.issues().forEach(function(i){ i.attachments.forEach(function(a){ att.push({ i: i, a: a }); }); });
+document.getElementById('attached').innerHTML = att.length ? att.map(function(x){
+  return '<div class="pm-filerow"><div class="pm-fileicon">' + PMUI.icon('clip') + '</div>' +
+    '<div class="flex1"><a href="#" class="bold">' + PMUI.esc(x.a.name) + '</a>' +
+    '<div class="fs11 muted"><a href="05_issue_detail.html?key=' + x.i.key + '">' + x.i.key + '</a> ' + PMUI.esc(x.i.summary) + '</div></div>' +
+    '<div class="fs12 muted">' + PMUI.fileSize(x.a.size) + '</div></div>';
+}).join('') : '<div class="pm-empty">課題に添付されたファイルはありません</div>';
+
+render();
+</script>
+</body>
+</html>

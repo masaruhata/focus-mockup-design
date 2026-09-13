@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — ガントチャート</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.gantt-month { display:flex; }
+.gantt-month-cell { border-right:1px solid var(--pm-border); font-size:11px; font-weight:800; color:var(--pm-text-sub); padding:5px 8px; background:var(--pm-soft); white-space:nowrap; overflow:hidden; }
+.gantt-group td, .gantt-group { background:var(--pm-soft-2); }
+.gantt-group .pm-gantt-name { background:var(--pm-soft-2); font-weight:800; font-size:12px; }
+.gantt-legend { display:flex; gap:14px; flex-wrap:wrap; font-size:11px; color:var(--pm-text-muted); align-items:center; }
+.gantt-legend i { width:14px; height:9px; border-radius:5px; display:inline-block; margin-right:4px; vertical-align:-1px; }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+
+    <div class="pm-page-head">
+      <div>
+        <h1 class="pm-page-title">ガントチャート</h1>
+        <div class="pm-page-sub" id="sub"></div>
+      </div>
+      <div class="pm-page-actions">
+        <select id="f-milestone" class="pm-select" style="width:auto"></select>
+        <select id="f-assignee" class="pm-select" style="width:auto"></select>
+        <select id="f-scale" class="pm-select" style="width:auto">
+          <option value="26">表示: 日</option>
+          <option value="14">表示: 日（縮小）</option>
+        </select>
+        <label class="pm-check"><input type="checkbox" id="f-open" checked> 完了を隠す</label>
+      </div>
+    </div>
+
+    <div class="pm-card mb12">
+      <div class="pm-card-body" style="padding:10px 14px">
+        <div class="gantt-legend">
+          <span><i style="background:#ed8077"></i>未対応</span>
+          <span><i style="background:#4488ce"></i>処理中</span>
+          <span><i style="background:#5eb5a6"></i>処理済み</span>
+          <span><i style="background:#b0be3c"></i>完了</span>
+          <span style="margin-left:8px">バー内の明るい部分が進捗（実績時間 / 予定時間）を表します</span>
+          <span style="margin-left:auto" class="bold">本日: <span id="today"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pm-gantt" id="gantt"></div>
+
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('gantt');
+document.getElementById('today').textContent = PMUI.fmtDateFull(PM.TODAY);
+
+function fill(id, items, label) {
+  document.getElementById(id).innerHTML = '<option value="">' + label + '</option>' +
+    items.map(function(i){ return '<option value="' + i[0] + '">' + i[1] + '</option>'; }).join('');
+}
+fill('f-milestone', PM.milestones.map(function(m){ return [m.id, m.name]; }), 'マイルストーン: すべて');
+fill('f-assignee', PM.users.map(function(u){ return [u.id, u.name]; }), '担当者: すべて');
+
+var CELL = 26;
+var state = { milestone: '', assignee: '', hideClosed: true };
+
+function targets() {
+  return PM.issues().filter(function(i){
+    if (!i.start || !i.due) return false;
+    if (state.hideClosed && i.statusId === 4) return false;
+    if (state.milestone && i.milestoneId !== Number(state.milestone)) return false;
+    if (state.assignee && i.assigneeId !== Number(state.assignee)) return false;
+    return true;
+  });
+}
+
+function addDays(dateStr, n) {
+  var d = PMUI.toDate(dateStr);
+  d.setDate(d.getDate() + n);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function render() {
+  var list = targets();
+  if (!list.length) {
+    document.getElementById('gantt').innerHTML = '<div class="pm-empty">表示できる課題がありません</div>';
+    document.getElementById('sub').textContent = '';
+    return;
+  }
+
+  var min = list.reduce(function(a, i){ return i.start < a ? i.start : a; }, list[0].start);
+  var max = list.reduce(function(a, i){ return i.due > a ? i.due : a; }, list[0].due);
+  min = addDays(min, -3); max = addDays(max, 3);
+  var days = PMUI.diffDays(min, max) + 1;
+  var width = days * CELL;
+
+  document.getElementById('sub').textContent =
+    list.length + ' 件の課題を表示（' + PMUI.fmtDateFull(min) + ' 〜 ' + PMUI.fmtDateFull(max) + '）';
+
+  /* 日付配列 */
+  var dates = [];
+  for (var d = 0; d < days; d++) {
+    var ds = addDays(min, d);
+    var wd = PMUI.toDate(ds).getDay();
+    dates.push({ s: ds, day: Number(ds.slice(8, 10)), month: ds.slice(0, 7), weekend: wd === 0 || wd === 6, today: ds === PM.TODAY });
+  }
+
+  /* 月ヘッダ */
+  var months = [];
+  dates.forEach(function(x){
+    var last = months[months.length - 1];
+    if (last && last.month === x.month) last.n++;
+    else months.push({ month: x.month, n: 1 });
+  });
+  var monthRow = '<div class="pm-gantt-row gantt-group"><div class="pm-gantt-name" style="background:var(--pm-soft)"></div>' +
+    '<div class="gantt-month" style="width:' + width + 'px">' +
+    months.map(function(m){
+      return '<div class="gantt-month-cell" style="width:' + (m.n * CELL) + 'px">' + m.month.replace('-', '年') + '月</div>';
+    }).join('') + '</div></div>';
+
+  var dayRow = '<div class="pm-gantt-row pm-gantt-head"><div class="pm-gantt-name">課題</div>' +
+    '<div class="pm-gantt-track" style="width:' + width + 'px;display:flex;background:none">' +
+    dates.map(function(x){
+      return '<div class="pm-gantt-cell' + (x.today ? ' today' : (x.weekend ? ' weekend' : '')) + '" style="width:' + CELL + 'px">' + x.day + '</div>';
+    }).join('') + '</div></div>';
+
+  /* 背景（週末・本日） */
+  var bg = dates.map(function(x, idx){
+    if (x.today) return '<div class="pm-gantt-todayline" style="left:' + (idx * CELL + CELL / 2) + 'px"></div>';
+    if (x.weekend) return '<div class="pm-gantt-weekend" style="left:' + (idx * CELL) + 'px;width:' + CELL + 'px"></div>';
+    return '';
+  }).join('');
+
+  /* マイルストーンごとにグループ化 */
+  var groups = PM.milestones.map(function(m){
+    var all = PM.issues().filter(function(i){ return i.milestoneId === m.id; });
+    return {
+      name: m.name, due: m.due,
+      items: list.filter(function(i){ return i.milestoneId === m.id; }),
+      total: all.length,
+      done: all.filter(function(i){ return i.statusId === 4; }).length
+    };
+  }).concat([(function(){
+    var all = PM.issues().filter(function(i){ return !i.milestoneId; });
+    return {
+      name: 'マイルストーン未設定', due: null,
+      items: list.filter(function(i){ return !i.milestoneId; }),
+      total: all.length,
+      done: all.filter(function(i){ return i.statusId === 4; }).length
+    };
+  })()]).filter(function(g){ return g.items.length; });
+
+  var rows = '';
+  groups.forEach(function(g){
+    var gs = g.items.reduce(function(a, i){ return i.start < a ? i.start : a; }, g.items[0].start);
+    var ge = g.items.reduce(function(a, i){ return i.due > a ? i.due : a; }, g.items[0].due);
+    var gl = PMUI.diffDays(min, gs) * CELL;
+    var gw = (PMUI.diffDays(gs, ge) + 1) * CELL;
+
+    rows += '<div class="pm-gantt-row gantt-group">' +
+      '<div class="pm-gantt-name">' + PMUI.icon('flag', 'pm-inline-ico') + PMUI.esc(g.name) +
+        ' <span class="fs11 muted">(' + g.done + '/' + g.total + ' 完了)</span></div>' +
+      '<div class="pm-gantt-track" style="width:' + width + 'px">' + bg +
+        '<div class="pm-gantt-bar" style="left:' + gl + 'px;width:' + gw + 'px;background:#5a6b7d;border-radius:3px;top:9px;height:16px">' +
+        '<span>' + PMUI.esc(g.name) + '</span></div>' +
+      '</div></div>';
+
+    g.items.slice().sort(function(a, b){ return a.start < b.start ? -1 : 1; }).forEach(function(i){
+      var left = PMUI.diffDays(min, i.start) * CELL;
+      var w = (PMUI.diffDays(i.start, i.due) + 1) * CELL;
+      var st = PM.status(i.statusId);
+      var pct = i.estimated ? Math.min(100, Math.round(i.actual / i.estimated * 100)) : (i.statusId === 4 ? 100 : 0);
+      rows += '<div class="pm-gantt-row">' +
+        '<div class="pm-gantt-name" title="' + PMUI.esc(i.summary) + '">' +
+          '<span class="pm-issue-key">' + i.key + '</span> ' +
+          '<a href="05_issue_detail.html?key=' + i.key + '">' + PMUI.esc(i.summary) + '</a></div>' +
+        '<div class="pm-gantt-track" style="width:' + width + 'px">' + bg +
+          '<div class="pm-gantt-bar" style="left:' + left + 'px;width:' + w + 'px;background:' + st.color + '" ' +
+            'title="' + i.key + ' ' + PMUI.esc(i.summary) + '&#10;' + PMUI.fmtDateFull(i.start) + ' 〜 ' + PMUI.fmtDateFull(i.due) + '&#10;進捗 ' + pct + '%">' +
+            '<i class="fill" style="width:' + pct + '%"></i>' +
+            '<span>' + (w > 80 ? PMUI.esc(i.summary.slice(0, Math.floor(w / 13))) : '') + '</span>' +
+          '</div>' +
+          '<div style="position:absolute;left:' + (left + w + 6) + 'px;top:9px;font-size:10px;color:var(--pm-text-muted);white-space:nowrap">' +
+            (PM.user(i.assigneeId) ? PM.user(i.assigneeId).name : '未設定') + ' / ' + pct + '%</div>' +
+        '</div></div>';
+    });
+  });
+
+  document.getElementById('gantt').innerHTML = '<div class="pm-gantt-inner" style="width:' + (300 + width) + 'px">' + monthRow + dayRow + rows + '</div>';
+
+  /* 本日が見えるようスクロール */
+  var g = document.getElementById('gantt');
+  var todayLeft = PMUI.diffDays(min, PM.TODAY) * CELL;
+  g.scrollLeft = Math.max(0, todayLeft - 200);
+}
+
+document.getElementById('f-milestone').addEventListener('change', function(){ state.milestone = this.value; render(); });
+document.getElementById('f-assignee').addEventListener('change', function(){ state.assignee = this.value; render(); });
+document.getElementById('f-open').addEventListener('change', function(){ state.hideClosed = this.checked; render(); });
+document.getElementById('f-scale').addEventListener('change', function(){ CELL = Number(this.value); render(); });
+
+render();
+</script>
+</body>
+</html>

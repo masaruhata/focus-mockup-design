@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — ログイン</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+body { background: linear-gradient(150deg,#1f2836 0%,#2c3b4a 45%,#33564a 100%); display:flex; align-items:center; justify-content:center; padding:32px 16px; }
+.login-wrap { width:100%; max-width:960px; display:grid; grid-template-columns:1.05fr .95fr; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,.35); }
+.login-hero { background:var(--pm-nav-bg); color:#fff; padding:44px 40px; display:flex; flex-direction:column; justify-content:space-between; }
+.login-hero h1 { font-size:24px; font-weight:800; letter-spacing:-.02em; margin-bottom:10px; }
+.login-hero p { font-size:13px; color:#b9c2ce; line-height:1.9; }
+.login-feature { display:flex; gap:10px; align-items:flex-start; margin-top:14px; font-size:13px; color:#d7dee6; }
+.login-feature svg { width:16px; height:16px; color:var(--pm-primary); flex-shrink:0; margin-top:3px; }
+.login-form { padding:44px 40px; }
+.login-form h2 { font-size:19px; font-weight:800; margin-bottom:4px; }
+.login-space { display:flex; align-items:center; gap:8px; background:var(--pm-soft-2); border:1px solid var(--pm-border-light); border-radius:var(--pm-radius-sm); padding:8px 12px; font-size:12px; color:var(--pm-text-sub); margin:16px 0 20px; }
+.login-space b { color:var(--pm-text); }
+.login-mark { display:inline-flex; align-items:center; gap:10px; font-size:20px; font-weight:800; }
+.login-mark span.m { width:36px; height:36px; border-radius:9px; background:var(--pm-primary); display:flex; align-items:center; justify-content:center; }
+.login-mark span.m svg { width:20px; height:20px; }
+.login-foot { margin-top:22px; padding-top:18px; border-top:1px solid var(--pm-border-light); font-size:12px; color:var(--pm-text-muted); text-align:center; line-height:2; }
+@media (max-width: 820px) { .login-wrap { grid-template-columns:1fr; } .login-hero { display:none; } }
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-hero">
+    <div>
+      <div class="login-mark"><span class="m"><svg viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L2 6l8 4 8-4-8-4zM2 14l8 4 8-4M2 10l8 4 8-4"/></svg></span>Backvog</div>
+      <p style="margin-top:18px">課題管理・ガントチャート・Wiki・Git を1つに。<br>チームの「やること」を、ひとつの場所に。</p>
+    </div>
+    <div style="margin-top:28px">
+      <div class="login-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.58l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg><div>課題（チケット）の登録から完了までを可視化</div></div>
+      <div class="login-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.58l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg><div>ボード・ガントチャートで進捗をひと目で把握</div></div>
+      <div class="login-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 111.4-1.4L8 12.58l7.3-7.3a1 1 0 011.4 0z" clip-rule="evenodd"/></svg><div>Wiki・ファイル共有・Git 連携で情報を集約</div></div>
+    </div>
+    <div style="font-size:11px;color:#8794a4;margin-top:30px">© 2026 PHM Solution — モックアップ</div>
+  </div>
+
+  <div class="login-form">
+    <h2>ログイン</h2>
+    <div class="muted fs12">スペースにサインインしてください</div>
+
+    <div class="login-space">
+      <svg viewBox="0 0 20 20" fill="currentColor" style="width:15px;height:15px;color:var(--pm-primary)"><path d="M10.7 2.3a1 1 0 00-1.4 0l-7 7A1 1 0 003.7 10.7L4 10.4V17a1 1 0 001 1h3v-5h4v5h3a1 1 0 001-1v-6.6l.3.3a1 1 0 001.4-1.4l-7-7z"/></svg>
+      スペース: <b>phm-solution</b>.backvog.jp
+    </div>
+
+    <form onsubmit="location.href='02_dashboard.html'; return false;">
+      <div class="pm-field">
+        <label class="pm-label req">メールアドレス</label>
+        <input type="email" class="pm-input" value="masaru.hata@phmsolution.com" required>
+      </div>
+      <div class="pm-field">
+        <label class="pm-label req">パスワード</label>
+        <input type="password" class="pm-input" value="demopassword" required>
+      </div>
+      <div class="pm-row pm-between mb16">
+        <label class="pm-check"><input type="checkbox" checked>ログイン状態を保持する</label>
+        <a href="#" class="fs12">パスワードをお忘れですか？</a>
+      </div>
+      <button type="submit" class="pm-btn pm-btn-primary pm-btn-lg" style="width:100%;justify-content:center">ログイン</button>
+    </form>
+
+    <div class="login-foot">
+      アカウントをお持ちでない場合は管理者にお問い合わせください<br>
+      <a href="index.html">モックアップ画面一覧を見る</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

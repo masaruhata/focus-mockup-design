@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — プロジェクト設定</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.color-dot { width:14px; height:14px; border-radius:3px; display:inline-block; vertical-align:-2px; margin-right:6px; }
+.settings-grid { display:grid; grid-template-columns:200px minmax(0,1fr); gap:16px; align-items:start; }
+@media (max-width: 900px) { .settings-grid { grid-template-columns:1fr; } }
+.set-nav a { display:block; padding:9px 14px; font-size:12.5px; color:var(--pm-text-sub); border-left:3px solid transparent; }
+.set-nav a:hover { background:var(--pm-soft); text-decoration:none; }
+.set-nav a.active { background:var(--pm-primary-light); border-left-color:var(--pm-primary); color:var(--pm-primary-dark); font-weight:700; }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow">
+
+      <div class="pm-breadcrumb"><a href="03_project_home.html" id="bc"></a> › <span>プロジェクト設定</span></div>
+
+      <div class="pm-page-head">
+        <div><h1 class="pm-page-title">プロジェクト設定</h1>
+        <div class="pm-page-sub">課題の種別・カテゴリー・マイルストーン・参加ユーザーなどを管理します。</div></div>
+      </div>
+
+      <div class="settings-grid">
+        <div class="pm-card set-nav" id="nav"></div>
+        <div id="pane"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('settings');
+document.getElementById('bc').textContent = PM.currentProject().name;
+
+var TABS = [
+  ['basic', '基本設定'], ['type', '種別'], ['category', 'カテゴリー'],
+  ['milestone', 'マイルストーン'], ['status', '状態'], ['members', '参加ユーザー'], ['notify', '通知']
+];
+var current = PMUI.param('tab', 'basic');
+
+function card(title, body, action) {
+  return '<div class="pm-card"><div class="pm-card-head"><div class="pm-card-title">' + title + '</div>' +
+    (action || '') + '</div>' + body + '</div>';
+}
+
+var PANES = {
+  basic: function(){
+    var p = PM.currentProject();
+    return card('基本設定',
+      '<div class="pm-card-body">' +
+        '<div class="pm-field"><label class="pm-label req">プロジェクト名</label><input class="pm-input" value="' + PMUI.esc(p.name) + '"></div>' +
+        '<div class="pm-field"><label class="pm-label req">プロジェクトキー</label><input class="pm-input" value="' + p.key + '" style="width:200px">' +
+          '<div class="pm-help">課題キーの接頭辞になります（例: ' + p.key + '-12）。変更すると既存の課題キーもすべて変わります。</div></div>' +
+        '<div class="pm-field"><label class="pm-label">概要</label><textarea class="pm-textarea" style="min-height:90px">患者管理システム「Focus」の開発プロジェクト。v1.0 は 2026-09-30 リリース予定。</textarea></div>' +
+        '<div class="pm-field"><label class="pm-label">テキスト整形のルール</label>' +
+          '<select class="pm-select" style="width:220px"><option>Markdown</option><option>Backlog 記法</option></select></div>' +
+        '<div class="pm-field"><label class="pm-check"><input type="checkbox" checked> 参加ユーザー以外にも公開する</label></div>' +
+        '<div class="pm-field"><label class="pm-check"><input type="checkbox" checked> ガントチャートを使用する</label></div>' +
+        '<div class="pm-field"><label class="pm-check"><input type="checkbox" checked> Wiki を使用する</label></div>' +
+        '<div class="pm-field"><label class="pm-check"><input type="checkbox" checked> Git を使用する</label></div>' +
+        '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'設定を保存しました\')">保存する</button>' +
+      '</div>') +
+    card('プロジェクトの削除',
+      '<div class="pm-card-body"><div class="fs12 sub mb12">プロジェクトを削除すると、課題・Wiki・ファイルがすべて削除されます。この操作は取り消せません。</div>' +
+      '<button class="pm-btn pm-btn-danger" onclick="PMUI.toast(\'モックアップのため削除は実行されません\')">プロジェクトを削除する</button></div>');
+  },
+
+  type: function(){
+    return card('種別',
+      '<table class="pm-table"><thead><tr><th style="width:60px">色</th><th>種別名</th><th style="width:100px">課題数</th><th style="width:120px"></th></tr></thead><tbody>' +
+      PM.types.map(function(t){
+        var n = PM.issues().filter(function(i){ return i.typeId === t.id; }).length;
+        return '<tr><td><span class="color-dot" style="background:' + t.color + '"></span></td>' +
+          '<td class="bold">' + t.name + '</td><td>' + n + ' 件</td>' +
+          '<td class="tright"><button class="pm-btn pm-btn-sm" onclick="PMUI.toast(\'編集画面を開きます\')">編集</button></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+        '<div class="pm-row g8"><input class="pm-input" placeholder="新しい種別名" style="width:240px">' +
+        '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'種別を追加しました\')">追加</button></div></div>');
+  },
+
+  category: function(){
+    return card('カテゴリー',
+      '<table class="pm-table"><thead><tr><th>カテゴリー名</th><th style="width:100px">課題数</th><th style="width:120px"></th></tr></thead><tbody>' +
+      PM.categories.map(function(c){
+        var n = PM.issues().filter(function(i){ return i.category === c; }).length;
+        return '<tr><td class="bold">' + c + '</td><td>' + n + ' 件</td>' +
+          '<td class="tright"><button class="pm-btn pm-btn-sm" onclick="PMUI.toast(\'編集画面を開きます\')">編集</button></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+        '<div class="pm-row g8"><input class="pm-input" placeholder="新しいカテゴリー名" style="width:240px">' +
+        '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'カテゴリーを追加しました\')">追加</button></div></div>');
+  },
+
+  milestone: function(){
+    return card('マイルストーン',
+      '<table class="pm-table"><thead><tr><th>名称</th><th style="width:110px">開始日</th><th style="width:110px">期限日</th>' +
+      '<th style="width:160px">進捗</th><th style="width:100px"></th></tr></thead><tbody>' +
+      PM.milestones.map(function(m){
+        var list = PM.issues().filter(function(i){ return i.milestoneId === m.id; });
+        var done = list.filter(function(i){ return i.statusId === 4; }).length;
+        var pct = list.length ? Math.round(done / list.length * 100) : 0;
+        return '<tr><td><div class="bold">' + m.name + '</div><div class="fs11 muted">' + PMUI.esc(m.desc) + '</div></td>' +
+          '<td class="fs12">' + PMUI.fmtDateFull(m.start) + '</td><td class="fs12">' + PMUI.fmtDateFull(m.due) + '</td>' +
+          '<td><div class="pm-progress thin mb4"><i style="width:' + pct + '%"></i></div>' +
+            '<span class="fs11 muted">' + done + '/' + list.length + '（' + pct + '%）</span></td>' +
+          '<td class="tright"><button class="pm-btn pm-btn-sm" onclick="PMUI.toast(\'編集画面を開きます\')">編集</button></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+        '<div class="pm-row g8 pm-wrap"><input class="pm-input" placeholder="マイルストーン名" style="width:220px">' +
+        '<input class="pm-input" type="date" style="width:150px"><input class="pm-input" type="date" style="width:150px">' +
+        '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'マイルストーンを追加しました\')">追加</button></div></div>');
+  },
+
+  status: function(){
+    return card('状態',
+      '<table class="pm-table"><thead><tr><th style="width:60px">色</th><th>状態名</th><th style="width:110px">分類</th><th style="width:100px">課題数</th><th style="width:120px"></th></tr></thead><tbody>' +
+      PM.statuses.map(function(s){
+        var n = PM.issues().filter(function(i){ return i.statusId === s.id; }).length;
+        return '<tr><td><span class="color-dot" style="background:' + s.color + '"></span></td>' +
+          '<td class="bold">' + s.name + '</td><td class="fs12 muted">' + (s.id === 4 ? '完了' : '未完了') + '</td>' +
+          '<td>' + n + ' 件</td>' +
+          '<td class="tright"><button class="pm-btn pm-btn-sm" onclick="PMUI.toast(\'編集画面を開きます\')">編集</button></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+        '<div class="fs12 muted">状態はプロジェクト単位で追加できます（例:「レビュー待ち」「検証中」）。並び順はドラッグで変更できます。</div></div>');
+  },
+
+  members: function(){
+    var p = PM.currentProject();
+    return card('参加ユーザー',
+      '<table class="pm-table"><thead><tr><th style="width:220px">ユーザー</th><th style="width:150px">権限</th>' +
+      '<th style="width:110px">担当課題</th><th>メールアドレス</th><th style="width:90px"></th></tr></thead><tbody>' +
+      p.members.map(function(id){
+        var u = PM.user(id);
+        var n = PM.issues().filter(function(i){ return i.assigneeId === id && i.statusId < 4; }).length;
+        return '<tr><td><div class="pm-row g8">' + PMUI.avatar(id, 'sm') + '<span class="bold fs12">' + u.name + '</span></div></td>' +
+          '<td><select class="pm-select" style="padding:3px 8px;font-size:12px">' +
+            ['管理者', '一般ユーザー', 'ゲスト', 'レポーター'].map(function(r){
+              return '<option' + (r === u.role ? ' selected' : '') + '>' + r + '</option>';
+            }).join('') + '</select></td>' +
+          '<td class="fs12">' + n + ' 件</td><td class="fs12 muted">' + u.mail + '</td>' +
+          '<td class="tright"><button class="pm-btn pm-btn-sm pm-btn-danger" onclick="PMUI.toast(\'モックアップのため削除は実行されません\')">除外</button></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+        '<div class="pm-row g8"><select class="pm-select" style="width:240px">' +
+        PM.users.filter(function(u){ return p.members.indexOf(u.id) === -1; })
+          .map(function(u){ return '<option>' + u.name + '（' + u.mail + '）</option>'; }).join('') +
+        '</select><button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'ユーザーを追加しました\')">追加</button></div></div>');
+  },
+
+  notify: function(){
+    return card('プロジェクトの通知',
+      '<div class="pm-card-body">' +
+        '<div class="fs12 sub mb12">課題が更新されたときに通知を受け取るメンバーを設定します。</div>' +
+        PM.currentProject().members.map(function(id){
+          var u = PM.user(id);
+          return '<div class="pm-row pm-between" style="padding:7px 0;border-bottom:1px solid var(--pm-border-light)">' +
+            '<span class="pm-row g8">' + PMUI.avatar(id, 'xs') + '<span class="fs12">' + u.name + '</span></span>' +
+            '<span class="pm-row g16 fs12">' +
+              '<label class="pm-check"><input type="checkbox" checked>メール</label>' +
+              '<label class="pm-check"><input type="checkbox"' + (id <= 3 ? ' checked' : '') + '>デスクトップ</label>' +
+            '</span></div>';
+        }).join('') +
+        '<button class="pm-btn pm-btn-primary mt12" onclick="PMUI.toast(\'通知設定を保存しました\')">保存する</button>' +
+      '</div>');
+  }
+};
+
+function render() {
+  document.getElementById('nav').innerHTML = TABS.map(function(t){
+    return '<a href="?tab=' + t[0] + '" class="' + (t[0] === current ? 'active' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</a>';
+  }).join('');
+  document.getElementById('pane').innerHTML = (PANES[current] || PANES.basic)();
+  document.querySelectorAll('[data-tab]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); current = a.dataset.tab; render(); });
+  });
+}
+render();
+</script>
+</body>
+</html>

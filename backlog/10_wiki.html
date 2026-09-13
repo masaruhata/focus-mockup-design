@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — Wiki</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.wiki-layout { display:grid; grid-template-columns:260px minmax(0,1fr); gap:16px; align-items:start; }
+@media (max-width: 980px) { .wiki-layout { grid-template-columns:1fr; } }
+.wiki-nav-item { display:block; padding:8px 14px; font-size:12.5px; color:var(--pm-text-sub); border-left:3px solid transparent; }
+.wiki-nav-item:hover { background:var(--pm-soft); text-decoration:none; color:var(--pm-text); }
+.wiki-nav-item.active { background:var(--pm-primary-light); border-left-color:var(--pm-primary); color:var(--pm-primary-dark); font-weight:700; }
+.wiki-nav-item .meta { display:block; font-size:10.5px; color:var(--pm-text-muted); font-weight:400; margin-top:2px; }
+.wiki-tags { display:flex; gap:5px; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+
+    <div class="pm-page-head">
+      <div>
+        <h1 class="pm-page-title">Wiki</h1>
+        <div class="pm-page-sub">プロジェクトの共有情報。Markdown で記述でき、編集内容は保存されます。</div>
+      </div>
+      <div class="pm-page-actions">
+        <input class="pm-input" id="wiki-search" type="search" placeholder="ページを検索" style="width:200px">
+        <button class="pm-btn pm-btn-primary" id="btn-new"></button>
+      </div>
+    </div>
+
+    <div class="wiki-layout">
+      <div class="pm-card">
+        <div class="pm-card-head"><div class="pm-card-title">ページ一覧</div><span class="fs11 muted" id="page-count"></span></div>
+        <div id="wiki-nav"></div>
+      </div>
+
+      <div class="pm-card">
+        <div class="pm-card-head">
+          <div class="pm-card-title" id="page-title"></div>
+          <div class="pm-row g6">
+            <button class="pm-btn pm-btn-sm" id="btn-edit">編集</button>
+            <button class="pm-btn pm-btn-sm hidden" id="btn-save">保存</button>
+            <button class="pm-btn pm-btn-sm hidden" id="btn-cancel">キャンセル</button>
+          </div>
+        </div>
+        <div class="pm-card-body">
+          <div id="page-meta" class="fs11 muted mb16"></div>
+          <div class="pm-doc" id="page-view"></div>
+          <div id="page-edit" class="hidden">
+            <div class="pm-field"><label class="pm-label">タイトル</label><input class="pm-input" id="edit-title"></div>
+            <div class="pm-field"><label class="pm-label">本文（Markdown）</label>
+              <textarea class="pm-textarea" id="edit-body" style="min-height:420px;font-family:'SFMono-Regular',Consolas,monospace;font-size:12.5px"></textarea></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('wiki');
+document.getElementById('btn-new').innerHTML = PMUI.icon('plus') + 'ページを追加';
+
+var current = Number(PMUI.param('id', 1));
+var keyword = '';
+var editing = false;
+
+function pages() {
+  return PM.wiki().filter(function(w){
+    return !keyword || (w.title + w.body).toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+  });
+}
+
+function renderNav() {
+  var list = pages();
+  document.getElementById('page-count').textContent = list.length + ' ページ';
+  document.getElementById('wiki-nav').innerHTML = list.length ? list.map(function(w){
+    return '<a class="wiki-nav-item' + (w.id === current ? ' active' : '') + '" href="?id=' + w.id + '">' +
+      PMUI.esc(w.title) +
+      '<span class="meta">' + PM.user(w.updatedBy).name + ' ・ ' + PMUI.relTime(w.updated) + '</span></a>';
+  }).join('') : '<div class="pm-empty">一致するページがありません</div>';
+}
+
+function renderPage() {
+  var w = PM.wiki().filter(function(x){ return x.id === current; })[0] || PM.wiki()[0];
+  if (!w) return;
+  current = w.id;
+  document.getElementById('page-title').textContent = w.title;
+  document.getElementById('page-meta').innerHTML =
+    '最終更新: ' + PM.user(w.updatedBy).name + ' ・ ' + PMUI.fmtDateTime(w.updated) +
+    (w.tags && w.tags.length ? ' ・ ' + w.tags.map(function(t){ return '<span class="pm-chip">' + PMUI.esc(t) + '</span>'; }).join(' ') : '');
+  document.getElementById('page-view').innerHTML = PMUI.markdown(w.body);
+  document.getElementById('edit-title').value = w.title;
+  document.getElementById('edit-body').value = w.body;
+  setEditing(false);
+}
+
+function setEditing(on) {
+  editing = on;
+  document.getElementById('page-view').classList.toggle('hidden', on);
+  document.getElementById('page-edit').classList.toggle('hidden', !on);
+  document.getElementById('btn-edit').classList.toggle('hidden', on);
+  document.getElementById('btn-save').classList.toggle('hidden', !on);
+  document.getElementById('btn-cancel').classList.toggle('hidden', !on);
+}
+
+document.getElementById('btn-edit').addEventListener('click', function(){ setEditing(true); });
+document.getElementById('btn-cancel').addEventListener('click', renderPage);
+document.getElementById('btn-save').addEventListener('click', function(){
+  PM.saveWiki(current, document.getElementById('edit-title').value.trim() || '無題のページ', document.getElementById('edit-body').value);
+  PMUI.toast('Wiki ページを保存しました');
+  renderNav(); renderPage();
+});
+document.getElementById('btn-new').addEventListener('click', function(){
+  var id = PM.saveWiki(null, '新しいページ', '# 新しいページ\n\nここに内容を記入します。\n');
+  current = id;
+  PMUI.toast('ページを追加しました');
+  renderNav(); renderPage(); setEditing(true);
+});
+document.getElementById('wiki-search').addEventListener('input', function(){
+  keyword = this.value; renderNav();
+});
+
+renderNav();
+renderPage();
+</script>
+</body>
+</html>

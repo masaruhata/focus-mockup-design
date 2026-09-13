@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — プロジェクト管理システム モックアップ画面一覧</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+body { background:var(--pm-bg); }
+.idx-wrap { max-width:1040px; margin:0 auto; padding:40px 24px 64px; }
+.idx-hero { text-align:center; margin-bottom:34px; }
+.idx-mark { display:inline-flex; align-items:center; gap:10px; font-size:26px; font-weight:800; letter-spacing:-.02em; }
+.idx-mark .m { width:44px; height:44px; border-radius:11px; background:var(--pm-primary); display:flex; align-items:center; justify-content:center; }
+.idx-mark .m svg { width:24px; height:24px; color:#fff; }
+.idx-badge { display:inline-flex; align-items:center; gap:7px; background:var(--pm-nav-bg); color:#fff; font-size:12px; font-weight:700; padding:5px 14px; border-radius:100px; }
+.idx-badge i { width:7px; height:7px; border-radius:50%; background:var(--pm-primary); display:inline-block; }
+.idx-group { margin-bottom:26px; }
+.idx-group-title { font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--pm-text-muted); border-bottom:2px solid var(--pm-border-light); padding-bottom:8px; margin-bottom:12px; }
+.idx-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(232px,1fr)); gap:10px; }
+.idx-card { background:#fff; border:1px solid var(--pm-border-light); border-radius:var(--pm-radius-md); padding:13px 15px; display:flex; align-items:center; gap:11px; box-shadow:var(--pm-shadow-xs); transition:all .14s; }
+.idx-card:hover { border-color:var(--pm-primary); transform:translateY(-1px); box-shadow:var(--pm-shadow-sm); text-decoration:none; }
+.idx-icon { width:34px; height:34px; border-radius:var(--pm-radius-sm); background:var(--pm-primary-light); color:var(--pm-primary-dark); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.idx-icon svg { width:17px; height:17px; }
+.idx-num { font-size:10px; color:var(--pm-text-muted); font-weight:700; }
+.idx-name { font-size:13px; font-weight:700; color:var(--pm-text); }
+.idx-desc { font-size:10.5px; color:var(--pm-text-muted); margin-top:1px; }
+.idx-note { background:#fff; border:1px solid var(--pm-border-light); border-radius:var(--pm-radius-md); padding:20px 22px; box-shadow:var(--pm-shadow-xs); }
+.idx-note h3 { font-size:13px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:7px; }
+.idx-note ul { margin:0 0 0 18px; font-size:12.5px; color:var(--pm-text-sub); line-height:2; }
+.idx-note code { background:var(--pm-soft-2); border:1px solid var(--pm-border-light); border-radius:3px; padding:1px 5px; font-size:11.5px; font-family:'SFMono-Regular',Consolas,monospace; }
+</style>
+</head>
+<body>
+<div class="idx-wrap">
+
+  <div class="idx-hero">
+    <div class="idx-mark"><span class="m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>Backvog</div>
+    <div class="fs13 muted" style="margin-top:10px">Backlog 相当のプロジェクト管理システム — モックアップ</div>
+    <div style="margin-top:12px"><span class="idx-badge"><i></i>全 16 画面 ・ 課題の登録／状態変更／コメントは実際に動作します</span></div>
+    <div class="fs12 muted" style="margin-top:10px">データはブラウザの localStorage に保存されます（<a href="15_space_settings.html?tab=data">初期化はこちら</a>）</div>
+  </div>
+
+  <div id="groups"></div>
+
+  <div class="idx-note">
+    <h3>このモックアップについて</h3>
+    <ul>
+      <li><b>実際に動く機能</b>: 課題の追加 / 状態・優先度・担当者・期限の変更 / コメント投稿 / ボードのドラッグ＆ドロップ / Wiki の編集 / 絞り込み・並び替え・ページング / 横断検索</li>
+      <li><b>データ</b>: <code>data.js</code> のサンプルデータを起点に、変更内容を <code>localStorage</code>（キー: <code>pm_mock_db_v1</code>）へ保存</li>
+      <li><b>配色の変更</b>: <code>backlog.css</code> 冒頭の CSS 変数（<code>--pm-primary</code> など）を書き換えると全画面へ反映されます</li>
+      <li><b>共通UI</b>: ヘッダーとサイドバーは <code>app.js</code> の <code>PMUI.mount()</code> が各画面へ差し込みます</li>
+      <li><b>ビルド不要</b>: すべて静的 HTML / CSS / JavaScript。ファイルをブラウザで開くだけで動作します</li>
+    </ul>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+var GROUPS = [
+  ['認証・マイページ', [
+    ['01_login.html', '01', 'ログイン', 'スペースへのサインイン', 'logout'],
+    ['02_dashboard.html', '02', 'マイダッシュボード', '自分の課題・最近の活動', 'chart'],
+    ['13_notifications.html', '13', 'お知らせ', '通知一覧と通知設定', 'bell'],
+    ['16_search.html', '16', '検索結果', '課題・Wiki・ファイル横断検索', 'search']
+  ]],
+  ['課題管理', [
+    ['03_project_home.html', '03', 'プロジェクトホーム', '進捗サマリーと活動', 'home'],
+    ['04_issues.html', '04', '課題一覧', '絞り込み・並び替え・ページング', 'issue'],
+    ['05_issue_detail.html', '05', '課題詳細', 'コメント・状態変更・更新履歴', 'doc'],
+    ['06_issue_new.html', '06', '課題の追加', '新規チケット登録フォーム', 'plus']
+  ]],
+  ['進捗の可視化', [
+    ['07_board.html', '07', 'ボード', 'カンバン（ドラッグ＆ドロップ）', 'board'],
+    ['08_gantt.html', '08', 'ガントチャート', '期間と進捗のタイムライン', 'gantt'],
+    ['09_milestones.html', '09', 'マイルストーン', 'バーンダウンチャート', 'flag']
+  ]],
+  ['ドキュメント・開発', [
+    ['10_wiki.html', '10', 'Wiki', 'Markdown で編集・保存', 'wiki'],
+    ['11_files.html', '11', 'ファイル', '共有フォルダと添付一覧', 'file'],
+    ['12_git.html', '12', 'Git', 'コミット・プルリク・ブランチ', 'git']
+  ]],
+  ['設定', [
+    ['14_project_settings.html', '14', 'プロジェクト設定', '種別・カテゴリー・メンバー', 'gear'],
+    ['15_space_settings.html', '15', 'スペース設定', 'ユーザー・プラン・セキュリティ', 'users']
+  ]]
+];
+
+document.getElementById('groups').innerHTML = GROUPS.map(function(g){
+  return '<div class="idx-group"><div class="idx-group-title">' + g[0] + '</div><div class="idx-grid">' +
+    g[1].map(function(s){
+      return '<a href="' + s[0] + '" class="idx-card">' +
+        '<div class="idx-icon">' + PMUI.icon(s[4]) + '</div>' +
+        '<div><div class="idx-num">' + s[1] + '</div><div class="idx-name">' + s[2] + '</div>' +
+        '<div class="idx-desc">' + s[3] + '</div></div></a>';
+    }).join('') + '</div></div>';
+}).join('');
+</script>
+</body>
+</html>

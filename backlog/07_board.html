@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — ボード</title>
+<link rel="stylesheet" href="backlog.css">
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+
+    <div class="pm-page-head">
+      <div>
+        <h1 class="pm-page-title">ボード</h1>
+        <div class="pm-page-sub">カードをドラッグして状態を変更できます（変更内容は保存されます）</div>
+      </div>
+      <div class="pm-page-actions">
+        <a href="04_issues.html" class="pm-btn" id="btn-list"></a>
+        <a href="06_issue_new.html" class="pm-btn pm-btn-primary" id="btn-new"></a>
+      </div>
+    </div>
+
+    <div class="pm-filter">
+      <div class="pm-filter-row">
+        <div class="pm-filter-item"><label class="pm-label">担当者</label><select id="f-assignee" class="pm-select"></select></div>
+        <div class="pm-filter-item"><label class="pm-label">マイルストーン</label><select id="f-milestone" class="pm-select"></select></div>
+        <div class="pm-filter-item"><label class="pm-label">種別</label><select id="f-type" class="pm-select"></select></div>
+        <div class="pm-filter-item" style="min-width:200px"><label class="pm-label">キーワード</label><input id="f-q" class="pm-input" type="search" placeholder="件名で絞り込み"></div>
+        <div class="pm-filter-item" style="min-width:auto"><button class="pm-btn" id="btn-clear">クリア</button></div>
+      </div>
+    </div>
+
+    <div class="pm-board" id="board"></div>
+
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('board');
+document.getElementById('btn-list').innerHTML = PMUI.icon('issue') + '一覧表示';
+document.getElementById('btn-new').innerHTML = PMUI.icon('plus') + '課題の追加';
+
+function fill(id, items, label) {
+  document.getElementById(id).innerHTML = '<option value="">すべて</option>' +
+    items.map(function(i){ return '<option value="' + i[0] + '">' + i[1] + '</option>'; }).join('');
+}
+fill('f-assignee', PM.users.map(function(u){ return [u.id, u.name]; }));
+fill('f-milestone', PM.milestones.map(function(m){ return [m.id, m.name]; }));
+fill('f-type', PM.types.map(function(t){ return [t.id, t.name]; }));
+
+var filter = { assignee: '', milestone: '', type: '', q: '' };
+
+function match(i) {
+  if (filter.assignee && i.assigneeId !== Number(filter.assignee)) return false;
+  if (filter.milestone && i.milestoneId !== Number(filter.milestone)) return false;
+  if (filter.type && i.typeId !== Number(filter.type)) return false;
+  if (filter.q && (i.summary + i.key).toLowerCase().indexOf(filter.q.toLowerCase()) === -1) return false;
+  return true;
+}
+
+function card(i) {
+  var ms = PM.milestone(i.milestoneId);
+  var t = PM.type(i.typeId);
+  var overdue = i.due && i.statusId < 4 && PMUI.diffDays(PM.TODAY, i.due) < 0;
+  return '<div class="pm-board-card" draggable="true" data-key="' + i.key + '" style="border-left-color:' + t.color + '">' +
+    '<div class="pm-row pm-between">' +
+      '<span class="pm-board-card-key">' + i.key + '</span>' + PMUI.priorityTag(i.priorityId) +
+    '</div>' +
+    '<div class="pm-board-card-title"><a href="05_issue_detail.html?key=' + i.key + '">' + PMUI.esc(i.summary) + '</a></div>' +
+    '<div class="pm-board-card-foot">' +
+      PMUI.avatar(i.assigneeId, 'xs') +
+      (i.due ? '<span class="pm-chip ' + (overdue ? 'red' : '') + '">' + PMUI.fmtDate(i.due) + '</span>' : '') +
+      (ms ? '<span class="pm-chip green">' + PMUI.esc(ms.name.replace(' リリース', '').replace(' 機能改善','').replace(' 不妊治療領域','')) + '</span>' : '') +
+      (i.comments.length ? '<span class="fs11 muted">' + PMUI.icon('comment', 'pm-inline-ico') + i.comments.length + '</span>' : '') +
+    '</div></div>';
+}
+
+function render() {
+  var issues = PM.issues().filter(match);
+  document.getElementById('board').innerHTML = PM.statuses.map(function(s){
+    var list = issues.filter(function(i){ return i.statusId === s.id; });
+    return '<div class="pm-board-col">' +
+      '<div class="pm-board-col-head"><i style="background:' + s.color + '"></i>' +
+        '<span class="pm-board-col-name">' + s.name + '</span>' +
+        '<span class="pm-board-col-count">' + list.length + '</span></div>' +
+      '<div class="pm-board-list" data-status="' + s.id + '">' + list.map(card).join('') + '</div>' +
+    '</div>';
+  }).join('');
+  bindDnD();
+}
+
+function bindDnD() {
+  var dragKey = null;
+
+  document.querySelectorAll('.pm-board-card').forEach(function(el){
+    el.addEventListener('dragstart', function(e){
+      dragKey = el.dataset.key;
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragKey);
+    });
+    el.addEventListener('dragend', function(){ el.classList.remove('dragging'); });
+  });
+
+  document.querySelectorAll('.pm-board-list').forEach(function(col){
+    col.addEventListener('dragover', function(e){ e.preventDefault(); col.classList.add('drag-over'); });
+    col.addEventListener('dragleave', function(){ col.classList.remove('drag-over'); });
+    col.addEventListener('drop', function(e){
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      var key = dragKey || e.dataTransfer.getData('text/plain');
+      if (!key) return;
+      var newStatus = Number(col.dataset.status);
+      var it = PM.issue(key);
+      if (!it || it.statusId === newStatus) return;
+      PM.updateIssue(key, { statusId: newStatus });
+      PMUI.toast(key + ' を「' + PM.status(newStatus).name + '」に変更しました');
+      render();
+    });
+  });
+}
+
+['assignee','milestone','type','q'].forEach(function(k){
+  var el = document.getElementById('f-' + k);
+  el.addEventListener(k === 'q' ? 'input' : 'change', function(){ filter[k] = el.value; render(); });
+});
+document.getElementById('btn-clear').addEventListener('click', function(){
+  ['assignee','milestone','type','q'].forEach(function(k){ filter[k] = ''; document.getElementById('f-' + k).value = ''; });
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

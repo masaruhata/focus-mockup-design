@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — 課題の追加</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.type-picker { display:flex; gap:8px; flex-wrap:wrap; }
+.type-opt { padding:6px 14px; border-radius:100px; border:1px solid var(--pm-border); background:#fff; font-size:12px; font-weight:700; color:var(--pm-text-sub); cursor:pointer; }
+.type-opt.active { color:#fff; border-color:transparent; }
+.dropzone { border:2px dashed var(--pm-border); border-radius:var(--pm-radius-md); padding:22px; text-align:center; color:var(--pm-text-muted); font-size:12px; background:var(--pm-soft); }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow" style="max-width:980px">
+
+      <div class="pm-breadcrumb"><a href="03_project_home.html" id="bc-pj"></a> › <a href="04_issues.html">課題</a> › <span>課題の追加</span></div>
+
+      <div class="pm-page-head">
+        <div><h1 class="pm-page-title">課題の追加</h1>
+        <div class="pm-page-sub">必須項目を入力して「登録」を押すと、課題が作成され詳細画面へ移動します。</div></div>
+      </div>
+
+      <form id="form">
+      <div class="pm-grid pm-grid-side">
+        <div>
+          <div class="pm-card">
+            <div class="pm-card-body">
+              <div class="pm-field">
+                <label class="pm-label req">種別</label>
+                <div class="type-picker" id="type-picker"></div>
+                <input type="hidden" id="f-type" value="1">
+              </div>
+
+              <div class="pm-field">
+                <label class="pm-label req">件名</label>
+                <input type="text" class="pm-input" id="f-summary" placeholder="例）患者情報一覧のCSVエクスポート機能を実装する" required>
+              </div>
+
+              <div class="pm-field">
+                <label class="pm-label">詳細</label>
+                <textarea class="pm-textarea" id="f-desc" style="min-height:220px" placeholder="## 目的&#10;&#10;## 実装範囲&#10;- &#10;&#10;## 完了条件&#10;- "></textarea>
+                <div class="pm-help">Markdown 記法（見出し・箇条書き・表・コードブロック）が使えます。<code>FOCUS-12</code> のように書くと課題へのリンクになります。</div>
+              </div>
+
+              <div class="pm-field">
+                <label class="pm-label">添付ファイル</label>
+                <div class="dropzone">ここにファイルをドロップ、またはクリックして選択（モックアップのため保存はされません）</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="pm-card">
+            <div class="pm-card-head"><div class="pm-card-title">プロパティ</div></div>
+            <div class="pm-card-body">
+              <div class="pm-field">
+                <label class="pm-label">優先度</label>
+                <select class="pm-select" id="f-priority"></select>
+              </div>
+              <div class="pm-field">
+                <label class="pm-label">担当者</label>
+                <select class="pm-select" id="f-assignee"></select>
+              </div>
+              <div class="pm-field">
+                <label class="pm-label">カテゴリー</label>
+                <select class="pm-select" id="f-category"></select>
+              </div>
+              <div class="pm-field">
+                <label class="pm-label">マイルストーン</label>
+                <select class="pm-select" id="f-milestone"></select>
+              </div>
+              <div class="pm-grid pm-grid-2" style="gap:10px">
+                <div class="pm-field"><label class="pm-label">開始日</label><input type="date" class="pm-input" id="f-start"></div>
+                <div class="pm-field"><label class="pm-label">期限日</label><input type="date" class="pm-input" id="f-due"></div>
+              </div>
+              <div class="pm-field">
+                <label class="pm-label">予定時間</label>
+                <input type="number" class="pm-input" id="f-est" placeholder="0" min="0" step="0.5">
+                <div class="pm-help">時間単位で入力します</div>
+              </div>
+              <div class="pm-field mb0">
+                <label class="pm-check"><input type="checkbox" checked> 登録後もこの画面を開いたままにする</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="pm-card">
+            <div class="pm-card-body pm-row g8">
+              <button type="submit" class="pm-btn pm-btn-primary" id="btn-submit"></button>
+              <a href="04_issues.html" class="pm-btn">キャンセル</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      </form>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('issues');
+document.getElementById('bc-pj').textContent = PM.currentProject().name;
+document.getElementById('btn-submit').innerHTML = PMUI.icon('check') + '登録';
+
+/* 種別ピッカー */
+function renderTypes(sel) {
+  document.getElementById('type-picker').innerHTML = PM.types.map(function(t){
+    var on = String(t.id) === String(sel);
+    return '<button type="button" class="type-opt' + (on ? ' active' : '') + '" data-type="' + t.id + '"' +
+      (on ? ' style="background:' + t.color + '"' : '') + '>' + t.name + '</button>';
+  }).join('');
+  document.querySelectorAll('[data-type]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('f-type').value = b.dataset.type;
+      renderTypes(b.dataset.type);
+    });
+  });
+}
+renderTypes(1);
+
+function fill(id, items, label, selected) {
+  document.getElementById(id).innerHTML = '<option value="">' + label + '</option>' +
+    items.map(function(i){ return '<option value="' + i[0] + '"' + (String(i[0]) === String(selected) ? ' selected' : '') + '>' + i[1] + '</option>'; }).join('');
+}
+fill('f-priority', PM.priorities.map(function(p){ return [p.id, p.name]; }), '選択してください', 3);
+fill('f-assignee', PM.users.map(function(u){ return [u.id, u.name]; }), '未設定', '');
+fill('f-category', PM.categories.map(function(c){ return [c, c]; }), '未設定', '');
+fill('f-milestone', PM.milestones.map(function(m){ return [m.id, m.name]; }), '未設定', 1);
+document.getElementById('f-start').value = PM.TODAY;
+
+document.getElementById('form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var summary = document.getElementById('f-summary').value.trim();
+  if (!summary) { PMUI.toast('件名を入力してください'); return; }
+  var it = PM.addIssue({
+    typeId: document.getElementById('f-type').value,
+    summary: summary,
+    description: document.getElementById('f-desc').value,
+    priorityId: document.getElementById('f-priority').value || 3,
+    assigneeId: document.getElementById('f-assignee').value,
+    category: document.getElementById('f-category').value,
+    milestoneId: document.getElementById('f-milestone').value,
+    start: document.getElementById('f-start').value,
+    due: document.getElementById('f-due').value,
+    estimated: document.getElementById('f-est').value
+  });
+  PMUI.toast(it.key + ' を登録しました');
+  setTimeout(function(){ location.href = '05_issue_detail.html?key=' + it.key; }, 500);
+});
+</script>
+</body>
+</html>

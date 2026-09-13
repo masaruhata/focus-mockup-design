@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — 課題一覧</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.saved-filters { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.saved-filter { padding:5px 12px; border-radius:100px; font-size:12px; font-weight:700; border:1px solid var(--pm-border); background:#fff; color:var(--pm-text-sub); cursor:pointer; }
+.saved-filter:hover { background:var(--pm-soft-2); }
+.saved-filter.active { background:var(--pm-nav-bg); border-color:var(--pm-nav-bg); color:#fff; }
+th .arrow { font-size:9px; margin-left:3px; color:var(--pm-primary); }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+
+    <div class="pm-page-head">
+      <div>
+        <h1 class="pm-page-title">課題</h1>
+        <div class="pm-page-sub" id="sub"></div>
+      </div>
+      <div class="pm-page-actions">
+        <a href="07_board.html" class="pm-btn" id="btn-board"></a>
+        <a href="08_gantt.html" class="pm-btn" id="btn-gantt"></a>
+        <a href="06_issue_new.html" class="pm-btn pm-btn-primary" id="btn-new"></a>
+      </div>
+    </div>
+
+    <div class="saved-filters" id="saved"></div>
+
+    <div class="pm-filter">
+      <div class="pm-filter-row">
+        <div class="pm-filter-item" style="min-width:220px">
+          <label class="pm-label">キーワード</label>
+          <input type="search" id="f-q" class="pm-input" placeholder="件名・説明・キーで検索">
+        </div>
+        <div class="pm-filter-item">
+          <label class="pm-label">状態</label>
+          <select id="f-status" class="pm-select"></select>
+        </div>
+        <div class="pm-filter-item">
+          <label class="pm-label">種別</label>
+          <select id="f-type" class="pm-select"></select>
+        </div>
+        <div class="pm-filter-item">
+          <label class="pm-label">優先度</label>
+          <select id="f-priority" class="pm-select"></select>
+        </div>
+        <div class="pm-filter-item">
+          <label class="pm-label">担当者</label>
+          <select id="f-assignee" class="pm-select"></select>
+        </div>
+        <div class="pm-filter-item">
+          <label class="pm-label">カテゴリー</label>
+          <select id="f-category" class="pm-select"></select>
+        </div>
+        <div class="pm-filter-item">
+          <label class="pm-label">マイルストーン</label>
+          <select id="f-milestone" class="pm-select"></select>
+        </div>
+        <div class="pm-filter-item" style="min-width:auto">
+          <button class="pm-btn" id="btn-clear">条件をクリア</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pm-card">
+      <div class="pm-table-wrap" id="table"></div>
+      <div class="pm-pager">
+        <div class="pm-pager-info" id="pager-info"></div>
+        <div class="pm-pager-btns" id="pager"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('issues');
+document.getElementById('btn-board').innerHTML = PMUI.icon('board') + 'ボード';
+document.getElementById('btn-gantt').innerHTML = PMUI.icon('gantt') + 'ガント';
+document.getElementById('btn-new').innerHTML = PMUI.icon('plus') + '課題の追加';
+
+var PER_PAGE = 15;
+var state = { q: '', status: '', type: '', priority: '', assignee: '', category: '', milestone: '', sort: 'key', dir: 'desc', page: 1, saved: 'all' };
+
+/* ── セレクトを構築 ── */
+function fill(id, items, label) {
+  var el = document.getElementById(id);
+  el.innerHTML = '<option value="">' + label + '</option>' +
+    items.map(function(i){ return '<option value="' + i[0] + '">' + i[1] + '</option>'; }).join('');
+}
+fill('f-status', PM.statuses.map(function(s){ return [s.id, s.name]; }), 'すべて');
+fill('f-type', PM.types.map(function(t){ return [t.id, t.name]; }), 'すべて');
+fill('f-priority', PM.priorities.map(function(p){ return [p.id, p.name]; }), 'すべて');
+fill('f-assignee', PM.users.map(function(u){ return [u.id, u.name]; }), 'すべて');
+fill('f-category', PM.categories.map(function(c){ return [c, c]; }), 'すべて');
+fill('f-milestone', PM.milestones.map(function(m){ return [m.id, m.name]; }), 'すべて');
+
+/* ── URLパラメータの反映 ── */
+(function(){
+  var f = PMUI.param('filter');
+  if (f === 'mine') { state.saved = 'mine'; }
+  var st = PMUI.param('status');
+  if (st) { state.status = st; document.getElementById('f-status').value = st; state.saved = ''; }
+  var ms = PMUI.param('milestone');
+  if (ms) { state.milestone = ms; document.getElementById('f-milestone').value = ms; state.saved = ''; }
+  var q = PMUI.param('q');
+  if (q) { state.q = q; document.getElementById('f-q').value = q; state.saved = ''; }
+})();
+
+/* ── よく使う条件 ── */
+var SAVED = [
+  ['all',      'すべての課題'],
+  ['open',     '完了していない課題'],
+  ['mine',     '自分が担当の課題'],
+  ['created',  '自分が作成した課題'],
+  ['overdue',  '期限切れの課題'],
+  ['week',     '今週が期限の課題'],
+  ['unassigned', '担当者未設定']
+];
+function renderSaved() {
+  document.getElementById('saved').innerHTML = SAVED.map(function(s){
+    return '<button class="saved-filter' + (state.saved === s[0] ? ' active' : '') + '" data-saved="' + s[0] + '">' + s[1] + '</button>';
+  }).join('');
+  document.querySelectorAll('[data-saved]').forEach(function(b){
+    b.addEventListener('click', function(){
+      state.saved = b.dataset.saved; state.page = 1;
+      render();
+    });
+  });
+}
+
+/* ── 絞り込み ── */
+function filtered() {
+  var me = PM.db.currentUserId;
+  return PM.issues().filter(function(i){
+    if (state.saved === 'open' && i.statusId === 4) return false;
+    if (state.saved === 'mine' && i.assigneeId !== me) return false;
+    if (state.saved === 'created' && i.createdById !== me) return false;
+    if (state.saved === 'overdue' && !(i.statusId < 4 && i.due && PMUI.diffDays(PM.TODAY, i.due) < 0)) return false;
+    if (state.saved === 'week') {
+      var d = i.due ? PMUI.diffDays(PM.TODAY, i.due) : 999;
+      if (!(i.statusId < 4 && d >= 0 && d <= 7)) return false;
+    }
+    if (state.saved === 'unassigned' && i.assigneeId) return false;
+    if (state.status && i.statusId !== Number(state.status)) return false;
+    if (state.type && i.typeId !== Number(state.type)) return false;
+    if (state.priority && i.priorityId !== Number(state.priority)) return false;
+    if (state.assignee && i.assigneeId !== Number(state.assignee)) return false;
+    if (state.category && i.category !== state.category) return false;
+    if (state.milestone && i.milestoneId !== Number(state.milestone)) return false;
+    if (state.q) {
+      var q = state.q.toLowerCase();
+      var hay = (i.key + ' ' + i.summary + ' ' + i.description).toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    return true;
+  });
+}
+
+function sortList(list) {
+  var d = state.dir === 'asc' ? 1 : -1;
+  return list.slice().sort(function(a, b){
+    var va, vb;
+    switch (state.sort) {
+      case 'key':      va = a.id; vb = b.id; break;
+      case 'summary':  va = a.summary; vb = b.summary; break;
+      case 'status':   va = a.statusId; vb = b.statusId; break;
+      case 'priority': va = a.priorityId; vb = b.priorityId; break;
+      case 'assignee': va = a.assigneeId || 99; vb = b.assigneeId || 99; break;
+      case 'due':      va = a.due || '9999'; vb = b.due || '9999'; break;
+      case 'updated':  va = a.updated; vb = b.updated; break;
+      default:         va = a.id; vb = b.id;
+    }
+    if (va < vb) return -1 * d;
+    if (va > vb) return 1 * d;
+    return 0;
+  });
+}
+
+var COLS = [
+  ['key', 'キー', 'width:96px'],
+  ['type', '種別', 'width:66px'],
+  ['summary', '件名', ''],
+  ['status', '状態', 'width:78px'],
+  ['priority', '優先度', 'width:74px'],
+  ['assignee', '担当者', 'width:126px'],
+  ['due', '期限日', 'width:96px'],
+  ['updated', '更新日', 'width:104px']
+];
+
+function render() {
+  renderSaved();
+  var list = sortList(filtered());
+  var pages = Math.max(1, Math.ceil(list.length / PER_PAGE));
+  if (state.page > pages) state.page = pages;
+  var view = list.slice((state.page - 1) * PER_PAGE, state.page * PER_PAGE);
+
+  document.getElementById('sub').textContent =
+    PM.currentProject().name + ' — 全 ' + PM.issues().length + ' 件中 ' + list.length + ' 件が条件に一致';
+
+  if (!view.length) {
+    document.getElementById('table').innerHTML = '<div class="pm-empty">' + PMUI.icon('issue') + '条件に一致する課題がありません</div>';
+  } else {
+    document.getElementById('table').innerHTML =
+      '<table class="pm-table"><thead><tr>' +
+      COLS.map(function(c){
+        var arrow = state.sort === c[0] ? '<span class="arrow">' + (state.dir === 'asc' ? '▲' : '▼') + '</span>' : '';
+        return '<th class="sortable" data-sort="' + c[0] + '" style="' + c[2] + '">' + c[1] + arrow + '</th>';
+      }).join('') + '</tr></thead><tbody>' +
+      view.map(function(i){
+        var ms = PM.milestone(i.milestoneId);
+        return '<tr>' +
+          '<td><span class="pm-issue-key">' + i.key + '</span></td>' +
+          '<td>' + PMUI.typeTag(i.typeId) + '</td>' +
+          '<td><a class="pm-issue-link" href="05_issue_detail.html?key=' + i.key + '">' + PMUI.esc(i.summary) + '</a>' +
+            (i.category ? ' <span class="pm-chip">' + PMUI.esc(i.category) + '</span>' : '') +
+            (ms ? ' <span class="pm-chip green">' + PMUI.esc(ms.name) + '</span>' : '') +
+            (i.comments.length ? ' <span class="fs11 muted nowrap">' + PMUI.icon('comment', 'pm-inline-ico') + i.comments.length + '</span>' : '') +
+          '</td>' +
+          '<td>' + PMUI.statusTag(i.statusId) + '</td>' +
+          '<td>' + PMUI.priorityTag(i.priorityId) + '</td>' +
+          '<td>' + PMUI.userChip(i.assigneeId) + '</td>' +
+          '<td class="fs12 ' + PMUI.dueClass(i.due, i.statusId) + '">' + PMUI.fmtDateFull(i.due) + '</td>' +
+          '<td class="fs11 muted">' + PMUI.relTime(i.updated) + '</td>' +
+        '</tr>';
+      }).join('') + '</tbody></table>';
+
+    document.querySelectorAll('th[data-sort]').forEach(function(th){
+      th.addEventListener('click', function(){
+        var k = th.dataset.sort;
+        if (state.sort === k) state.dir = state.dir === 'asc' ? 'desc' : 'asc';
+        else { state.sort = k; state.dir = 'asc'; }
+        render();
+      });
+    });
+  }
+
+  var from = list.length ? (state.page - 1) * PER_PAGE + 1 : 0;
+  var to = Math.min(state.page * PER_PAGE, list.length);
+  document.getElementById('pager-info').textContent = list.length + ' 件中 ' + from + '–' + to + ' 件を表示';
+
+  var btns = '<button class="pm-pager-btn" data-page="' + (state.page - 1) + '"' + (state.page === 1 ? ' disabled' : '') + '>前へ</button>';
+  for (var p = 1; p <= pages; p++) {
+    btns += '<button class="pm-pager-btn' + (p === state.page ? ' active' : '') + '" data-page="' + p + '">' + p + '</button>';
+  }
+  btns += '<button class="pm-pager-btn" data-page="' + (state.page + 1) + '"' + (state.page === pages ? ' disabled' : '') + '>次へ</button>';
+  document.getElementById('pager').innerHTML = btns;
+  document.querySelectorAll('[data-page]').forEach(function(b){
+    b.addEventListener('click', function(){ state.page = Number(b.dataset.page); render(); window.scrollTo(0, 0); });
+  });
+}
+
+/* ── イベント ── */
+['q','status','type','priority','assignee','category','milestone'].forEach(function(k){
+  var el = document.getElementById('f-' + k);
+  el.addEventListener(k === 'q' ? 'input' : 'change', function(){
+    state[k] = el.value; state.page = 1;
+    if (state.saved !== 'all' && state.saved !== '') { /* 保存条件は併用可 */ }
+    render();
+  });
+});
+document.getElementById('btn-clear').addEventListener('click', function(){
+  ['q','status','type','priority','assignee','category','milestone'].forEach(function(k){
+    state[k] = ''; document.getElementById('f-' + k).value = '';
+  });
+  state.saved = 'all'; state.page = 1; render();
+});
+
+render();
+</script>
+</body>
+</html>

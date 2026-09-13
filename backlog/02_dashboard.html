@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — マイダッシュボード</title>
+<link rel="stylesheet" href="backlog.css">
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow">
+
+      <div class="pm-page-head">
+        <div>
+          <h1 class="pm-page-title">マイダッシュボード</h1>
+          <div class="pm-page-sub" id="greeting"></div>
+        </div>
+        <div class="pm-page-actions">
+          <a href="06_issue_new.html" class="pm-btn pm-btn-primary" id="btn-new"></a>
+        </div>
+      </div>
+
+      <div class="pm-kpi" id="kpi"></div>
+
+      <div class="pm-grid pm-grid-side">
+        <div>
+          <div class="pm-card">
+            <div class="pm-tabs" style="margin:0;padding:0 8px">
+              <button class="pm-tab active" data-tab="mine">自分の課題</button>
+              <button class="pm-tab" data-tab="created">自分が作成した課題</button>
+              <button class="pm-tab" data-tab="recent">最近の更新</button>
+            </div>
+            <div class="pm-table-wrap" id="issue-table"></div>
+            <div class="pm-pager">
+              <div class="pm-pager-info" id="list-info"></div>
+              <a href="04_issues.html" class="pm-btn pm-btn-sm">課題一覧で開く</a>
+            </div>
+          </div>
+
+          <div class="pm-card">
+            <div class="pm-card-head">
+              <div class="pm-card-title" id="act-title">最近の活動</div>
+              <a href="03_project_home.html" class="fs12">プロジェクトホーム</a>
+            </div>
+            <ul class="pm-feed" id="activity"></ul>
+          </div>
+        </div>
+
+        <div>
+          <div class="pm-card">
+            <div class="pm-card-head"><div class="pm-card-title">参加プロジェクト</div></div>
+            <div id="projects"></div>
+          </div>
+
+          <div class="pm-card">
+            <div class="pm-card-head">
+              <div class="pm-card-title">お知らせ</div>
+              <a href="13_notifications.html" class="fs12">すべて見る</a>
+            </div>
+            <ul class="pm-feed" id="notices"></ul>
+          </div>
+
+          <div class="pm-card">
+            <div class="pm-card-head"><div class="pm-card-title">状態別の内訳</div></div>
+            <div class="pm-card-body" id="breakdown"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('dashboard');
+
+var me = PM.currentUser();
+var all = PM.issues();
+var mine = all.filter(function(i){ return i.assigneeId === me.id; });
+var open = mine.filter(function(i){ return i.statusId < 4; });
+var overdue = open.filter(function(i){ return i.due && PMUI.diffDays(PM.TODAY, i.due) < 0; });
+var soon = open.filter(function(i){ var d = i.due ? PMUI.diffDays(PM.TODAY, i.due) : 99; return d >= 0 && d <= 7; });
+var doneMine = mine.filter(function(i){ return i.statusId === 4; });
+
+document.getElementById('greeting').textContent =
+  me.name + ' さん — ' + PMUI.fmtDateFull(PM.TODAY) + ' 現在、担当している未完了の課題は ' + open.length + ' 件です';
+document.getElementById('btn-new').innerHTML = PMUI.icon('plus') + '課題の追加';
+document.getElementById('act-title').innerHTML = PMUI.icon('clock') + '最近の活動';
+
+/* ── KPI ── */
+document.getElementById('kpi').innerHTML = [
+  ['担当中の課題', open.length, '件', 'var(--pm-text)', '未完了のみ'],
+  ['期限切れ', overdue.length, '件', 'var(--pm-danger)', '対応が必要です'],
+  ['今週が期限', soon.length, '件', 'var(--pm-warning)', '7日以内'],
+  ['完了した課題', doneMine.length, '件', 'var(--pm-primary-dark)', '累計']
+].map(function(k){
+  return '<div class="pm-kpi-card">' +
+    '<div class="pm-kpi-label">' + k[0] + '</div>' +
+    '<div class="pm-kpi-value" style="color:' + k[3] + '">' + k[1] + '<span class="fs12 muted" style="font-weight:600"> ' + k[2] + '</span></div>' +
+    '<div class="pm-kpi-foot">' + k[4] + '</div></div>';
+}).join('');
+
+/* ── 課題テーブル ── */
+function rows(list) {
+  if (!list.length) return '<div class="pm-empty">' + PMUI.icon('issue') + '該当する課題はありません</div>';
+  return '<table class="pm-table"><thead><tr>' +
+    '<th style="width:92px">キー</th><th>件名</th><th style="width:78px">状態</th>' +
+    '<th style="width:70px">優先度</th><th style="width:96px">期限日</th><th style="width:110px">担当者</th>' +
+    '</tr></thead><tbody>' +
+    list.map(function(i){
+      return '<tr>' +
+        '<td><span class="pm-issue-key">' + i.key + '</span></td>' +
+        '<td><a class="pm-issue-link" href="05_issue_detail.html?key=' + i.key + '">' + PMUI.esc(i.summary) + '</a></td>' +
+        '<td>' + PMUI.statusTag(i.statusId) + '</td>' +
+        '<td>' + PMUI.priorityTag(i.priorityId) + '</td>' +
+        '<td class="fs12 ' + PMUI.dueClass(i.due, i.statusId) + '">' + PMUI.fmtDateFull(i.due) + '</td>' +
+        '<td>' + PMUI.userChip(i.assigneeId) + '</td>' +
+      '</tr>';
+    }).join('') + '</tbody></table>';
+}
+
+var TABS = {
+  mine: function(){ return open.slice().sort(byDue); },
+  created: function(){ return all.filter(function(i){ return i.createdById === me.id; }).sort(byDue); },
+  recent: function(){ return all.slice().sort(function(a,b){ return a.updated < b.updated ? 1 : -1; }); }
+};
+function byDue(a,b){
+  if (!a.due) return 1; if (!b.due) return -1;
+  return a.due < b.due ? -1 : (a.due > b.due ? 1 : 0);
+}
+function renderTab(name) {
+  var list = TABS[name]();
+  document.getElementById('issue-table').innerHTML = rows(list.slice(0, 10));
+  document.getElementById('list-info').textContent = list.length + ' 件中 ' + Math.min(10, list.length) + ' 件を表示';
+}
+document.querySelectorAll('.pm-tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.pm-tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    renderTab(t.dataset.tab);
+  });
+});
+renderTab('mine');
+
+/* ── 最近の活動 ── */
+var acts = [];
+all.forEach(function(i){
+  i.comments.forEach(function(c){
+    acts.push({ at: c.at, userId: c.userId, key: i.key, summary: i.summary,
+      text: c.change ? ('の <b>' + c.change[0] + '</b> を「' + c.change[1] + '」から「' + c.change[2] + '」に変更しました')
+                     : 'にコメントしました' });
+  });
+});
+acts.sort(function(a,b){ return a.at < b.at ? 1 : -1; });
+document.getElementById('activity').innerHTML = acts.slice(0, 8).map(function(a){
+  var u = PM.user(a.userId);
+  return '<li>' + PMUI.avatar(a.userId, 'sm') +
+    '<div class="pm-feed-body"><div class="pm-feed-text"><b>' + PMUI.esc(u.name) + '</b> が ' +
+    '<a href="05_issue_detail.html?key=' + a.key + '">' + a.key + ' ' + PMUI.esc(a.summary) + '</a> ' + a.text + '</div>' +
+    '<div class="pm-feed-meta">' + PMUI.relTime(a.at) + '</div></div></li>';
+}).join('');
+
+/* ── プロジェクト ── */
+document.getElementById('projects').innerHTML = PM.projects.map(function(p){
+  var cnt = p.key === 'FOCUS' ? all.filter(function(i){ return i.statusId < 4; }).length : (p.key === 'SITE' ? 14 : 9);
+  return '<div class="pm-filerow">' +
+    '<div class="pm-side-project-mark" style="background:' + p.color + ';width:28px;height:28px;font-size:11px">' + p.key.slice(0,2) + '</div>' +
+    '<div class="flex1"><a href="03_project_home.html" class="bold">' + PMUI.esc(p.name) + '</a>' +
+    '<div class="fs11 muted">' + p.key + ' ・ メンバー ' + p.members.length + '人</div></div>' +
+    '<span class="pm-chip">' + cnt + '</span></div>';
+}).join('');
+
+/* ── お知らせ ── */
+document.getElementById('notices').innerHTML = PM.notices().slice(0, 5).map(function(n){
+  return '<li>' + (n.by ? PMUI.avatar(n.by, 'sm') : '<span class="pm-avatar sm" style="background:#c3cad2">!</span>') +
+    '<div class="pm-feed-body"><div class="pm-feed-text' + (n.read ? '' : ' bold') + '">' +
+    '<a href="05_issue_detail.html?key=' + n.issue + '">' + n.issue + '</a> ' + PMUI.esc(n.text) + '</div>' +
+    '<div class="pm-feed-meta">' + PMUI.relTime(n.at) + '</div></div></li>';
+}).join('');
+
+/* ── 状態別内訳 ── */
+var counts = PM.statuses.map(function(s){ return all.filter(function(i){ return i.statusId === s.id; }).length; });
+var total = all.length;
+document.getElementById('breakdown').innerHTML =
+  '<div class="pm-progress-multi mb12">' + PM.statuses.map(function(s,idx){
+    return '<i style="width:' + (counts[idx]/total*100) + '%;background:' + s.color + '"></i>';
+  }).join('') + '</div>' +
+  PM.statuses.map(function(s,idx){
+    return '<div class="pm-row pm-between fs12" style="padding:5px 0">' +
+      '<span class="pm-row g8"><i style="width:9px;height:9px;border-radius:2px;background:' + s.color + ';display:inline-block"></i>' + s.name + '</span>' +
+      '<span class="bold">' + counts[idx] + ' 件</span></div>';
+  }).join('') +
+  '<div class="fs11 muted mt8">プロジェクト全体 ' + total + ' 件（完了率 ' + Math.round(counts[3]/total*100) + '%）</div>';
+</script>
+</body>
+</html>

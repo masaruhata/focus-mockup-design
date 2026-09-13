@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — スペース設定</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.settings-grid { display:grid; grid-template-columns:200px minmax(0,1fr); gap:16px; align-items:start; }
+@media (max-width: 900px) { .settings-grid { grid-template-columns:1fr; } }
+.set-nav a { display:block; padding:9px 14px; font-size:12.5px; color:var(--pm-text-sub); border-left:3px solid transparent; }
+.set-nav a:hover { background:var(--pm-soft); text-decoration:none; }
+.set-nav a.active { background:var(--pm-primary-light); border-left-color:var(--pm-primary); color:var(--pm-primary-dark); font-weight:700; }
+.plan-bar { height:10px; border-radius:5px; background:var(--pm-soft-2); overflow:hidden; }
+.plan-bar > i { display:block; height:100%; background:var(--pm-primary); }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow">
+
+      <div class="pm-breadcrumb"><a href="02_dashboard.html">ホーム</a> › <span>スペース設定</span></div>
+      <div class="pm-page-head">
+        <div><h1 class="pm-page-title">スペース設定</h1>
+        <div class="pm-page-sub">phm-solution.backvog.jp — スペース全体のユーザー・プロジェクト・プランを管理します。</div></div>
+      </div>
+
+      <div class="settings-grid">
+        <div class="pm-card set-nav" id="nav"></div>
+        <div id="pane"></div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('');
+
+var TABS = [['space','スペース情報'], ['users','ユーザー管理'], ['projects','プロジェクト'], ['plan','プラン・使用状況'], ['security','セキュリティ'], ['data','データ管理']];
+var current = PMUI.param('tab', 'space');
+
+function card(title, body, action) {
+  return '<div class="pm-card"><div class="pm-card-head"><div class="pm-card-title">' + title + '</div>' + (action || '') + '</div>' + body + '</div>';
+}
+
+var PANES = {
+  space: function(){
+    return card('スペース情報',
+      '<div class="pm-card-body">' +
+      '<div class="pm-field"><label class="pm-label req">スペース名</label><input class="pm-input" value="PHM Solution" style="max-width:380px"></div>' +
+      '<div class="pm-field"><label class="pm-label req">スペースID</label><input class="pm-input" value="phm-solution" style="max-width:260px">' +
+        '<div class="pm-help">URL は https://phm-solution.backvog.jp になります。</div></div>' +
+      '<div class="pm-field"><label class="pm-label">タイムゾーン</label><select class="pm-select" style="max-width:260px"><option>(GMT+09:00) Asia/Tokyo</option><option>(GMT+00:00) UTC</option></select></div>' +
+      '<div class="pm-field"><label class="pm-label">言語</label><select class="pm-select" style="max-width:200px"><option>日本語</option><option>English</option></select></div>' +
+      '<div class="pm-field"><label class="pm-label">週の開始曜日</label><select class="pm-select" style="max-width:160px"><option>日曜日</option><option selected>月曜日</option></select></div>' +
+      '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'スペース情報を保存しました\')">保存する</button></div>');
+  },
+
+  users: function(){
+    return card('ユーザー管理',
+      '<table class="pm-table"><thead><tr><th style="width:210px">ユーザー</th><th style="width:130px">スペース権限</th>' +
+      '<th>メールアドレス</th><th style="width:110px">担当課題</th><th style="width:100px">状態</th><th style="width:80px"></th></tr></thead><tbody>' +
+      PM.users.map(function(u){
+        var n = PM.issues().filter(function(i){ return i.assigneeId === u.id && i.statusId < 4; }).length;
+        return '<tr><td><div class="pm-row g8">' + PMUI.avatar(u.id, 'sm') + '<span class="bold fs12">' + u.name + '</span></div></td>' +
+          '<td><span class="pm-chip' + (u.role === '管理者' ? ' green' : '') + '">' + u.role + '</span></td>' +
+          '<td class="fs12 muted">' + u.mail + '</td><td class="fs12">' + n + ' 件</td>' +
+          '<td><span class="pm-chip green">有効</span></td>' +
+          '<td class="tright"><button class="pm-btn pm-btn-sm" onclick="PMUI.toast(\'ユーザー編集画面を開きます\')">編集</button></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+      '<div class="pm-row g8 pm-wrap"><input class="pm-input" placeholder="招待するメールアドレス" style="width:280px">' +
+      '<select class="pm-select" style="width:150px"><option>一般ユーザー</option><option>管理者</option><option>ゲスト</option></select>' +
+      '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'招待メールを送信しました\')">招待する</button></div>' +
+      '<div class="pm-help mt8">ユーザー数: ' + PM.users.length + ' / 30（プラン上限）</div></div>');
+  },
+
+  projects: function(){
+    return card('プロジェクト',
+      '<table class="pm-table"><thead><tr><th style="width:90px">キー</th><th>プロジェクト名</th>' +
+      '<th style="width:110px">メンバー</th><th style="width:110px">課題数</th><th style="width:100px">状態</th><th style="width:80px"></th></tr></thead><tbody>' +
+      PM.projects.map(function(p){
+        var n = p.key === 'FOCUS' ? PM.issues().length : (p.key === 'SITE' ? 26 : 18);
+        return '<tr><td><span class="pm-issue-key">' + p.key + '</span></td>' +
+          '<td><span class="pm-row g8"><i style="width:10px;height:10px;border-radius:3px;background:' + p.color + ';display:inline-block"></i>' +
+          '<a href="03_project_home.html" class="bold">' + p.name + '</a></span></td>' +
+          '<td class="fs12">' + p.members.length + ' 人</td><td class="fs12">' + n + ' 件</td>' +
+          '<td><span class="pm-chip green">進行中</span></td>' +
+          '<td class="tright"><a class="pm-btn pm-btn-sm" href="14_project_settings.html">設定</a></td></tr>';
+      }).join('') + '</tbody></table>' +
+      '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+      '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'プロジェクト作成画面を開きます\')">新しいプロジェクトを作成</button></div>');
+  },
+
+  plan: function(){
+    var rows = [['ユーザー数', PM.users.length, 30], ['プロジェクト数', PM.projects.length, 10], ['ストレージ (GB)', 5.4, 100], ['Gitリポジトリ', 3, 20]];
+    return card('プラン・使用状況',
+      '<div class="pm-card-body">' +
+      '<div class="pm-row pm-between mb16" style="padding:12px 14px;background:var(--pm-primary-light);border-radius:var(--pm-radius-md)">' +
+        '<div><div class="bold">スタンダードプラン</div><div class="fs11 muted">次回更新日: 2026-10-01 ・ 月額 ¥17,600（税込）</div></div>' +
+        '<button class="pm-btn" onclick="PMUI.toast(\'プラン変更画面を開きます\')">プランを変更</button></div>' +
+      rows.map(function(r){
+        var pct = Math.min(100, r[1] / r[2] * 100);
+        return '<div class="mb12"><div class="pm-row pm-between fs12 mb4"><span>' + r[0] + '</span>' +
+          '<span class="bold">' + r[1] + ' / ' + r[2] + '</span></div>' +
+          '<div class="plan-bar"><i style="width:' + pct + '%' + (pct > 80 ? ';background:var(--pm-warning)' : '') + '"></i></div></div>';
+      }).join('') + '</div>');
+  },
+
+  security: function(){
+    return card('セキュリティ',
+      '<div class="pm-card-body">' +
+      '<div class="mb12"><label class="pm-check"><input type="checkbox" checked> 二要素認証を必須にする</label>' +
+        '<div class="pm-help">全ユーザーにワンタイムパスワードによる認証を要求します。</div></div>' +
+      '<div class="mb12"><label class="pm-check"><input type="checkbox" checked> IPアドレス制限を有効にする</label>' +
+        '<textarea class="pm-textarea" style="min-height:70px;max-width:420px;margin-top:6px">203.0.113.0/24&#10;198.51.100.15</textarea></div>' +
+      '<div class="mb12"><label class="pm-check"><input type="checkbox" checked> パスワードの有効期限を90日にする</label></div>' +
+      '<div class="mb12"><label class="pm-check"><input type="checkbox"> シングルサインオン（SAML）を使用する</label></div>' +
+      '<div class="pm-field"><label class="pm-label">セッションの有効期間</label>' +
+        '<select class="pm-select" style="max-width:200px"><option>8時間</option><option>24時間</option><option>30日</option></select></div>' +
+      '<button class="pm-btn pm-btn-primary" onclick="PMUI.toast(\'セキュリティ設定を保存しました\')">保存する</button></div>') +
+    card('監査ログ',
+      '<table class="pm-table"><thead><tr><th style="width:150px">日時</th><th style="width:130px">ユーザー</th><th>操作</th><th style="width:130px">IPアドレス</th></tr></thead><tbody>' +
+      [['2026-09-12 09:12', 4, 'FOCUS-4 の担当者を変更', '203.0.113.24'],
+       ['2026-09-12 08:40', 2, 'Wiki「権限マスタ設計メモ」を更新', '203.0.113.18'],
+       ['2026-09-11 18:42', 3, 'ログイン成功', '203.0.113.31'],
+       ['2026-09-11 17:45', 3, 'FOCUS-5 の状態を変更', '203.0.113.31'],
+       ['2026-09-11 09:05', 1, 'ユーザー「山本 大輔」を招待', '198.51.100.15']
+      ].map(function(r){
+        return '<tr><td class="fs12">' + r[0] + '</td><td>' + PMUI.userChip(r[1]) + '</td>' +
+          '<td class="fs12">' + r[2] + '</td><td class="fs12 mono muted">' + r[3] + '</td></tr>';
+      }).join('') + '</tbody></table>');
+  },
+
+  data: function(){
+    return card('データ管理',
+      '<div class="pm-card-body">' +
+      '<div class="fs12 sub mb12">このモックアップのデータはブラウザの localStorage に保存されています。課題の追加・状態変更・コメント・Wiki 編集は保存され、再読み込み後も保持されます。</div>' +
+      '<div class="pm-row g8 pm-wrap">' +
+        '<button class="pm-btn" id="btn-export">' + PMUI.icon('doc') + 'データをエクスポート（JSON）</button>' +
+        '<button class="pm-btn pm-btn-danger" id="btn-reset">' + PMUI.icon('close') + '初期データに戻す</button>' +
+      '</div>' +
+      '<div class="pm-help mt8">「初期データに戻す」を実行すると、追加した課題や編集内容がすべて破棄されます。</div></div>');
+  }
+};
+
+function render() {
+  document.getElementById('nav').innerHTML = TABS.map(function(t){
+    return '<a href="?tab=' + t[0] + '" class="' + (t[0] === current ? 'active' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</a>';
+  }).join('');
+  document.getElementById('pane').innerHTML = (PANES[current] || PANES.space)();
+  document.querySelectorAll('[data-tab]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); current = a.dataset.tab; render(); });
+  });
+
+  var ex = document.getElementById('btn-export');
+  if (ex) ex.addEventListener('click', function(){
+    var blob = new Blob([JSON.stringify(PM.db, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'backvog_export.json';
+    a.click();
+    PMUI.toast('JSON をエクスポートしました');
+  });
+  var rs = document.getElementById('btn-reset');
+  if (rs) rs.addEventListener('click', function(){
+    if (confirm('初期データに戻します。追加・編集した内容は失われますがよろしいですか？')) {
+      PM.reset();
+      PMUI.toast('初期データに戻しました');
+      setTimeout(function(){ location.reload(); }, 600);
+    }
+  });
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — 課題詳細</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.issue-title { font-size:19px; font-weight:800; line-height:1.5; }
+.prop-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+.prop-table th { width:96px; text-align:left; font-weight:700; color:var(--pm-text-muted); padding:7px 0; vertical-align:middle; font-size:11.5px; }
+.prop-table td { padding:6px 0; }
+.prop-table select, .prop-table input { padding:4px 8px; font-size:12px; }
+.status-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.attach { display:flex; align-items:center; gap:8px; font-size:12px; padding:7px 10px; border:1px solid var(--pm-border-light); border-radius:var(--pm-radius-sm); background:var(--pm-soft); }
+.attach svg { width:15px; height:15px; color:var(--pm-text-muted); }
+.editor-tools { display:flex; gap:4px; padding:6px; border:1px solid var(--pm-border); border-bottom:none; border-radius:var(--pm-radius-sm) var(--pm-radius-sm) 0 0; background:var(--pm-soft); }
+.editor-tools button { border:none; background:none; padding:3px 8px; font-size:12px; font-weight:700; color:var(--pm-text-muted); border-radius:3px; cursor:pointer; }
+.editor-tools button:hover { background:var(--pm-soft-2); color:var(--pm-text); }
+.editor-tools + .pm-textarea { border-radius:0 0 var(--pm-radius-sm) var(--pm-radius-sm); }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow" id="root"></div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('issues');
+
+var key = PMUI.param('key', 'FOCUS-1');
+var it = PM.issue(key) || PM.issues()[0];
+
+function render() {
+  if (!it) {
+    document.getElementById('root').innerHTML = '<div class="pm-card"><div class="pm-empty">課題が見つかりませんでした。<br><a href="04_issues.html">課題一覧へ戻る</a></div></div>';
+    return;
+  }
+  var ms = PM.milestone(it.milestoneId);
+  var st = PM.status(it.statusId);
+
+  document.getElementById('root').innerHTML =
+    '<div class="pm-breadcrumb"><a href="03_project_home.html">' + PM.currentProject().name + '</a> › ' +
+      '<a href="04_issues.html">課題</a> › <span>' + it.key + '</span></div>' +
+
+    '<div class="pm-page-head">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="pm-row g8 mb4">' + PMUI.typeTag(it.typeId) +
+          '<span class="pm-issue-key">' + it.key + '</span>' + PMUI.statusTag(it.statusId) + '</div>' +
+        '<h1 class="issue-title" id="title-view">' + PMUI.esc(it.summary) + '</h1>' +
+      '</div>' +
+      '<div class="pm-page-actions">' +
+        '<button class="pm-btn" id="btn-edit">' + PMUI.icon('doc') + '編集</button>' +
+        '<button class="pm-btn" id="btn-copy">' + PMUI.icon('link') + 'リンクをコピー</button>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="pm-grid pm-grid-side">' +
+      /* ───── 左カラム ───── */
+      '<div>' +
+        '<div class="pm-card">' +
+          '<div class="pm-card-head"><div class="pm-card-title">' + PMUI.icon('doc') + '課題の詳細</div>' +
+            '<span class="fs11 muted">登録: ' + PM.user(it.createdById).name + ' ・ ' + PMUI.fmtDateTime(it.created) + '</span></div>' +
+          '<div class="pm-card-body"><div class="pm-doc" id="desc-view">' + PMUI.markdown(it.description) + '</div>' +
+            '<div id="desc-edit" class="hidden">' +
+              '<textarea class="pm-textarea" id="desc-input" style="min-height:220px">' + PMUI.esc(it.description) + '</textarea>' +
+              '<div class="pm-row g8 mt8"><button class="pm-btn pm-btn-primary pm-btn-sm" id="btn-desc-save">保存</button>' +
+              '<button class="pm-btn pm-btn-sm" id="btn-desc-cancel">キャンセル</button></div>' +
+            '</div>' +
+          '</div>' +
+          (it.attachments.length ?
+            '<div class="pm-card-body" style="border-top:1px solid var(--pm-border-light)">' +
+              '<div class="fs11 bold muted mb8">添付ファイル</div>' +
+              it.attachments.map(function(a){
+                return '<div class="attach">' + PMUI.icon('clip') + '<a href="#">' + PMUI.esc(a.name) + '</a>' +
+                  '<span class="muted fs11">' + PMUI.fileSize(a.size) + '</span></div>';
+              }).join('') + '</div>' : '') +
+        '</div>' +
+
+        '<div class="pm-card">' +
+          '<div class="pm-card-head"><div class="pm-card-title">' + PMUI.icon('comment') + 'コメント・更新履歴' +
+            '<span class="pm-chip">' + it.comments.length + '</span></div></div>' +
+          '<div id="comments">' + commentsHTML() + '</div>' +
+        '</div>' +
+
+        '<div class="pm-card">' +
+          '<div class="pm-card-head"><div class="pm-card-title">コメントを追加</div></div>' +
+          '<div class="pm-card-body">' +
+            '<div class="pm-row g8 mb8" style="align-items:flex-start">' + PMUI.avatar(PM.db.currentUserId, 'sm') +
+              '<div class="flex1">' +
+                '<div class="editor-tools">' +
+                  '<button type="button" data-md="**太字**">B</button>' +
+                  '<button type="button" data-md="- リスト">箇条書き</button>' +
+                  '<button type="button" data-md="`コード`">コード</button>' +
+                  '<button type="button" data-md="> 引用">引用</button>' +
+                '</div>' +
+                '<textarea class="pm-textarea" id="comment-input" placeholder="コメントを入力（Markdown が使えます）"></textarea>' +
+              '</div>' +
+            '</div>' +
+            '<div class="pm-row pm-between pm-wrap g12">' +
+              '<div class="pm-row g8">' +
+                '<span class="fs12 muted">状態を変更:</span>' +
+                '<select class="pm-select" id="comment-status" style="width:auto">' +
+                  PM.statuses.map(function(s){
+                    return '<option value="' + s.id + '"' + (s.id === it.statusId ? ' selected' : '') + '>' + s.name + '</option>';
+                  }).join('') + '</select>' +
+              '</div>' +
+              '<button class="pm-btn pm-btn-primary" id="btn-comment">' + PMUI.icon('check') + '登録</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      /* ───── 右カラム ───── */
+      '<div>' +
+        '<div class="pm-card">' +
+          '<div class="pm-card-head"><div class="pm-card-title">状態</div></div>' +
+          '<div class="pm-card-body">' +
+            '<div class="status-actions">' +
+              PM.statuses.filter(function(s){ return s.id !== it.statusId; }).map(function(s){
+                return '<button class="pm-btn pm-btn-sm" data-status="' + s.id + '">' + s.name + 'にする</button>';
+              }).join('') +
+            '</div>' +
+            '<div class="fs11 muted mt12">現在の状態: <b style="color:' + st.color + '">' + st.name + '</b>' +
+            '（最終更新 ' + PMUI.relTime(it.updated) + '）</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="pm-card">' +
+          '<div class="pm-card-head"><div class="pm-card-title">プロパティ</div></div>' +
+          '<div class="pm-card-body">' +
+            '<table class="prop-table">' +
+              row('優先度', select('priorityId', PM.priorities.map(function(p){ return [p.id, p.name]; }), it.priorityId)) +
+              row('担当者', select('assigneeId', PM.users.map(function(u){ return [u.id, u.name]; }), it.assigneeId, '未設定')) +
+              row('カテゴリー', select('category', PM.categories.map(function(c){ return [c, c]; }), it.category, '未設定')) +
+              row('マイルストーン', select('milestoneId', PM.milestones.map(function(m){ return [m.id, m.name]; }), it.milestoneId, '未設定')) +
+              row('開始日', '<input type="date" class="pm-input" data-field="start" value="' + (it.start || '') + '">') +
+              row('期限日', '<input type="date" class="pm-input" data-field="due" value="' + (it.due || '') + '">') +
+              row('予定時間', '<input type="number" class="pm-input" data-field="estimated" value="' + (it.estimated || 0) + '" style="width:80px"> <span class="fs11 muted">時間</span>') +
+              row('実績時間', '<input type="number" class="pm-input" data-field="actual" value="' + (it.actual || 0) + '" style="width:80px"> <span class="fs11 muted">時間</span>') +
+              row('登録者', PMUI.userChip(it.createdById)) +
+              row('登録日', '<span class="fs12">' + PMUI.fmtDateTime(it.created) + '</span>') +
+              row('更新日', '<span class="fs12">' + PMUI.fmtDateTime(it.updated) + '</span>') +
+            '</table>' +
+            (it.estimated ? '<div class="mt12"><div class="fs11 muted mb4">工数消化 ' + it.actual + ' / ' + it.estimated + ' 時間</div>' +
+              '<div class="pm-progress thin"><i style="width:' + Math.min(100, it.actual / it.estimated * 100) + '%;background:' +
+              (it.actual > it.estimated ? 'var(--pm-danger)' : 'var(--pm-primary)') + '"></i></div></div>' : '') +
+          '</div>' +
+        '</div>' +
+
+        '<div class="pm-card">' +
+          '<div class="pm-card-head"><div class="pm-card-title">関連する課題</div></div>' +
+          '<div>' + relatedHTML() + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  bind();
+}
+
+function row(label, html) { return '<tr><th>' + label + '</th><td>' + html + '</td></tr>'; }
+
+function select(field, items, current, emptyLabel) {
+  return '<select class="pm-select" data-field="' + field + '">' +
+    (emptyLabel ? '<option value="">' + emptyLabel + '</option>' : '') +
+    items.map(function(i){
+      return '<option value="' + i[0] + '"' + (String(i[0]) === String(current) ? ' selected' : '') + '>' + i[1] + '</option>';
+    }).join('') + '</select>';
+}
+
+function commentsHTML() {
+  if (!it.comments.length) return '<div class="pm-empty">まだコメントはありません</div>';
+  return it.comments.map(function(c, idx){
+    var changes = c.changes && c.changes.length ? c.changes : (c.change ? [c.change] : []);
+    return '<div class="pm-comment">' + PMUI.avatar(c.userId, 'sm') +
+      '<div class="pm-comment-main">' +
+        '<div class="pm-comment-head">' +
+          '<span class="pm-comment-author">' + PMUI.esc(PM.user(c.userId).name) + '</span>' +
+          '<span class="pm-comment-date">' + PMUI.fmtDateTime(c.at) + '（' + PMUI.relTime(c.at) + '）</span>' +
+          '<span class="fs11 muted">#' + (idx + 1) + '</span>' +
+        '</div>' +
+        (c.body ? '<div class="pm-comment-body">' + PMUI.esc(c.body) + '</div>' : '') +
+        (changes.length ? '<div class="pm-comment-change">' + changes.map(function(ch){
+          return '<div><b>' + ch[0] + '</b>: ' + PMUI.esc(ch[1]) + ' → <b>' + PMUI.esc(ch[2]) + '</b></div>';
+        }).join('') + '</div>' : '') +
+      '</div></div>';
+  }).join('');
+}
+
+function relatedHTML() {
+  var rel = PM.issues().filter(function(x){
+    return x.key !== it.key && (x.milestoneId === it.milestoneId || x.category === it.category);
+  }).slice(0, 5);
+  if (!rel.length) return '<div class="pm-empty">関連する課題はありません</div>';
+  return rel.map(function(x){
+    return '<div class="pm-filerow"><div class="flex1">' +
+      '<a href="05_issue_detail.html?key=' + x.key + '" class="fs12 bold">' + x.key + '</a> ' +
+      '<span class="fs12">' + PMUI.esc(x.summary.length > 24 ? x.summary.slice(0, 24) + '…' : x.summary) + '</span></div>' +
+      PMUI.statusTag(x.statusId) + '</div>';
+  }).join('');
+}
+
+function bind() {
+  /* 状態のクイック変更 */
+  document.querySelectorAll('[data-status]').forEach(function(b){
+    b.addEventListener('click', function(){
+      PM.updateIssue(it.key, { statusId: Number(b.dataset.status) });
+      it = PM.issue(it.key);
+      PMUI.toast('状態を「' + PM.status(it.statusId).name + '」に変更しました');
+      render();
+    });
+  });
+
+  /* プロパティ変更 */
+  document.querySelectorAll('[data-field]').forEach(function(el){
+    el.addEventListener('change', function(){
+      var f = el.dataset.field;
+      var v = el.value;
+      if (f === 'estimated' || f === 'actual') v = Number(v);
+      if (f === 'assigneeId' || f === 'milestoneId') v = v ? Number(v) : null;
+      PM.updateIssue(it.key, (function(){ var o = {}; o[f] = v; return o; })());
+      it = PM.issue(it.key);
+      PMUI.toast('変更を保存しました');
+      render();
+    });
+  });
+
+  /* コメント登録 */
+  var btn = document.getElementById('btn-comment');
+  if (btn) btn.addEventListener('click', function(){
+    var body = document.getElementById('comment-input').value;
+    var newStatus = Number(document.getElementById('comment-status').value);
+    if (!body.trim() && newStatus === it.statusId) { PMUI.toast('コメントを入力してください'); return; }
+    PM.updateIssue(it.key, newStatus !== it.statusId ? { statusId: newStatus } : {}, body);
+    it = PM.issue(it.key);
+    PMUI.toast('コメントを登録しました');
+    render();
+  });
+
+  /* Markdown ツールバー */
+  document.querySelectorAll('[data-md]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var ta = document.getElementById('comment-input');
+      ta.value += (ta.value && !/\n$/.test(ta.value) ? '\n' : '') + b.dataset.md;
+      ta.focus();
+    });
+  });
+
+  /* 説明の編集 */
+  var be = document.getElementById('btn-edit');
+  if (be) be.addEventListener('click', function(){
+    document.getElementById('desc-view').classList.add('hidden');
+    document.getElementById('desc-edit').classList.remove('hidden');
+  });
+  var bc = document.getElementById('btn-desc-cancel');
+  if (bc) bc.addEventListener('click', render);
+  var bs = document.getElementById('btn-desc-save');
+  if (bs) bs.addEventListener('click', function(){
+    it.description = document.getElementById('desc-input').value;
+    it.updated = PM.nowString();
+    PM.save();
+    PMUI.toast('課題の詳細を更新しました');
+    render();
+  });
+
+  var cp = document.getElementById('btn-copy');
+  if (cp) cp.addEventListener('click', function(){
+    PMUI.toast(location.origin + '/' + it.key + ' をコピーしました');
+  });
+}
+
+render();
+</script>
+</body>
+</html>

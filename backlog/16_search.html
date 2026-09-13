@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — 検索結果</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.hit { padding:12px 16px; border-bottom:1px solid var(--pm-border-light); }
+.hit:last-child { border-bottom:none; }
+.hit:hover { background:var(--pm-soft); }
+.hit-snippet { font-size:12px; color:var(--pm-text-sub); line-height:1.7; margin-top:4px; }
+mark { background:#fff3bf; color:inherit; padding:0 2px; border-radius:2px; }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow" style="max-width:960px">
+
+      <div class="pm-page-head">
+        <div><h1 class="pm-page-title">検索結果</h1>
+        <div class="pm-page-sub" id="sub"></div></div>
+      </div>
+
+      <div class="pm-filter">
+        <div class="pm-filter-row">
+          <div class="pm-filter-item" style="min-width:320px">
+            <label class="pm-label">検索キーワード</label>
+            <input class="pm-input" id="q" type="search" placeholder="課題・Wiki・ファイル・コミットを横断検索">
+          </div>
+          <div class="pm-filter-item" style="min-width:auto">
+            <button class="pm-btn pm-btn-primary" id="btn-search">検索</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pm-tabs" id="tabs"></div>
+      <div class="pm-card"><div id="results"></div></div>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('');
+
+var q = PMUI.param('q', '') || '';
+document.getElementById('q').value = q;
+var tab = 'all';
+
+function hl(text) {
+  if (!q) return PMUI.esc(text);
+  var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return PMUI.esc(text).replace(re, '<mark>$1</mark>');
+}
+function snippet(text) {
+  if (!text) return '';
+  var idx = q ? text.toLowerCase().indexOf(q.toLowerCase()) : -1;
+  var s = idx > 40 ? '…' + text.slice(idx - 40, idx + 120) : text.slice(0, 160);
+  return hl(s.replace(/\n+/g, ' ')) + (text.length > 160 ? '…' : '');
+}
+function hit(t) { return q && t.toLowerCase().indexOf(q.toLowerCase()) !== -1; }
+
+function search() {
+  var issues = PM.issues().filter(function(i){ return hit(i.key + ' ' + i.summary + ' ' + i.description); });
+  var wikis  = PM.wiki().filter(function(w){ return hit(w.title + ' ' + w.body); });
+  var files  = PM.files.filter(function(f){ return hit(f.name); });
+  var commits = PM.commits.filter(function(c){ return hit(c.msg + ' ' + c.hash); });
+  var comments = [];
+  PM.issues().forEach(function(i){
+    i.comments.forEach(function(c){ if (c.body && hit(c.body)) comments.push({ i: i, c: c }); });
+  });
+  return { issues: issues, wikis: wikis, files: files, commits: commits, comments: comments };
+}
+
+function render() {
+  var r = search();
+  var total = r.issues.length + r.wikis.length + r.files.length + r.commits.length + r.comments.length;
+  document.getElementById('sub').textContent = q ? ('「' + q + '」の検索結果: ' + total + ' 件') : 'キーワードを入力してください';
+
+  var TABS = [['all','すべて',total], ['issues','課題',r.issues.length], ['comments','コメント',r.comments.length],
+              ['wikis','Wiki',r.wikis.length], ['files','ファイル',r.files.length], ['commits','コミット',r.commits.length]];
+  document.getElementById('tabs').innerHTML = TABS.map(function(t){
+    return '<button class="pm-tab' + (tab === t[0] ? ' active' : '') + '" data-t="' + t[0] + '">' + t[1] + ' <span class="muted">' + t[2] + '</span></button>';
+  }).join('');
+  document.querySelectorAll('[data-t]').forEach(function(b){
+    b.addEventListener('click', function(){ tab = b.dataset.t; render(); });
+  });
+
+  var out = '';
+  function section(name, html, count) {
+    if (!count) return '';
+    return '<div class="pm-card-head" style="background:var(--pm-soft)"><div class="pm-card-title">' + name + '（' + count + '）</div></div>' + html;
+  }
+
+  if (tab === 'all' || tab === 'issues') {
+    out += section('課題', r.issues.map(function(i){
+      return '<div class="hit"><div class="pm-row g8 pm-wrap">' + PMUI.typeTag(i.typeId) +
+        '<span class="pm-issue-key">' + i.key + '</span>' + PMUI.statusTag(i.statusId) +
+        '<a href="05_issue_detail.html?key=' + i.key + '" class="bold">' + hl(i.summary) + '</a></div>' +
+        '<div class="hit-snippet">' + snippet(i.description) + '</div>' +
+        '<div class="fs11 muted mt4">' + (PM.user(i.assigneeId) ? PM.user(i.assigneeId).name : '未設定') + ' ・ 更新 ' + PMUI.relTime(i.updated) + '</div></div>';
+    }).join(''), r.issues.length);
+  }
+  if (tab === 'all' || tab === 'comments') {
+    out += section('コメント', r.comments.map(function(x){
+      return '<div class="hit"><a href="05_issue_detail.html?key=' + x.i.key + '" class="bold fs12">' + x.i.key + ' ' + PMUI.esc(x.i.summary) + '</a>' +
+        '<div class="hit-snippet">' + snippet(x.c.body) + '</div>' +
+        '<div class="fs11 muted mt4">' + PM.user(x.c.userId).name + ' ・ ' + PMUI.fmtDateTime(x.c.at) + '</div></div>';
+    }).join(''), r.comments.length);
+  }
+  if (tab === 'all' || tab === 'wikis') {
+    out += section('Wiki', r.wikis.map(function(w){
+      return '<div class="hit"><a href="10_wiki.html?id=' + w.id + '" class="bold">' + hl(w.title) + '</a>' +
+        '<div class="hit-snippet">' + snippet(w.body) + '</div>' +
+        '<div class="fs11 muted mt4">' + PM.user(w.updatedBy).name + ' ・ ' + PMUI.relTime(w.updated) + '</div></div>';
+    }).join(''), r.wikis.length);
+  }
+  if (tab === 'all' || tab === 'files') {
+    out += section('ファイル', r.files.map(function(f){
+      return '<div class="hit"><a href="11_files.html" class="bold">' + hl(f.name) + '</a>' +
+        '<div class="fs11 muted mt4">' + PM.user(f.by).name + ' ・ ' + PMUI.fmtDateTime(f.updated) + ' ・ ' + PMUI.fileSize(f.size) + '</div></div>';
+    }).join(''), r.files.length);
+  }
+  if (tab === 'all' || tab === 'commits') {
+    out += section('コミット', r.commits.map(function(c){
+      return '<div class="hit"><span class="pm-issue-key">' + c.hash + '</span> <a href="12_git.html" class="bold">' + hl(c.msg) + '</a>' +
+        '<div class="fs11 muted mt4">' + PM.user(c.by).name + ' ・ ' + PMUI.relTime(c.at) + ' ・ ' + c.branch + '</div></div>';
+    }).join(''), r.commits.length);
+  }
+
+  document.getElementById('results').innerHTML = out ||
+    '<div class="pm-empty">' + PMUI.icon('search') + (q ? '一致する結果がありませんでした' : 'キーワードを入力して検索してください') + '</div>';
+}
+
+document.getElementById('btn-search').addEventListener('click', function(){
+  q = document.getElementById('q').value; render();
+});
+document.getElementById('q').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') { q = this.value; render(); }
+});
+render();
+</script>
+</body>
+</html>

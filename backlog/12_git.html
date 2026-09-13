@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backvog — Git</title>
+<link rel="stylesheet" href="backlog.css">
+<style>
+.repo-box { display:flex; align-items:center; gap:10px; padding:12px 16px; }
+.clone-url { font-family:'SFMono-Regular',Consolas,monospace; font-size:12px; background:var(--pm-soft); border:1px solid var(--pm-border-light); border-radius:var(--pm-radius-sm); padding:6px 10px; color:var(--pm-text-sub); }
+.pr-state { display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:100px; font-size:11px; font-weight:700; color:#fff; }
+.pr-state.open { background:var(--pm-primary); } .pr-state.merged { background:#7e57c2; } .pr-state.closed { background:#8d97a3; }
+.branch { font-family:'SFMono-Regular',Consolas,monospace; font-size:11px; background:var(--pm-soft-2); border-radius:3px; padding:1px 6px; color:var(--pm-text-sub); }
+</style>
+</head>
+<body>
+<div id="pm-header"></div>
+<div class="pm-layout">
+  <div id="pm-side"></div>
+  <main class="pm-main">
+    <div class="pm-main-narrow">
+
+      <div class="pm-page-head">
+        <div>
+          <h1 class="pm-page-title">Git</h1>
+          <div class="pm-page-sub">コミットメッセージに <code>FOCUS-12</code> のように課題キーを含めると、課題と自動的に紐付きます。</div>
+        </div>
+        <div class="pm-page-actions">
+          <select class="pm-select" style="width:auto">
+            <option>focus-app</option>
+            <option>focus-infra</option>
+            <option>focus-docs</option>
+          </select>
+          <button class="pm-btn pm-btn-primary" id="btn-pr"></button>
+        </div>
+      </div>
+
+      <div class="pm-card mb16">
+        <div class="repo-box">
+          <div class="pm-fileicon" style="background:var(--pm-primary-light);color:var(--pm-primary-dark)" id="repo-icon"></div>
+          <div class="flex1">
+            <div class="bold">focus-app</div>
+            <div class="fs11 muted">Focus 患者管理システムのアプリケーションリポジトリ ・ デフォルトブランチ <span class="branch">develop</span></div>
+          </div>
+          <span class="clone-url">git@backvog.jp:phm-solution/focus-app.git</span>
+          <button class="pm-btn pm-btn-sm" onclick="PMUI.toast('クローンURLをコピーしました')">コピー</button>
+        </div>
+      </div>
+
+      <div class="pm-tabs">
+        <button class="pm-tab active" data-tab="commits">最近のコミット</button>
+        <button class="pm-tab" data-tab="prs">プルリクエスト</button>
+        <button class="pm-tab" data-tab="branches">ブランチ</button>
+      </div>
+
+      <div id="pane"></div>
+
+    </div>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+PMUI.mount('git');
+document.getElementById('btn-pr').innerHTML = PMUI.icon('plus') + 'プルリクエスト';
+document.getElementById('repo-icon').innerHTML = PMUI.icon('git');
+
+function linkIssue(text) {
+  return PMUI.esc(text).replace(/(FOCUS-\d+)/g, '<a href="05_issue_detail.html?key=$1">$1</a>');
+}
+
+var PANES = {
+  commits: function(){
+    return '<div class="pm-card"><div class="pm-card-head"><div class="pm-card-title">コミット履歴</div>' +
+      '<span class="fs11 muted">' + PM.commits.length + " 件</span></div>" +
+      PM.commits.map(function(c){
+        return '<div class="pm-filerow">' + PMUI.avatar(c.by, 'sm') +
+          '<div class="flex1"><div class="fs13">' + linkIssue(c.msg) + '</div>' +
+            '<div class="fs11 muted">' + PM.user(c.by).name + ' が ' + PMUI.relTime(c.at) + ' に ' +
+            '<span class="branch">' + c.branch + '</span> へコミット</div></div>' +
+          '<div class="pm-diffstat nowrap"><span class="add">+' + c.add + '</span> <span class="del">-' + c.del + '</span></div>' +
+          '<span class="pm-issue-key">' + c.hash + '</span></div>';
+      }).join('') + '</div>';
+  },
+  prs: function(){
+    var counts = { open: 0, merged: 0, closed: 0 };
+    PM.prs.forEach(function(p){ counts[p.status]++; });
+    return '<div class="pm-card"><div class="pm-card-head"><div class="pm-card-title">プルリクエスト</div>' +
+      '<div class="pm-row g6 fs11">' +
+        '<span class="pm-chip green">オープン ' + counts.open + '</span>' +
+        '<span class="pm-chip">マージ済み ' + counts.merged + '</span>' +
+        '<span class="pm-chip">クローズ ' + counts.closed + '</span></div></div>' +
+      PM.prs.map(function(p){
+        var label = { open: 'オープン', merged: 'マージ済み', closed: 'クローズ' }[p.status];
+        return '<div class="pm-filerow" style="align-items:flex-start">' +
+          '<span class="pr-state ' + p.status + '" style="margin-top:2px">' + label + '</span>' +
+          '<div class="flex1"><div class="fs13 bold">' + linkIssue(p.title) + '</div>' +
+            '<div class="fs11 muted mt4">#' + p.id + ' ・ ' + PM.user(p.by).name + ' が ' + PMUI.relTime(p.at) + ' に作成 ・ ' +
+            '<span class="branch">' + p.from + '</span> → <span class="branch">' + p.to + '</span></div>' +
+            '<div class="pm-row g6 mt4">' + p.reviewers.map(function(r){ return PMUI.avatar(r, 'xs'); }).join('') +
+            '<span class="fs11 muted">レビュアー ・ コメント ' + p.comments + ' 件</span></div></div>' +
+          '<div class="pm-diffstat nowrap"><span class="add">+' + p.add + '</span> <span class="del">-' + p.del + '</span></div></div>';
+      }).join('') + '</div>';
+  },
+  branches: function(){
+    var branches = [
+      { name: 'develop', by: 3, at: '2026-09-11 18:42', ahead: 0, behind: 0, def: true },
+      { name: 'main', by: 1, at: '2026-09-10 20:15', ahead: 0, behind: 12, def: false },
+      { name: 'feature/FOCUS-24', by: 2, at: '2026-09-11 15:10', ahead: 6, behind: 1, def: false },
+      { name: 'feature/FOCUS-19', by: 4, at: '2026-09-11 11:26', ahead: 9, behind: 3, def: false },
+      { name: 'feature/FOCUS-1', by: 3, at: '2026-09-11 18:42', ahead: 2, behind: 0, def: false },
+      { name: 'feature/FOCUS-10', by: 2, at: '2026-09-08 10:12', ahead: 4, behind: 8, def: false },
+      { name: 'release/1.0.0', by: 1, at: '2026-09-09 09:00', ahead: 1, behind: 5, def: false }
+    ];
+    return '<div class="pm-card"><div class="pm-card-head"><div class="pm-card-title">ブランチ</div>' +
+      '<span class="fs11 muted">' + branches.length + ' 件</span></div>' +
+      branches.map(function(b){
+        return '<div class="pm-filerow"><div class="pm-fileicon">' + PMUI.icon('git') + '</div>' +
+          '<div class="flex1"><span class="branch" style="font-size:12px">' + b.name + '</span>' +
+            (b.def ? ' <span class="pm-chip green">デフォルト</span>' : '') +
+            '<div class="fs11 muted mt4">最終更新 ' + PM.user(b.by).name + ' ・ ' + PMUI.relTime(b.at) + '</div></div>' +
+          '<div class="fs11 muted nowrap">' + (b.ahead ? '<span class="pm-diffstat add">↑' + b.ahead + '</span> ' : '') +
+            (b.behind ? '<span class="pm-diffstat del">↓' + b.behind + '</span>' : '') + '</div></div>';
+      }).join('') + '</div>';
+  }
+};
+
+function show(tab) {
+  document.getElementById('pane').innerHTML = PANES[tab]();
+}
+document.querySelectorAll('.pm-tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.pm-tab').forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    show(t.dataset.tab);
+  });
+});
+document.getElementById('btn-pr').addEventListener('click', function(){ PMUI.toast('プルリクエスト作成画面を開きます（モックアップ）'); });
+show('commits');
+</script>
+</body>
+</html>
